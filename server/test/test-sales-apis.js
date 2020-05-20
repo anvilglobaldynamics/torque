@@ -46,6 +46,8 @@ let {
 
   getAsyncDatabase,
 
+  getPaymentMethodCash,
+
   validateGetDiscountPresetListApiSuccessResponse,
   validateDiscountPresetSchema,
   validateAddDiscountPresetApiSuccessResponse,
@@ -149,6 +151,8 @@ let placeholderDefaultDiscountValue = 5;
 let validDiscountPresetId = null;
 let validDiscountPresetId2 = null;
 
+let paymentMethodCash = null;
+
 describe('Sales', _ => {
 
   it('START', testDoneFn => {
@@ -170,131 +174,137 @@ describe('Sales', _ => {
           }, (data) => {
             organizationId = data.organizationId;
             employmentId = data.employmentId;
-            addOutlet({
+            getPaymentMethodCash({
               apiKey,
               organizationId,
-              name: outletName,
-              physicalAddress: outletPhysicalAddress,
-              phone: outletPhone,
-              contactPersonName: outletContactPersonName,
-              location: { lat: 23.7945153, lng: 90.4139857 },
-              categoryCode: 'CAT_GENERAL'
             }, (data) => {
-              outletId = data.outletId;
-              getOutlet({
-                apiKey, outletId
+              paymentMethodCash = data.paymentMethodCash;
+              addOutlet({
+                apiKey,
+                organizationId,
+                name: outletName,
+                physicalAddress: outletPhysicalAddress,
+                phone: outletPhone,
+                contactPersonName: outletContactPersonName,
+                location: { lat: 23.7945153, lng: 90.4139857 },
+                categoryCode: 'CAT_GENERAL'
               }, (data) => {
-                outletDefaultInventoryId = data.defaultInventory.id;
-                outletReturnedInventoryId = data.returnedInventory.id;
-                outletDamagedInventoryId = data.damagedInventory.id;
-                addWarehouse({
-                  apiKey,
-                  organizationId,
-                  name: "Warehouse Name",
-                  physicalAddress: "11xx Warehouse Physical Address",
-                  phone: 'w1' + rnd(prefix, 11),
-                  contactPersonName: "Warehouse Contact Person Name"
+                outletId = data.outletId;
+                getOutlet({
+                  apiKey, outletId
                 }, (data) => {
-                  warehouseId = data.warehouseId;
-                  getWarehouse({
-                    apiKey, warehouseId
+                  outletDefaultInventoryId = data.defaultInventory.id;
+                  outletReturnedInventoryId = data.returnedInventory.id;
+                  outletDamagedInventoryId = data.damagedInventory.id;
+                  addWarehouse({
+                    apiKey,
+                    organizationId,
+                    name: "Warehouse Name",
+                    physicalAddress: "11xx Warehouse Physical Address",
+                    phone: 'w1' + rnd(prefix, 11),
+                    contactPersonName: "Warehouse Contact Person Name"
                   }, (data) => {
-                    warehouseDefaultInventoryId = data.defaultInventory.id;
-                    addProductCategory({
-                      apiKey,
-                      organizationId,
-                      name: "1st product category",
-                      colorCode: "FFFFFF"
+                    warehouseId = data.warehouseId;
+                    getWarehouse({
+                      apiKey, warehouseId
                     }, (data) => {
-                      productCategoryId = data.productCategoryId;
-                      addProductBlueprint({
+                      warehouseDefaultInventoryId = data.defaultInventory.id;
+                      addProductCategory({
                         apiKey,
                         organizationId,
-                        name: productBlueprintName,
-                        unit: "box",
-                        identifierCode: '',
-                        defaultPurchasePrice: 99,
-                        defaultVat: 3,
-                        defaultSalePrice: 112,
-                        productCategoryIdList: [],
-                        isReturnable: true
+                        name: "1st product category",
+                        colorCode: "FFFFFF"
                       }, (data) => {
-                        productBlueprintId = data.productBlueprintId;
-                        addProductToInventory({
+                        productCategoryId = data.productCategoryId;
+                        addProductBlueprint({
                           apiKey,
-                          inventoryId: outletDefaultInventoryId,
-                          productList: [
-                            { productBlueprintId, count: 100 }
-                          ],
-                          vendorId: null
+                          organizationId,
+                          name: productBlueprintName,
+                          unit: "box",
+                          identifierCode: '',
+                          defaultPurchasePrice: 99,
+                          defaultVat: 3,
+                          defaultSalePrice: 112,
+                          productCategoryIdList: [],
+                          isReturnable: true
                         }, (data) => {
+                          productBlueprintId = data.productBlueprintId;
                           addProductToInventory({
                             apiKey,
-                            inventoryId: warehouseDefaultInventoryId,
+                            inventoryId: outletDefaultInventoryId,
                             productList: [
                               { productBlueprintId, count: 100 }
                             ],
                             vendorId: null
                           }, (data) => {
-                            addCustomer({
+                            addProductToInventory({
                               apiKey,
-                              organizationId,
-                              fullName: customerFullName,
-                              phone: customerPhone,
-                              email: null,
-                              address: ''
+                              inventoryId: warehouseDefaultInventoryId,
+                              productList: [
+                                { productBlueprintId, count: 100 }
+                              ],
+                              vendorId: null
                             }, (data) => {
-                              customerId = data.customerId;
-                              getCustomer({
-                                apiKey, customerId
+                              addCustomer({
+                                apiKey,
+                                organizationId,
+                                fullName: customerFullName,
+                                phone: customerPhone,
+                                email: null,
+                                address: ''
                               }, (data) => {
-                                customerData = data.customer;
-                                addServiceBlueprint({
-                                  apiKey,
-                                  organizationId,
-                                  name: "1st service blueprint",
-                                  defaultVat: 2,
-                                  defaultSalePrice: 250,
-                                  isLongstanding: false,
-                                  serviceDuration: null,
-                                  isEmployeeAssignable: false,
-                                  isCustomerRequired: false,
-                                  isRefundable: false,
-                                  avtivateInAllOutlets: true
+                                customerId = data.customerId;
+                                getCustomer({
+                                  apiKey, customerId
                                 }, (data) => {
-                                  basicServiceBlueprintId = data.serviceBlueprintId;
+                                  customerData = data.customer;
                                   addServiceBlueprint({
                                     apiKey,
                                     organizationId,
-                                    name: "2nd service blueprint",
+                                    name: "1st service blueprint",
                                     defaultVat: 2,
                                     defaultSalePrice: 250,
                                     isLongstanding: false,
                                     serviceDuration: null,
-                                    isEmployeeAssignable: true,
-                                    isCustomerRequired: true,
+                                    isEmployeeAssignable: false,
+                                    isCustomerRequired: false,
                                     isRefundable: false,
                                     avtivateInAllOutlets: true
                                   }, (data) => {
-                                    customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                    basicServiceBlueprintId = data.serviceBlueprintId;
                                     addServiceBlueprint({
                                       apiKey,
                                       organizationId,
-                                      name: "3rd long service blueprint",
+                                      name: "2nd service blueprint",
                                       defaultVat: 2,
                                       defaultSalePrice: 250,
-                                      isLongstanding: true,
-                                      serviceDuration: {
-                                        months: 1,
-                                        days: 7
-                                      },
+                                      isLongstanding: false,
+                                      serviceDuration: null,
                                       isEmployeeAssignable: true,
                                       isCustomerRequired: true,
                                       isRefundable: false,
                                       avtivateInAllOutlets: true
                                     }, (data) => {
-                                      longstandingServiceBlueprintId = data.serviceBlueprintId;
-                                      testDoneFn();
+                                      customerAndEmployeeServiceBlueprintId = data.serviceBlueprintId;
+                                      addServiceBlueprint({
+                                        apiKey,
+                                        organizationId,
+                                        name: "3rd long service blueprint",
+                                        defaultVat: 2,
+                                        defaultSalePrice: 250,
+                                        isLongstanding: true,
+                                        serviceDuration: {
+                                          months: 1,
+                                          days: 7
+                                        },
+                                        isEmployeeAssignable: true,
+                                        isCustomerRequired: true,
+                                        isRefundable: false,
+                                        avtivateInAllOutlets: true
+                                      }, (data) => {
+                                        longstandingServiceBlueprintId = data.serviceBlueprintId;
+                                        testDoneFn();
+                                      });
                                     });
                                   });
                                 });
@@ -370,7 +380,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -416,7 +426,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -469,7 +479,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -522,7 +532,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -575,7 +585,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -630,7 +640,7 @@ describe('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -676,7 +686,7 @@ describe('Sales', _ => {
           totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -762,7 +772,7 @@ describe('Sales', _ => {
           paidAmount: 0,
           changeAmount: (0 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -815,7 +825,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -868,7 +878,7 @@ describe('Sales', _ => {
           paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -977,7 +987,7 @@ describe('Sales', _ => {
           paidAmount: 1300,
           changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -1030,6 +1040,7 @@ describe('Sales', _ => {
     });
 
   });
+
 
   it('api/get-sales (Valid)', testDoneFn => {
 
@@ -1135,6 +1146,7 @@ describe('Sales', _ => {
         salesId,
       }
     }, (err, response, body) => {
+
       expect(response.statusCode).to.equal(200);
       validateGetSalesApiSuccessResponse(body);
       validateSalesSchema(body.sales);
@@ -1858,7 +1870,7 @@ describe('Sales', _ => {
           paidAmount: 30, // out of total billed 212.799999999
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -1889,57 +1901,12 @@ describe('Sales', _ => {
           paidAmount: 20,
           changeAmount: 0,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
       validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    });
-
-  });
-
-  it('api/add-additional-payment (Valid, change-wallet, Less than total billed, user has that amount)', testDoneFn => {
-
-    callApi('api/add-additional-payment', {
-      json: {
-        apiKey,
-        salesId,
-        customerId,
-        payment: {
-          paidAmount: 10,
-          changeAmount: 0,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'change-wallet'
-        }
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiSuccessResponse(body);
-      testDoneFn();
-    });
-
-  });
-
-  it('api/add-additional-payment (Invalid, change-wallet, Less than total billed, user does not have that amount)', testDoneFn => {
-
-    callApi('api/add-additional-payment', {
-      json: {
-        apiKey,
-        salesId,
-        customerId,
-        payment: {
-          paidAmount: 60,
-          changeAmount: 0,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'change-wallet'
-        }
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGenericApiFailureResponse(body);
-      expect(body.error.code).to.equal('INSUFFICIENT_BALANCE');
       testDoneFn();
     });
 
@@ -1956,7 +1923,7 @@ describe('Sales', _ => {
           paidAmount: 20,
           changeAmount: 5,
           shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -1995,10 +1962,10 @@ describe('Sales', _ => {
         salesId,
         customerId,
         payment: {
-          paidAmount: 180,
-          changeAmount: 16,
-          shouldSaveChangeInAccount: true,
-          paymentMethod: 'cash'
+          paidAmount: 180 + 60,
+          changeAmount: 66,
+          shouldSaveChangeInAccount: false,
+          paymentMethodId: paymentMethodCash.id
         }
       }
     }, (err, response, body) => {
@@ -2006,25 +1973,6 @@ describe('Sales', _ => {
       validateGenericApiSuccessResponse(body);
       testDoneFn();
     });
-
-  });
-
-  it('api/get-customer (to verify impact of add-additional-payment)', testDoneFn => {
-
-    callApi('api/get-customer', {
-      json: {
-        apiKey,
-        customerId
-      }
-    }, (err, response, body) => {
-      expect(response.statusCode).to.equal(200);
-      validateGetCustomerApiSuccessResponse(body);
-      validateCustomerSchema(body.customer);
-      let diff = body.customer.changeWalletBalance - customerRef1.changeWalletBalance;
-      diff = Math.round(diff * 100) / 100;
-      expect(diff).to.equal(16)
-      testDoneFn();
-    })
 
   });
 
@@ -2091,7 +2039,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2144,7 +2092,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: (1000 - (basicService.salePrice + (basicService.salePrice * (basicService.serviceBlueprint.defaultVat / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2213,7 +2161,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2266,7 +2214,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (customerAndEmployeeService.salePrice + (customerAndEmployeeService.salePrice * (customerAndEmployeeService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2319,7 +2267,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2372,7 +2320,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2564,7 +2512,7 @@ describe('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        paymentMethod: null,
+        paymentMethodId: null,
 
         fromDate: monthsEarlierDate,
         toDate: (new Date()).getTime(),
@@ -2592,7 +2540,7 @@ describe('Sales', _ => {
         shouldFilterByOutlet: false,
         shouldFilterByCustomer: false,
 
-        paymentMethod: 'cash',
+        paymentMethodId: paymentMethodCash.id,
 
         fromDate: monthsEarlierDate,
         toDate: (new Date()).getTime(),
@@ -2601,7 +2549,7 @@ describe('Sales', _ => {
       expect(response.statusCode).to.equal(200);
       validateReportCollectionDetailsApiSuccessResponse(body);
       body.collectionList.forEach(doc => {
-        expect(doc.paymentMethod).to.equal('cash')
+        expect(doc.paymentMethodId).to.equal(paymentMethodCash.id)
         validateCollectionSchema(doc);
       });
       testDoneFn();
@@ -2665,6 +2613,12 @@ describe('Sales', _ => {
         email: orgEmail
       }))
       .then(({ organizationId }) => membershipTest.organizationId = organizationId)
+
+      .then(() => promisifyApiCall({}, getPaymentMethodCash, {
+        apiKey,
+        organizationId: membershipTest.organizationId
+      }))
+      .then(({ paymentMethodCash }) => membershipTest.paymentMethodCash = paymentMethodCash)
 
       .then(() => promisifyApiCall({}, addCustomer, {
         apiKey,
@@ -2769,7 +2723,10 @@ describe('Sales', _ => {
       })
 
       // add sale - outlet 1, customer 1, service 1
-      .then(() => { longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1'); return Promise.resolve() })
+      .then(() => {
+        longstandingService = membershipTest.outlet1ServiceList.find(i => i.serviceBlueprint.name === 'Long 1');
+        return Promise.resolve()
+      })
       .then(() => promisifyApiCall({}, addSales, {
         apiKey,
         outletId: membershipTest.outlet1Id,
@@ -2797,7 +2754,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2838,7 +2795,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2879,7 +2836,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2920,7 +2877,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -2961,7 +2918,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: membershipTest.paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3386,7 +3343,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3439,7 +3396,7 @@ describe('Sales', _ => {
           paidAmount: 1000,
           changeAmount: 1000 - (longstandingService.salePrice + (longstandingService.salePrice * (longstandingService.serviceBlueprint.defaultVat / 100))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3515,7 +3472,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3617,7 +3574,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3670,7 +3627,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,
@@ -3738,7 +3695,7 @@ describe('Sales', _ => {
           paidAmount: 300,
           changeAmount: (300 - (warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 + ((warehouseInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
           shouldSaveChangeInAccount: false,
-          paymentMethod: 'cash'
+          paymentMethodId: paymentMethodCash.id
         },
 
         assistedByEmployeeId: null,

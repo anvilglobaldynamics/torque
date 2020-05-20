@@ -53,7 +53,7 @@ exports.AddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin, Sal
         totalBilled: Joi.number().min(0).max(999999999999999).required(), // this is the final amount customer has to pay (regardless of the method)
 
         // NOTE: below is a single payment.
-        paymentMethod: Joi.string().valid('cash', 'card', 'digital', 'change-wallet').required(),
+        paymentMethodId: Joi.number().max(999999999999999).required(),
         paidAmount: Joi.number().max(999999999999999).required(),
         changeAmount: Joi.number().max(999999999999999).required(),
         shouldSaveChangeInAccount: Joi.boolean().required()

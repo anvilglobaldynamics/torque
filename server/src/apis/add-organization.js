@@ -38,6 +38,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     await this._addModuleActivation({ organizationId, activeModuleCodeList });
 
     await this.createDefaultAccounts({ organizationId, userId });
+    await this.createDefaultPaymentMethods({ organizationId });
 
     return { status: "success", organizationId, employmentId };
   }

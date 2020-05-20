@@ -39,10 +39,11 @@
         width: 100%;
       }
 
-      .should-save-change{
+      .should-save-change {
         margin-top: 12px;
         margin-bottom: 4px;
       }
+
     </style>
     <div class="card p-0 vertical layout">
       <div class="list">
@@ -54,15 +55,12 @@
 
         <div class="individual-calculation-field-container">
 
-          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.additionalPayment.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
-            <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
-              <paper-item name="cash">[[verses.general.cash]]</paper-item>
-              <paper-item name="card">[[verses.general.card]]</paper-item>
-              <paper-item name="digital">[[verses.general.digital]]</paper-item>
-              <template is="dom-if" if="[[$hasCustomerAccountBalanceModule()]]">
-                <template is="dom-if" if="[[customer]]">
-                  <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
-                </template>
+          <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
+            <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethodId}}" attr-for-selected="name">
+              <template is="dom-repeat" items="[[paymentMethodList]]" as="paymentMethod">
+                <paper-item name="[[paymentMethod.id]]">
+                  [[paymentMethod.name]]
+                </paper-item>
               </template>
             </paper-listbox>
           </paper-dropdown-menu>
@@ -133,11 +131,37 @@
       pageChanged() {
         this.useLanguageServices();
         if (!this.page) return;
+        this.app = this.page.app;
+        this._processPaymentMethodList(() => { });
+      }
+
+      _fetchPaymentMethodList(cbfn) {
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        this.app.callGetPaymentMethodListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.paymentMethodList);
+        });
+      }
+
+      _processPaymentMethodList(cbfn) {
+        this._fetchPaymentMethodList(paymentMethodList => {
+          this.paymentMethodList = paymentMethodList;
+          if (paymentMethodList.length === 0) {
+            return this.app.navigateTo('/manage-payment-methods');
+          }
+
+          let defaultPaymentMethod = paymentMethodList[0];
+
+          this.set('payment.paymentMethodId', defaultPaymentMethod.id);
+          return cbfn();
+        });
       }
 
       _calculatePayment() {
         let {
-          paymentMethod,
+          paymentMethodId,
           paidAmount,
           changeAmount,
           shouldSaveChangeInAccount
@@ -145,16 +169,13 @@
         let amountLeftToPay = parseFloat(this.amountLeftToPay);
         paidAmount = parseFloat(paidAmount);
         changeAmount = 0;
-        if (paymentMethod === 'change-wallet') {
-          changeAmount = 0;
-          paidAmount = amountLeftToPay;
-        } else {
-          if (paidAmount > amountLeftToPay) {
-            changeAmount = paidAmount - amountLeftToPay;
-          }
+
+        if (paidAmount > amountLeftToPay) {
+          changeAmount = paidAmount - amountLeftToPay;
         }
+
         this.payment = {
-          paymentMethod,
+          paymentMethodId,
           paidAmount,
           changeAmount,
           shouldSaveChangeInAccount

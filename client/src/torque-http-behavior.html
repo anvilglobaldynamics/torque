@@ -573,6 +573,21 @@
         this.callCombinedJsonApi('delete-discount-preset', data, cbfn);
       }
 
+      callGetPaymentMethodListApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('get-payment-method-list', data, cbfn);
+      }
+
+      callAddPaymentMethodApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('add-payment-method', data, cbfn);
+      }
+
+      callEditPaymentMethodApi(data, cbfn) {
+        if (!this._applyApiKey(data)) return;
+        this.callCombinedJsonApi('edit-payment-method', data, cbfn);
+      }
+
       callReportCollectionDetailsApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('report-collection-details', data, cbfn);

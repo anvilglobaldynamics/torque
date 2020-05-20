@@ -1,0 +1,204 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-manage-payment-methods">
+  <template>
+    <style include="shared-styles">
+      .name {
+        font-weight: bold;
+      }
+
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <template is="dom-if" if="[[!paymentMethodList.length]]">
+        <div class="card">
+          [[verses.paymentMethod.noPaymentMethodFound]]
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{paymentMethodList.length}}">
+
+        <div class="card vertical layout">
+
+          <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
+            <paper-button raised class="neutral pagination-show-previous" on-tap="showPreviousTapped">[[verses.general.showPrevious]]</paper-button>
+          </template>
+
+          <template is="dom-repeat" items="[[paymentMethodList]]" as="paymentMethod">
+            <div class="layout vertical" id="wrapper">
+              <div class="list">
+                <div class="horizontal layout item center">
+                  <div class="vertical layout flex">
+                    <div class="name">[[paymentMethod.name]]</div>
+                    <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+                      [[verses.accounting.monetaryAccount]]: [[paymentMethod.monetaryAccountDetails.displayName]]
+                    </template>
+                  </div>
+                  <div class="horizontal layout wrap">
+                    <paper-icon-button class="button-icon" icon="icons:create" on-tap="editTapped"></paper-icon-button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </template>
+
+          <div class="pagination">
+            [[verses.general.loaded]]
+            <span class="limit">[[pagination.limit]]</span>
+            [[verses.general.itemsOutOf]]
+            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
+            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          </div>
+          <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
+            <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
+          </template>
+
+        </div>
+
+      </template>
+
+      <div class="lone-controls">
+        <paper-button raised class="primary" on-tap="createTapped">
+          <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+          [[verses.paymentMethod.createNewPaymentMethod]]
+        </paper-button>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class PageManagePaymentMethods extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-manage-payment-methods';
+      }
+
+      static get properties() {
+        return {
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.page = this;
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.paymentMethod.pageTitle);
+        if (!this._ensureAccess()) return;
+        this._processPaymentMethodList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.paymentMethodList = [];
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: [
+            // 'PRIV_MODIFY_DISCOUNT_PRESETS'
+          ],
+          moduleList: []
+        });
+      }
+
+      _fetchPaymentMethodList(cbfn) {
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        this.app.callGetPaymentMethodListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.paymentMethodList);
+        });
+      }
+
+      _processPaymentMethodList(cbfn) {
+        this._fetchPaymentMethodList(paymentMethodList => {
+          this.paymentMethodList = paymentMethodList;
+          return cbfn();
+        });
+      }
+
+      _deletePaymentMethod(paymentMethodId) {
+        let data = {
+          paymentMethodId
+        };
+        this.app.showModalConfirmation(this.verses.paymentMethod.deleteQuestion, this.verses.paymentMethod.deleteQuestionMessage, (answer) => {
+          if (!answer) return;
+          this.app.callDeletePaymentMethodApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error, 'editPaymentMethodForm');
+            let message = this.app.verses.paymentMethod.paymentMethodDeleted;
+            this.app.showToast(message, _ => {
+              this._processPaymentMethodList(() => null);
+            });
+          });
+        });
+      }
+
+      // region: ui  ===========================
+
+      editTapped(e) {
+        let { paymentMethod } = e.model;
+        return this.app.navigateTo(`/edit-payment-method/payment-method:${paymentMethod.id}`);
+      }
+
+      createTapped(e = null) {
+        return this.app.navigateTo('/edit-payment-method');
+      }
+
+      showMoreTapped(e = null) {
+        this.set('paginate.offset', this.paginate.offset + this.paginate.limit);
+        this.isReady = false;
+        this._processPaymentMethodList(() => this.isReady = true);
+      }
+
+      showPreviousTapped(e = null) {
+        this.set('paginate.offset', Math.max(0, this.paginate.offset - this.paginate.limit));
+        this.isReady = false;
+        this._processPaymentMethodList(() => this.isReady = true);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageManagePaymentMethods.is, PageManagePaymentMethods);
+  </script>
+</dom-module>
