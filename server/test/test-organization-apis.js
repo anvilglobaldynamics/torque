@@ -338,7 +338,7 @@ describe('Organization', _ => {
         validateGetDashboardSummaryApiSuccessResponse(body);
 
         let modifications = {
-          $inc: { createdDatetimeStamp: (-1 * 1000 * 60 * 60 * 25) }
+          $inc: { createdDatetimeStamp: (-1 * 31 * 24 * 1000 * 60 * 60) }
         };
         getDatabase().updateOne('package-activation', { organizationId: organizationId }, modifications, (err, wasUpdated) => {
           if (err) throw err;

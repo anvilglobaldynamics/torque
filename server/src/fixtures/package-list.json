@@ -8,7 +8,7 @@
       "days": 0
     },
     "limits": {
-      "maximumOutlets": 1,
+      "maximumOutlets": 2,
       "maximumWarehouses": 1,
       "maximumEmployees": 5
     }
