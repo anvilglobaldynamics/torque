@@ -1,0 +1,166 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/good-map/good-map.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-organization">
+  <template>
+    <style include="shared-styles"></style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editOrganizationForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editOrganizationForm--name" value="{{editOrganizationForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.organization.nameOfYourOrganization]]></paper-input>
+            <paper-input class="editOrganizationForm--phone" value="{{editOrganizationForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
+            <paper-input class="editOrganizationForm--email" value="{{editOrganizationForm.email}}" pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input>
+            <paper-textarea class="editOrganizationForm--primaryBusinessAddress" value="{{editOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="4"></paper-textarea>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary editOrganizationForm--submit" on-tap="updateOrganizationTapped">
+                [[verses.organization.updateOrganization]]
+              </paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+  </template>
+
+  <script>
+    class PageEditOrganization extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-organization';
+      }
+
+      static get properties() {
+        return {
+          editingOrganization: {
+            type: Object,
+            value: null
+          },
+          editOrganizationForm: {
+            type: Object,
+            value: _ => {
+              return {
+                name: '',
+                phone: '',
+                email: '',
+                primaryBusinessAddress: ''
+              };
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        this.app.pushPageTitle(this.app.verses.organization.editOrganizationTitle);
+        
+        if (!this._ensureAccess()) return;
+        if (!('organization' in this.params))  {
+          this.backButtonOnTopBarPressed();
+        }
+
+        this._processGetOrganization(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editOrganizationForm');
+        this.removeAutoValidation('#editOrganizationForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: ['PRIV_MODIFY_ORGANIZATION']
+        });
+      }
+
+      // region: editOrganization =================================
+
+      _processGetOrganization(cbfn) {
+        let organizationId = parseInt(this.params.organization);
+        
+        this.app.callGetOrganizationListApi({}, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+
+          this.editingOrganization = response.organizationList.find(organization => organization.id === organizationId);
+          let { name, phone, email, primaryBusinessAddress } = this.editingOrganization;          
+          this.editOrganizationForm = { name, phone, email, primaryBusinessAddress };
+          cbfn();
+        });
+      }
+
+      _processUpdateOrganization({ name, phone, email, primaryBusinessAddress }) {
+        let data = {
+          name, phone, email, primaryBusinessAddress,
+          organizationId: this.editingOrganization.id
+        };
+        this.app.callEditOrganizationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editOrganizationForm');
+          let message = this.app.verses.organization.organizationUpdatedToast;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-organizations');
+      }
+
+      updateOrganizationTapped(e = null) {
+        this.elemAll('#editOrganizationForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editOrganizationForm').validate()) return;
+
+        let { name, phone, email, primaryBusinessAddress } = this.editOrganizationForm;
+        this._processUpdateOrganization({ name, phone, email, primaryBusinessAddress });
+      }
+
+      // region: misc =================================
+    }
+
+    window.customElements.define(PageEditOrganization.is, PageEditOrganization);
+  </script>
+</dom-module>

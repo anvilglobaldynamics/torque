@@ -271,6 +271,8 @@
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",
+    "editOrganizationTitle": "Edit Organization",
+    "updateOrganization": "Update Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
     "industryCategory": "Industry Category of Organization",
     "nameOfYourOrganization": "Name of your Organization",
@@ -281,6 +283,7 @@
     "primaryBusinessAddressInputError": "Enter an address at least 8 characters long",
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created.",
+    "organizationUpdatedToast": "Organization has been updated.",
     "phoneInputError": "Enter a valid phone number.",
     "phoneInput": "Phone number of your Organization",
     "manageOrganizationTitle": "Organizations"
