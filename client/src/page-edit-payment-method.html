@@ -26,6 +26,9 @@
 <dom-module id="page-edit-payment-method">
   <template>
     <style include="shared-styles">
+      .note {
+        padding-top: 30px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -38,6 +41,10 @@
             <paper-input class="editPaymentMethodForm--name" value="{{editPaymentMethodForm.name}}" required minlength="1" error-message=[[verses.paymentMethod.paymentMethodNameInputError]] label=[[verses.paymentMethod.paymentMethodNameInput]]></paper-input>
 
             <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+              <div class="note">
+                [[verses.accounting.monetaryAccountPurposeNote]]
+              </div>
+
               <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
                 <paper-listbox slot="dropdown-content" selected="{{editPaymentMethodForm.monetaryAccountId}}" attr-for-selected="key">
                   <template is="dom-repeat" items="[[accountList]]" as="account">

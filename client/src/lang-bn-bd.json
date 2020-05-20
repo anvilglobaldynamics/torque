@@ -1269,6 +1269,7 @@
     "monetaryAccount": "অর্থ অ্যাকাউন্ট",
     "createNewTransaction": "লেনদেন যোগ করুন",
     "updateOldTransaction": "লেনদেন আপডেট করুন",
+    "monetaryAccountPurposeNote": "বিঃদ্রঃ সংগৃহীত অর্থ এই আর্থিক অ্যাকাউন্টে জমা করা হবে। এবং এটি লেজারে দেখা যাবে।",
 
     "natureOfAccount": "অ্যাকাউন্টের প্রকৃতি",
     "debitAccountNatureText": "ডেবিট অ্যাকাউন্টের প্রকৃতি",

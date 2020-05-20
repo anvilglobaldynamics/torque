@@ -1268,6 +1268,7 @@
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
+    "monetaryAccountPurposeNote": "Note: Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
 
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
