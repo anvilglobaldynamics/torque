@@ -18,6 +18,7 @@ let {
   getAggregatedInventoryDetails,
   addSales,
   getSales,
+  getPaymentMethodCash,
   validateInventorySchema,
   validateProductBlueprintSchema,
   validateProductSchema,
@@ -93,6 +94,8 @@ fromDate = fromDate.getTime();
 let placeholderDefaultDiscountType = 'percent';
 let placeholderDefaultDiscountValue = 5;
 
+let paymentMethodCash = null;
+
 describe('Sales Return', _ => {
 
   it('START', testDoneFn => {
@@ -112,150 +115,117 @@ describe('Sales Return', _ => {
             email: orgEmail
           }, (data) => {
             organizationId = data.organizationId;
-            addOutlet({
+            getPaymentMethodCash({
               apiKey,
               organizationId,
-              name: outletName,
-              physicalAddress: outletPhysicalAddress,
-              phone: outletPhone,
-              contactPersonName: outletContactPersonName,
-              location: { lat: 23.7945153, lng: 90.4139857 },
-              categoryCode: 'CAT_GENERAL'
             }, (data) => {
-              outletId = data.outletId;
-              getOutlet({
-                apiKey, outletId
+              paymentMethodCash = data.paymentMethodCash;
+              addOutlet({
+                apiKey,
+                organizationId,
+                name: outletName,
+                physicalAddress: outletPhysicalAddress,
+                phone: outletPhone,
+                contactPersonName: outletContactPersonName,
+                location: { lat: 23.7945153, lng: 90.4139857 },
+                categoryCode: 'CAT_GENERAL'
               }, (data) => {
-                outletDefaultInventoryId = data.defaultInventory.id;
-                outletReturnedInventoryId = data.returnedInventory.id;
-                outletDamagedInventoryId = data.damagedInventory.id;
-                addProductBlueprint({
-                  apiKey,
-                  organizationId,
-                  name: "test product blueprint",
-                  unit: "box",
-                  identifierCode: '',
-                  defaultPurchasePrice: 99,
-                  defaultVat: 3,
-                  defaultSalePrice: 111,
-                  productCategoryIdList: [],
-                  isReturnable: true
+                outletId = data.outletId;
+                getOutlet({
+                  apiKey, outletId
                 }, (data) => {
-                  returnableProductBlueprintId = data.productBlueprintId;
+                  outletDefaultInventoryId = data.defaultInventory.id;
+                  outletReturnedInventoryId = data.returnedInventory.id;
+                  outletDamagedInventoryId = data.damagedInventory.id;
                   addProductBlueprint({
                     apiKey,
                     organizationId,
-                    name: "non returnable product blueprint",
+                    name: "test product blueprint",
                     unit: "box",
                     identifierCode: '',
                     defaultPurchasePrice: 99,
                     defaultVat: 3,
                     defaultSalePrice: 111,
                     productCategoryIdList: [],
-                    isReturnable: false
+                    isReturnable: true
                   }, (data) => {
-                    nonReturnableProductBlueprintId = data.productBlueprintId;
-                    addProductToInventory({
+                    returnableProductBlueprintId = data.productBlueprintId;
+                    addProductBlueprint({
                       apiKey,
-                      inventoryId: outletDefaultInventoryId,
-                      productList: [
-                        { productBlueprintId: returnableProductBlueprintId, count: 100 }
-                      ],
-                      vendorId: null
+                      organizationId,
+                      name: "non returnable product blueprint",
+                      unit: "box",
+                      identifierCode: '',
+                      defaultPurchasePrice: 99,
+                      defaultVat: 3,
+                      defaultSalePrice: 111,
+                      productCategoryIdList: [],
+                      isReturnable: false
                     }, (data) => {
+                      nonReturnableProductBlueprintId = data.productBlueprintId;
                       addProductToInventory({
                         apiKey,
                         inventoryId: outletDefaultInventoryId,
                         productList: [
-                          { productBlueprintId: nonReturnableProductBlueprintId, count: 200 }
+                          { productBlueprintId: returnableProductBlueprintId, count: 100 }
                         ],
                         vendorId: null
                       }, (data) => {
-                        addCustomer({
+                        addProductToInventory({
                           apiKey,
-                          organizationId,
-                          fullName: customerFullName,
-                          phone: customerPhone,
-                          email: null,
-                          address: ''
+                          inventoryId: outletDefaultInventoryId,
+                          productList: [
+                            { productBlueprintId: nonReturnableProductBlueprintId, count: 200 }
+                          ],
+                          vendorId: null
                         }, (data) => {
-                          customerId = data.customerId;
-                          getCustomer({
-                            apiKey, customerId
+                          addCustomer({
+                            apiKey,
+                            organizationId,
+                            fullName: customerFullName,
+                            phone: customerPhone,
+                            email: null,
+                            address: ''
                           }, (data) => {
-                            customerData = data.customer;
-                            getAggregatedInventoryDetails({
-                              apiKey,
-                              inventoryId: outletDefaultInventoryId
+                            customerId = data.customerId;
+                            getCustomer({
+                              apiKey, customerId
                             }, (data) => {
-                              outletInventoryProductList = data.aggregatedProductList;
-                              outletInventoryMatchingProductBlueprintList = outletInventoryProductList.map(_product => _product.product.productBlueprint);
-                              addSales({
+                              customerData = data.customer;
+                              getAggregatedInventoryDetails({
                                 apiKey,
-                                outletId,
-                                customerId,
-                                productList: [
-                                  {
-                                    productId: outletInventoryProductList[0].productId,
-                                    count: 2,
-                                    salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
-                                    vatPercentage: 5
-                                  }
-                                ],
-                                serviceList: [],
-                                payment: {
-                                  totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
-                                  vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
-                                  discountPresetId: null,
-                                  discountType: placeholderDefaultDiscountType,
-                                  discountValue: placeholderDefaultDiscountValue,
-                                  discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
-                                  serviceChargeAmount: 0,
-                                  totalBillBeforeRounding: 0,
-                                  roundedByAmount: 0,
-                                  totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
-                                  paidAmount: 300,
-                                  changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
-                                  shouldSaveChangeInAccount: false,
-                                  paymentMethod: 'cash'
-                                },
-
-                                assistedByEmployeeId: null,
-                                productsSelectedFromWarehouseId: null,
-
-                                wasOfflineSale: false,
-
-                                sentVia: 'none'
+                                inventoryId: outletDefaultInventoryId
                               }, (data) => {
-                                salesId = data.salesId;
+                                outletInventoryProductList = data.aggregatedProductList;
+                                outletInventoryMatchingProductBlueprintList = outletInventoryProductList.map(_product => _product.product.productBlueprint);
                                 addSales({
                                   apiKey,
                                   outletId,
                                   customerId,
                                   productList: [
                                     {
-                                      productId: outletInventoryProductList[1].productId,
+                                      productId: outletInventoryProductList[0].productId,
                                       count: 2,
-                                      salePrice: outletInventoryMatchingProductBlueprintList[1].defaultSalePrice,
+                                      salePrice: outletInventoryMatchingProductBlueprintList[0].defaultSalePrice,
                                       vatPercentage: 5
                                     }
                                   ],
                                   serviceList: [],
                                   payment: {
-                                    totalAmount: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2),
-                                    vatAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)),
+                                    totalAmount: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2),
+                                    vatAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)),
                                     discountPresetId: null,
                                     discountType: placeholderDefaultDiscountType,
                                     discountValue: placeholderDefaultDiscountValue,
-                                    discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+                                    discountedAmount: ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
                                     serviceChargeAmount: 0,
                                     totalBillBeforeRounding: 0,
                                     roundedByAmount: 0,
-                                    totalBilled: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100))),
+                                    totalBilled: (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100))),
                                     paidAmount: 300,
-                                    changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
+                                    changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[0].defaultSalePrice * 2) * (5 / 100)))),
                                     shouldSaveChangeInAccount: false,
-                                    paymentMethod: 'cash'
+                                    paymentMethodId: paymentMethodCash.id
                                   },
 
                                   assistedByEmployeeId: null,
@@ -265,16 +235,55 @@ describe('Sales Return', _ => {
 
                                   sentVia: 'none'
                                 }, (data) => {
-                                  sales2Id = data.salesId;
-                                  getSales({
-                                    apiKey, salesId
+                                  salesId = data.salesId;
+                                  addSales({
+                                    apiKey,
+                                    outletId,
+                                    customerId,
+                                    productList: [
+                                      {
+                                        productId: outletInventoryProductList[1].productId,
+                                        count: 2,
+                                        salePrice: outletInventoryMatchingProductBlueprintList[1].defaultSalePrice,
+                                        vatPercentage: 5
+                                      }
+                                    ],
+                                    serviceList: [],
+                                    payment: {
+                                      totalAmount: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2),
+                                      vatAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)),
+                                      discountPresetId: null,
+                                      discountType: placeholderDefaultDiscountType,
+                                      discountValue: placeholderDefaultDiscountValue,
+                                      discountedAmount: ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)),
+                                      serviceChargeAmount: 0,
+                                      totalBillBeforeRounding: 0,
+                                      roundedByAmount: 0,
+                                      totalBilled: (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100))),
+                                      paidAmount: 300,
+                                      changeAmount: (300 - (outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2 - ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (placeholderDefaultDiscountValue / 100)) + ((outletInventoryMatchingProductBlueprintList[1].defaultSalePrice * 2) * (5 / 100)))),
+                                      shouldSaveChangeInAccount: false,
+                                      paymentMethodId: paymentMethodCash.id
+                                    },
+
+                                    assistedByEmployeeId: null,
+                                    productsSelectedFromWarehouseId: null,
+
+                                    wasOfflineSale: false,
+
+                                    sentVia: 'none'
                                   }, (data) => {
-                                    salesData = data.sales;
+                                    sales2Id = data.salesId;
                                     getSales({
-                                      apiKey, salesId: sales2Id
+                                      apiKey, salesId
                                     }, (data) => {
-                                      sales2Data = data.sales;
-                                      testDoneFn();
+                                      salesData = data.sales;
+                                      getSales({
+                                        apiKey, salesId: sales2Id
+                                      }, (data) => {
+                                        sales2Data = data.sales;
+                                        testDoneFn();
+                                      });
                                     });
                                   });
                                 });

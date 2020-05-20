@@ -1,0 +1,268 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-page-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-edit-payment-method">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <iron-form id="editPaymentMethodForm" on-keypress="genericFormSubmitionKeypress">
+        <form>
+          <div class="card vertical layout">
+            <paper-input class="editPaymentMethodForm--name" value="{{editPaymentMethodForm.name}}" required minlength="1" error-message=[[verses.paymentMethod.paymentMethodNameInputError]] label=[[verses.paymentMethod.paymentMethodNameInput]]></paper-input>
+
+            <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+              <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.monetaryAccount]]" class="mr-4">
+                <paper-listbox slot="dropdown-content" selected="{{editPaymentMethodForm.monetaryAccountId}}" attr-for-selected="key">
+                  <template is="dom-repeat" items="[[accountList]]" as="account">
+                    <paper-item key="[[account.id]]">[[account.displayName]]</paper-item>
+                  </template>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </template>
+
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editPaymentMethodForm--submit" on-tap="createPaymentMethodTapped">[[verses.paymentMethod.createPaymentMethod]]</paper-button>
+              <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editPaymentMethodForm--submit" on-tap="updatePaymentMethodTapped">[[verses.paymentMethod.updatePaymentMethod]]</paper-button>
+            </div>
+          </div>
+        </form>
+      </iron-form>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageEditPaymentMethod extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
+
+      static get is() {
+        return 'page-edit-payment-method';
+      }
+
+      static get properties() {
+        return {
+          editMode: {
+            type: Boolean,
+            value: false
+          },
+          editingPaymentMethod: {
+            type: Object,
+            value: null
+          },
+          editPaymentMethodForm: {
+            type: Object,
+            value: _ => {
+              if (mode === 'development') {
+                return {
+                  name: "Another Payment Method",
+                  monetaryAccountId: null
+                };
+              } else {
+                return {
+                  name: "",
+                  monetaryAccountId: null
+                };
+              }
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = true;
+        this.useLanguageServices();
+        if ('payment-method' in this.params) {
+          this.editMode = true;
+          this.app.pushPageTitle(this.app.verses.paymentMethod.editPaymentMethodTitle);
+        } else {
+          this.editMode = false;
+          this.app.pushPageTitle(this.app.verses.paymentMethod.addPaymentMethodTitle);
+        }
+        if (!this._ensureAccess()) return;
+
+        let fn = () => {
+          if (this.editMode) {
+            this._processGetPaymentMethod(() => {
+              this.isReady = true;
+            });
+          } else {
+            this.delay(300, () => {
+              this.isReady = true;
+            });
+          }
+        };
+
+        if (this.hasModule('MOD_ACCOUNTING')) {
+          this._processAccountList(fn);
+        } else {
+          fn();
+        }
+
+
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+        this.resetProperties('editPaymentMethodForm');
+        this.removeAutoValidation('#editPaymentMethodForm paper-input');
+      }
+
+      _ensureAccess() {
+        return this.accessControl({
+          authLevel: 'organization-selected',
+          privilegeList: [
+            'PRIV_MANAGE_ACCOUNTING',
+            'PRIV_MODIFY_PAYMENT_METHODS'
+          ]
+        });
+      }
+
+      // region: editPaymentMethod =================================
+
+      _fetchPaymentMethod({ paymentMethodId }, cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          paymentMethodIdList: [paymentMethodId]
+        };
+        this.app.callGetPaymentMethodListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let paymentMethod = response.paymentMethodList[0];
+          cbfn({ paymentMethod });
+        });
+      }
+
+      _processGetPaymentMethod(cbfn) {
+        let paymentMethodId = parseInt(this.params['payment-method']);
+        this._fetchPaymentMethod({ paymentMethodId }, ({ paymentMethod }) => {
+
+          this.editingPaymentMethod = paymentMethod;
+          let { name, monetaryAccountId } = paymentMethod;
+          this.editPaymentMethodForm = { name, monetaryAccountId };
+
+          cbfn();
+        });
+      }
+
+      _processCreatePaymentMethod({ name, monetaryAccountId }) {
+        let data = {
+          name, monetaryAccountId,
+          organizationId: this.app.organization.id,
+        };
+        this.app.callAddPaymentMethodApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editPaymentMethodForm');
+          let message = this.app.verses.paymentMethod.paymentMethodCreated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _processUpdatePaymentMethod({ name, monetaryAccountId }) {
+        let data = {
+          name, monetaryAccountId,
+          paymentMethodId: this.editingPaymentMethod.id
+        };
+
+        this.app.callEditPaymentMethodApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editPaymentMethodForm');
+          let message = this.app.verses.paymentMethod.paymentMethodUpdated;
+          this.app.showToast(message, _ => {
+            this.backButtonOnTopBarPressed();
+          });
+        });
+      }
+
+      _fetchAccountList(cbfn) {
+        let data = {
+          organizationId: this.app.organization.id,
+          filterByIsMonetary: 'only-monetary',
+          filterByNature: 'all',
+          accountIdList: [],
+        };
+        this.app.callGetAccountListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.accountList);
+        });
+      }
+
+      _processAccountList(cbfn) {
+        this._fetchAccountList(newAccountList => {
+          this.accountList = newAccountList
+          cbfn();
+        });
+      }
+
+      // region: ui =================================
+
+      backButtonOnTopBarPressed(e = null) {
+        this.app.navigateToPreviousUrl('/manage-payment-methods');
+      }
+
+      createPaymentMethodTapped(e = null) {
+        this.elemAll('#editPaymentMethodForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editPaymentMethodForm').validate()) return;
+
+        let { name, monetaryAccountId } = this.editPaymentMethodForm;
+        this._processCreatePaymentMethod({ name, monetaryAccountId });
+      }
+
+      updatePaymentMethodTapped(e = null) {
+        this.elemAll('#editPaymentMethodForm paper-input').forEach(el => el.autoValidate = true);
+        if (!this.elem('#editPaymentMethodForm').validate()) return;
+
+        let { name, monetaryAccountId } = this.editPaymentMethodForm;
+        this._processUpdatePaymentMethod({ name, monetaryAccountId });
+      }
+
+      genericDiscountValueInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+      }
+
+      // region: misc =================================
+
+    }
+
+    window.customElements.define(PageEditPaymentMethod.is, PageEditPaymentMethod);
+  </script>
+</dom-module>

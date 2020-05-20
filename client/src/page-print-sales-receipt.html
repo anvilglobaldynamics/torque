@@ -407,7 +407,7 @@
               <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
-                  <td class="monetary-cell"> [[payment.paymentMethod]]</td>
+                  <td class="monetary-cell"> [[payment.paymentMethodDetails.name]]</td>
                   <td class="monetary-cell">[[$addTailingZeros(payment.paidAmount)]]</td>
                   <td class="monetary-cell">[[$addTailingZeros(payment.changeAmount)]] </td>
                 </tr>
@@ -577,7 +577,7 @@
               <template is="dom-repeat" items="[[sales.payment.paymentList]]" as="payment">
                 <tr>
                   <td class="centered-cell">[[$mkDate(payment.createdDatetimeStamp, 'dd-MM-yyyy - hh:mm TT')]]</td>
-                  <td class="centered-cell">[[payment.paymentMethod]]</td>
+                  <td class="centered-cell">[[payment.paymentMethodDetails.name]]</td>
                   <td class="monetary-cell">[[$addTailingZeros(payment.paidAmount)]]</td>
                   <td class="monetary-cell">[[$addTailingZeros(payment.changeAmount)]]</td>
                 </tr>

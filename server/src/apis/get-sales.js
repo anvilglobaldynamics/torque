@@ -43,6 +43,7 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
 
   async handle({ body }) {
     let { salesId } = body;
+    let { organizationId } = this.interimData;
 
     let sales = await this._getSales({ salesId });
 
@@ -52,6 +53,8 @@ exports.GetSalesApi = class extends Api.mixin(InventoryMixin, SalesMixin, Servic
     await this._addServiceBlueprintData({ sales });
 
     await this.__addDiscountPresetName({ sales });
+
+    await this._appendPaymentMethodDetails({ sales, organizationId });
 
     return {
       sales

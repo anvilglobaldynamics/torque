@@ -9,8 +9,9 @@ const { OrganizationMixin } = require('./mixins/organization-mixin');
 const { LiteMixin } = require('./mixins/lite-mixin');
 const { OutletMixin } = require('./mixins/outlet-mixin');
 const { InventoryMixin } = require('./mixins/inventory-mixin');
+const { AccountingMixin } = require('./mixins/accounting-mixin');
 
-exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, OrganizationMixin, LiteMixin, OutletMixin, InventoryMixin) {
+exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, OrganizationMixin, LiteMixin, OutletMixin, InventoryMixin, AccountingMixin) {
 
   get autoValidates() { return true; }
 
@@ -83,6 +84,11 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
     await this._createGeolocationCache({ outletId, location });
 
     await this.__createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId });
+
+    // === payment methods
+    // Accounting is required for default monetary account Ids
+    await this.createDefaultAccounts({ organizationId, userId });
+    await this.createDefaultPaymentMethods({ organizationId });
 
     // === end
     return { status: "success", userId, organizationId, employmentId };
