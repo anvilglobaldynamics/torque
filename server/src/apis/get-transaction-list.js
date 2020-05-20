@@ -73,7 +73,6 @@ exports.GetTransactionListApi = class extends Api.mixin(AccountingMixin) {
     let balance = 0;
     pastTransactionList.forEach((transaction) => {
       let isAccountDebited = transaction.debitList.find(({ accountId }) => accountId === account.id);
-      console.log({ isAccountDebited })
 
       if (isAccountDebited) {
         if (isBalanceDebit) {
