@@ -13,7 +13,7 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
 
   get authenticationLevel() { return 'admin'; }
 
-  get isEnabled() { return true; }
+  get isEnabled() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
@@ -23,6 +23,8 @@ exports.AdminSetupAccountingModuleApi = class extends Api.mixin(OrganizationMixi
 
   async handle({ body, username }) {
     // WARNING! This API does NOT activate MOD_ACCOUNTING. It only creates default accounting accounts
+
+    // WARNING! This API is used during further devops! DO NOT CALL
 
     let organizationList = await this.database.organization._find({});
 
