@@ -198,7 +198,7 @@
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস",
-    "managePaymentMethods": "পেমেন্ট মেথড",
+    "managePaymentMethods": "মূল্যপরিশোধ পদ্ধতি",
     "productSalesReport": "পণ্য বিক্রয় রিপোর্ট"
   },
   "titleBar": {
@@ -1107,18 +1107,18 @@
   },
   "paymentMethod": {
     "pageTitle": "ডিসকাউন্টস",
-    "editPaymentMethodTitle": "পেমেন্ট মেথড  এডিট করুন",
-    "addPaymentMethodTitle": "পেমেন্ট মেথড  যোগ করুন",
-    "noPaymentMethodFound": "কোনো পেমেন্ট মেথড  পাওয়া যায়নি। ",
-    "createPaymentMethod": "পেমেন্ট মেথড  তৈরি করুন",
-    "updatePaymentMethod": "পেমেন্ট মেথড  পরিবর্তন করুন ",
-    "paymentMethodCreated": "নতুন পেমেন্ট মেথড  তৈরি করা হয়েছে।",
-    "paymentMethodUpdated": "পেমেন্ট মেথড  পরিবর্তন করা হয়েছে। ",
-    "createNewPaymentMethod": "নতুন পেমেন্ট মেথড  তৈরি করুন",
-    "paymentMethodDeleted": "পেমেন্ট মেথড  মুছে ফেলা হয়েছে ",
+    "editPaymentMethodTitle": "মূল্যপরিশোধ পদ্ধতি এডিট করুন",
+    "addPaymentMethodTitle": "মূল্যপরিশোধ পদ্ধতি যোগ করুন",
+    "noPaymentMethodFound": "কোনো মূল্যপরিশোধ পদ্ধতি পাওয়া যায়নি। ",
+    "createPaymentMethod": "মূল্যপরিশোধ পদ্ধতি তৈরি করুন",
+    "updatePaymentMethod": "মূল্যপরিশোধ পদ্ধতি পরিবর্তন করুন ",
+    "paymentMethodCreated": "নতুন মূল্যপরিশোধ পদ্ধতি তৈরি করা হয়েছে।",
+    "paymentMethodUpdated": "মূল্যপরিশোধ পদ্ধতি পরিবর্তন করা হয়েছে। ",
+    "createNewPaymentMethod": "নতুন মূল্যপরিশোধ পদ্ধতি তৈরি করুন",
+    "paymentMethodDeleted": "মূল্যপরিশোধ পদ্ধতি মুছে ফেলা হয়েছে ",
     "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
-    "deleteQuestionMessage": "আপনি কি পেমেন্ট মেথড টি মুছে ফেলতে চান?",
-    "paymentMethodNameInput": "পেমেন্ট মেথডের নাম "
+    "deleteQuestionMessage": "আপনি কি মূল্যপরিশোধ পদ্ধতিটি মুছে ফেলতে চান?",
+    "paymentMethodNameInput": "মূল্যপরিশোধ পদ্ধতির নাম"
   },
   "collectionReport": {
     "collectionReportTitle": "সংগ্রহ বিবরণ",

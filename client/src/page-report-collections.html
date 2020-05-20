@@ -198,6 +198,9 @@
           <div class="horizontal layout center item wrap">
             <div class="flex">
               [[verses.collectionReport.collectedAmount]]
+              <template is="dom-if" if="[[!$equals(paymentMethodId, 'all')]]">
+                ([[$getPaymentMethodName(paymentMethodId)]])
+              </template>
             </div>
             <div>
               <strong>[[$applyThousandDecimalFormatting(collectionSummary.collectedAmountSum)]]</strong>

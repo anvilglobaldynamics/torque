@@ -94,6 +94,12 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
       name: 'Digital', 
       monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
     });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Cheque', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
   }
 
   // Organization Creation - End
