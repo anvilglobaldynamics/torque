@@ -33,7 +33,7 @@ let { UserResetPasswordConfirmApi } = require('./legacy-apis/user-reset-password
 
 const { AddOrganizationApi } = require('./apis/add-organization');
 const { GetOrganizationListApi } = require('./apis/get-organization-list');
-let { EditOrganizationApi } = require('./legacy-apis/edit-organization');
+const { EditOrganizationApi } = require('./apis/edit-organization');
 const { GetActivatedPackageListApi } = require('./apis/get-activated-package-list');
 
 const { AddNewEmployeeApi } = require('./apis/add-new-employee');
@@ -112,6 +112,11 @@ const { AddDiscountPresetApi } = require('./apis/add-discount-preset');
 const { EditDiscountPresetApi } = require('./apis/edit-discount-preset');
 const { DeleteDiscountPresetApi } = require('./apis/delete-discount-preset');
 const { GetDiscountPresetListApi } = require('./apis/get-discount-preset-list');
+
+
+const { AddPaymentMethodApi } = require('./apis/add-payment-method');
+const { EditPaymentMethodApi } = require('./apis/edit-payment-method');
+const { GetPaymentMethodListApi } = require('./apis/get-payment-method-list');
 
 const { AddProductCategoryApi } = require('./apis/add-product-category');
 const { EditProductCategoryApi } = require('./apis/edit-product-category');
@@ -221,12 +226,14 @@ class Program {
     try {
       config = ConfigLoader.getComputedConfig();
       if (params.db) {
+        console.log(`WARN Using db "${params.db}"`);
         config.db.name = params.db;
       }
+
       server = new Server(config, mode);
+      logger = new Logger(config.log, this.muteLogger);
       database = new DatabaseService(config.db);
       legacyDatabase = new LegacyDatabase(config.db);
-      logger = new Logger(config.log, this.muteLogger);
       emailService = new EmailService(config, mode, database);
       smsService = new SmsService(config, legacyDatabase);
       templateManager = new TemplateManager(config);
@@ -390,6 +397,10 @@ class Program {
     server.registerPostApi('/api/edit-discount-preset', EditDiscountPresetApi);
     server.registerPostApi('/api/delete-discount-preset', DeleteDiscountPresetApi);
     server.registerPostApi('/api/get-discount-preset-list', GetDiscountPresetListApi);
+
+    server.registerPostApi('/api/add-payment-method', AddPaymentMethodApi);
+    server.registerPostApi('/api/edit-payment-method', EditPaymentMethodApi);
+    server.registerPostApi('/api/get-payment-method-list', GetPaymentMethodListApi);
 
     server.registerPostApi('/api/add-product-category', AddProductCategoryApi);
     server.registerPostApi('/api/edit-product-category', EditProductCategoryApi);

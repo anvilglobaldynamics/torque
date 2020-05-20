@@ -187,6 +187,7 @@ describe('Organization', _ => {
         apiKey,
         organizationId: organizationToBeEdited.id,
         monetaryUnit: 'BDT',
+        vatRule: 'vat-after-discount',
         decimalFormatPreset: 'XX,XX,XXX.XX',
         receiptText1: 'Test Change',
         receiptText2: '',
@@ -337,7 +338,7 @@ describe('Organization', _ => {
         validateGetDashboardSummaryApiSuccessResponse(body);
 
         let modifications = {
-          $inc: { createdDatetimeStamp: (-1 * 1000 * 60 * 60 * 25) }
+          $inc: { createdDatetimeStamp: (-1 * 31 * 24 * 1000 * 60 * 60) }
         };
         getDatabase().updateOne('package-activation', { organizationId: organizationId }, modifications, (err, wasUpdated) => {
           if (err) throw err;

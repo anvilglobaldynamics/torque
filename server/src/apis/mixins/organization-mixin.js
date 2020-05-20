@@ -30,10 +30,11 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
 
     // TODO: Collect during signup
     let monetaryUnit = 'BDT';
+    let vatRule = 'vat-before-discount';
     let decimalFormatPreset = 'XX,XX,XXX.XX';
 
     let logoImageId = null;
-    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset });
+    return await this.database.organizationSettings.create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset });
   }
 
   async _setUserAsOwner({ userId, organizationId }) {
@@ -43,7 +44,7 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   async _setTrialPackage({ organizationId }) {
-    const packageCode = "R-T01";
+    const packageCode = "RS-T01";
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
     let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: "system", paymentReference: "SERVER_ADD_ORGANIZATION_API" });
@@ -74,6 +75,32 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
       let paymentReference = 'SERVER_ADD_ORGANIZATION_API';
       await this.database.moduleActivation.create({ moduleCode, organizationId, createdByAdminName, paymentReference });
     }
+  }
+
+  async createDefaultPaymentMethods({ organizationId }) {
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Cash', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'CASH' })).id
+    });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Card', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Digital', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
+
+    await this.database.paymentMethod.create({
+      organizationId,
+      name: 'Cheque', 
+      monetaryAccountId: (await this.getAccountByCodeName({ organizationId, codeName: 'BANK' })).id
+    });
   }
 
   // Organization Creation - End

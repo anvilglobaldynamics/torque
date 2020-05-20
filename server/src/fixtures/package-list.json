@@ -1,7 +1,21 @@
 [
   {
+    "code": "RS-T01",
+    "name": "Enterprise Trial Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
+  },
+  {
     "code": "RS-D01",
-    "name": "Enterprise Demo Retail-Service Package",
+    "name": "Enterprise Demo Package",
     "price": 0,
     "duration": {
       "months": 1,
@@ -25,20 +39,6 @@
       "maximumOutlets": 99999,
       "maximumWarehouses": 99999,
       "maximumEmployees": 99999
-    }
-  },
-  {
-    "code": "R-T01",
-    "name": "Enterprise Trial Retail Package",
-    "price": 0,
-    "duration": {
-      "months": 0,
-      "days": 1
-    },
-    "limits": {
-      "maximumOutlets": 2,
-      "maximumWarehouses": 1,
-      "maximumEmployees": 5
     }
   },
   {
@@ -66,19 +66,6 @@
     "limits": {
       "maximumOutlets": 99999,
       "maximumEmployees": 99999
-    }
-  },
-  {
-    "code": "S-T01",
-    "name": "Enterprise Trial Service Package",
-    "price": 0,
-    "duration": {
-      "months": 0,
-      "days": 1
-    },
-    "limits": {
-      "maximumOutlets": 1,
-      "maximumEmployees": 10
     }
   },
   {

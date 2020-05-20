@@ -198,6 +198,7 @@
     "manageProductTransfer": "Product Transfer Records",
     "manageProductAcquisition": "Product Acquisition Records",
     "manageDiscountPresets": "Discounts",
+    "managePaymentMethods": "Payment Methods",
     "productSalesReport": "Product Sales Report"
   },
   "titleBar": {
@@ -270,6 +271,8 @@
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",
+    "editOrganizationTitle": "Edit Organization",
+    "updateOrganization": "Update Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
     "industryCategory": "Industry Category of Organization",
     "nameOfYourOrganization": "Name of your Organization",
@@ -280,6 +283,7 @@
     "primaryBusinessAddressInputError": "Enter an address at least 8 characters long",
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created.",
+    "organizationUpdatedToast": "Organization has been updated.",
     "phoneInputError": "Enter a valid phone number.",
     "phoneInput": "Phone number of your Organization",
     "manageOrganizationTitle": "Organizations"
@@ -904,6 +908,10 @@
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
+    "vatRuleDetail": "Select which type of VAT rule your organization uses; [1] VAT Before Discount [2] VAT After Discount",
+    "vatRule": "VAT rule",
+    "beforeDiscount": "Calculate VAT Before discount",
+    "afterDiscount": "Calculate VAT After discount",
     "monetaryUnit": "Monetary Unit (Max. 3 characters, example: USD)",
     "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
@@ -1102,6 +1110,21 @@
     "deleteQuestion": "Delete discount preset?",
     "deleteQuestionMessage": "Are you sure you want to delete this discount preset",
     "discountPresetNameInput": "Discount Preset Name"
+  },
+  "paymentMethod": {
+    "pageTitle": "Payment Methods",
+    "editPaymentMethodTitle": "Edit Payment Method",
+    "addPaymentMethodTitle": "Add Payment Method",
+    "noPaymentMethodFound": "No Payment Method found.",
+    "createPaymentMethod": "Create Payment Method",
+    "updatePaymentMethod": "Update Payment Method",
+    "paymentMethodCreated": "New Payment Method has been created.",
+    "paymentMethodUpdated": "Payment Method has been updated.",
+    "createNewPaymentMethod": "Create New Payment Method",
+    "paymentMethodDeleted": "Payment Method has been deleted.",
+    "deleteQuestion": "Delete Payment Method?",
+    "deleteQuestionMessage": "Are you sure you want to delete this Payment Method",
+    "paymentMethodNameInput": "Payment Method Name"
   },
   "collectionReport": {
     "collectionReportTitle": "Collection Report",

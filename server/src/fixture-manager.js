@@ -28,12 +28,12 @@ class FixtureManager {
       {
         name: "privilege-list",
         path: "./src/fixtures/privilege-list.json",
-        version: 21
+        version: 23
       },
       {
         name: "package-list",
         path: "./src/fixtures/package-list.json",
-        version: 21
+        version: 23
       },
       {
         name: "module-list",

@@ -50,7 +50,7 @@ exports.OrganizationCollection = class extends Collection {
     });
   }
 
-  async update({ id }, { name, primaryBusinessAddress, phone, email }) {
+  async setDetails({ id }, { name, primaryBusinessAddress, phone, email }) {
     return await this._update({ id }, {
       $set: {
         name, primaryBusinessAddress, phone, email

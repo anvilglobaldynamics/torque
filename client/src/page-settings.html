@@ -46,7 +46,7 @@
 
       .note {
         margin-top: 8px;
-        font-size: smaller;
+        font-size: 12px;
         color: #616161;
       }
 
@@ -56,7 +56,6 @@
 
       .settings-save-button {
         margin-top: 8px;
-        width: 100%;
         margin-left: 0px;
         margin-right: 0px;
       }
@@ -104,7 +103,9 @@
             </div>
           </div>
 
-          <paper-button class="secondary settings-save-button" raised on-tap="updateOfflineModeSettingsTapped">[[verses.general.update]]</paper-button>
+          <div class="lone-controls">
+            <paper-button class="secondary settings-save-button" raised on-tap="updateOfflineModeSettingsTapped">[[verses.general.update]]</paper-button>
+          </div>
         </div>
 
         <div class="card vertical layout">
@@ -120,7 +121,10 @@
             <div class="note">
               [[verses.settings.defaultPrinterFormatDetail]]
             </div>
-            <paper-button class="secondary settings-save-button" raised on-tap="updatePrinterFormatSettingsTapped">[[verses.general.update]]</paper-button>
+
+            <div class="lone-controls">
+              <paper-button class="secondary settings-save-button" raised on-tap="updatePrinterFormatSettingsTapped">[[verses.general.update]]</paper-button>
+            </div>
           </div>
         </div>
 
@@ -130,7 +134,10 @@
             <div class="note">
               [[verses.settings.minimumProductQuantityDetail]]
             </div>
-            <paper-button class="secondary settings-save-button" raised on-tap="updateMinimumProductQuantitySettingsTapped">[[verses.general.update]]</paper-button>
+
+            <div class="lone-controls">
+              <paper-button class="secondary settings-save-button" raised on-tap="updateMinimumProductQuantitySettingsTapped">[[verses.general.update]]</paper-button>
+            </div>
           </div>
         </div>
 
@@ -148,6 +155,7 @@
         </template>
 
         <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ORGANIZATION_SETTINGS')]]">
+          
           <div class="card vertical layout">
             <div class="note">
               [[verses.settings.monetaryUnitDetail]]
@@ -164,7 +172,20 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <paper-button class="secondary" raised on-tap="updateOrganizationMonetarySettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            <div class="note" style="padding-top: 30px;">
+              [[verses.settings.vatRuleDetail]]
+            </div>
+
+            <paper-dropdown-menu style="width: 100%;" label="[[verses.settings.vatRule]]" class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{organizationSettings.vatRule}}" attr-for-selected="key">
+                <paper-item key="vat-before-discount">[[verses.settings.beforeDiscount]]</paper-item>
+                <paper-item key="vat-after-discount">[[verses.settings.afterDiscount]]</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <div class="lone-controls">
+              <paper-button class="secondary" raised on-tap="updateOrganizationMonetarySettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            </div>
 
           </div>
 
@@ -177,7 +198,9 @@
 
             <paper-input value="{{organizationSettings.receiptText2}}" maxlength="64" label="[[verses.settings.receiptText2]]"></paper-input>
 
-            <paper-button class="secondary" raised on-tap="updateOrganizationReceiptSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            <div class="lone-controls">
+              <paper-button class="secondary" raised on-tap="updateOrganizationReceiptSettingsTapped" style="margin-top: 8px;">[[verses.general.update]]</paper-button>
+            </div>
 
           </div>
         </template>
@@ -200,7 +223,10 @@
               [[verses.settings.useWebsocketsDetail]]
             </div>
           </div>
-          <paper-button class="secondary settings-save-button" raised on-tap="updateWebSocketSettingsTapped">[[verses.general.update]]</paper-button>
+
+          <div class="lone-controls">
+            <paper-button class="secondary settings-save-button" raised on-tap="updateWebSocketSettingsTapped">[[verses.general.update]]</paper-button>
+          </div>
         </div>
 
       </template>
@@ -417,9 +443,9 @@
       // region: organization-settings =================================
 
       _loadOrganizationSettings() {
-        let { receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId } = this.app.organization.settings;
+        let { receiptText1, receiptText2, monetaryUnit, vatRule, decimalFormatPreset, logoImageId } = this.app.organization.settings;
         this.organizationSettings = {
-          receiptText1, receiptText2, monetaryUnit, decimalFormatPreset, logoImageId
+          receiptText1, receiptText2, monetaryUnit, vatRule, decimalFormatPreset, logoImageId
         };
       }
 
@@ -429,6 +455,7 @@
           receiptText1: this.organizationSettings.receiptText1,
           receiptText2: this.organizationSettings.receiptText2,
           monetaryUnit: this.app.organization.settings.monetaryUnit,
+          vatRule: this.app.organization.settings.vatRule,
           decimalFormatPreset: this.app.organization.settings.decimalFormatPreset,
           logoImageId: this.app.organization.settings.logoImageId
         };
@@ -447,6 +474,7 @@
           receiptText1: this.app.organization.settings.receiptText1,
           receiptText2: this.app.organization.settings.receiptText2,
           monetaryUnit: this.organizationSettings.monetaryUnit,
+          vatRule: this.organizationSettings.vatRule,
           decimalFormatPreset: this.organizationSettings.decimalFormatPreset,
           logoImageId: this.app.organization.settings.logoImageId
         };

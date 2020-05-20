@@ -1037,23 +1037,18 @@
                 <div class="individual-calculation-field-container light">
 
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.paymentMethod]]" class="mr-4" on-iron-select="paymentMethodSelected">
-                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethod}}" attr-for-selected="name">
-                      <paper-item name="cash">[[verses.general.cash]]</paper-item>
-                      <paper-item name="card">[[verses.general.card]]</paper-item>
-                      <paper-item name="digital">[[verses.general.digital]]</paper-item>
-                      <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
-                        <template is="dom-if" if="[[customer]]">
-                          <paper-item name="change-wallet">[[verses.general.balance]]</paper-item>
-                        </template>
+                    <paper-listbox slot="dropdown-content" selected="{{payment.paymentMethodId}}" attr-for-selected="name">
+                      <template is="dom-repeat" items="[[paymentMethodList]]" as="paymentMethod">
+                        <paper-item name="[[paymentMethod.id]]">
+                          [[paymentMethod.name]]
+                        </paper-item>
                       </template>
                     </paper-listbox>
                   </paper-dropdown-menu>
 
-                  <template is="dom-if" if="[[!isPaymentMethodChangeWallet(payment.paymentMethod)]]">
-                    <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
-                      <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
-                    </paper-input>
-                  </template>
+                  <paper-input class="payment--paidAmount flex" value="{{payment.paidAmount}}" on-change="genericPaymentInputChanged" on-input="genericPaymentInputChanged" type="number" required min="0" error-message="[[verses.pos.paidAmountInputError]]" label="[[verses.pos.paidAmountInput]]" on-focus="paidAmountInputFocuesd">
+                    <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
+                  </paper-input>
 
                   <template is="dom-if" if="[[payment.changeAmount]]">
                     <br> [[verses.pos.changeAmount]]:
@@ -1249,7 +1244,7 @@
                 roundedByAmount: 0,
                 totalBilled: null,
                 shouldSaveChangeInAccount: false,
-                paymentMethod: 'cash',
+                paymentMethodId: null,
                 paidAmount: 0,
                 changeAmount: 0
               }
@@ -1349,6 +1344,7 @@
         this.assignedAssistedByEmployee = this.app.getFromSession('pos-assigned-assisted-by-employee');
         this.selectedDiscountPreset = '--no-discount';
         this._processDiscountPresetList(() => { });
+        this._processPaymentMethodList(() => { });
         this.delay(0, () => {
           this._calculatePayment();
         });
@@ -2265,6 +2261,38 @@
         }
       }
 
+      _fetchPaymentMethodList(cbfn) {
+        // only for offline mode
+        if (this.isInOfflineMode) {
+          window.setTimeout(() => {
+            cbfn(this.app.offlineData.cache.getPaymentMethodListResponse.paymentMethodList);
+          }, 10);
+          return;
+        }
+
+        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        this.app.callGetPaymentMethodListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.pagination = response.pagination;
+          return cbfn(response.paymentMethodList);
+        });
+      }
+
+      _processPaymentMethodList(cbfn) {
+        this._fetchPaymentMethodList(paymentMethodList => {
+          this.paymentMethodList = paymentMethodList;
+          if (paymentMethodList.length === 0) {
+            return this.app.navigateTo('/manage-payment-methods');
+          }
+
+          let defaultPaymentMethod = paymentMethodList[0]
+
+          this.set('payment.paymentMethodId', defaultPaymentMethod.id);
+          return cbfn();
+        });
+      }
+
       // main payment calculation method
       _calculatePayment({ resetRounding = true } = {}) {
         let {
@@ -2278,51 +2306,27 @@
           roundedByAmount,
           totalBilled,
           shouldSaveChangeInAccount,
-          paymentMethod,
+          paymentMethodId,
           paidAmount,
           changeAmount,
           discountPresetId = null
         } = this.payment;
 
-        // setting vatAmount to default value of 0 before calculating vatAmount on a loop
-        vatAmount = 0;
+        if (paymentMethodId === null || typeof (paymentMethodId) === 'undefined') return;
+        let paymentMethodDetails = this.paymentMethodList.find(pm => pm.id === paymentMethodId);
 
-        // reducing to find totalProductAmount
-        let totalProductAmount = 0;
-        totalProductAmount = this.productList.reduce((sum, product) => {
-          let { salePrice, selectedCount, vatValue } = product;
+        let totalProductAmount = this.calculateTotalProductAmount();
+        let totalServiceAmount = this.calculateTotalServiceAmount();
 
-          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
-
-          // adding product vat value to to total vatAmount
-          vatAmount += salePriceForAllSelected * (vatValue / 100);
-
-          // the sum to be set as totalProductAmount
-          return parseFloat(sum) + salePriceForAllSelected;
-        }, 0);
-
-        // reducing to find totalServiceAmount
-        let totalServiceAmount = 0;
-        totalServiceAmount = this.serviceList.reduce((sum, service) => {
-          let { salePrice, vatValue } = service;
-
-          // adding service vat value to to total vatAmount
-          vatAmount += salePrice * (vatValue / 100);
-
-          // the sum to be set as totalServiceAmount
-          return parseFloat(sum) + parseFloat(salePrice);
-        }, 0);
+        vatAmount = this.calculateVatBeforeDiscount();
 
         // totalAmount of service and product sale price(s)
         totalAmount = parseFloat(totalProductAmount) + parseFloat(totalServiceAmount);
 
-        // overall discount calculation
-        if (discountValue) {
-          if (discountType === 'percent') {
-            discountedAmount = totalAmount * (discountValue / 100);
-          } else if (discountType === 'fixed') {
-            discountedAmount = discountValue;
-          }
+        discountedAmount = this.calculateDiscount({ discountType, discountValue, totalAmount });
+
+        if (this.app.organization.settings.vatRule === 'vat-after-discount' && discountType === 'percent') {
+          vatAmount = this.calculateVatAfterDiscount({ vatAmount, discountValue });
         }
 
         // updating totalBilled with calculated totalAmount, vatAmount and discountedAmount
@@ -2340,21 +2344,15 @@
         totalBilled = totalBillBeforeRounding - roundedByAmount;
 
         // setting the default paid amount equal to total billed
-        if (paymentMethod !== 'cash' && paidAmount < 1) {
+        if (paymentMethodDetails.monetaryAccountDetails.codeName !== 'CASH' && paidAmount < 1) {
           paidAmount = totalBilled;
         }
 
-        // calculating change amount, paid amount depending on payment method
-        if (paymentMethod === 'change-wallet') {
-          changeAmount = 0;
-          // NOTE: commented out the following to avoid incorrect charging
-          // paidAmount = 0;
+        // calculating change amount, paid amount
+        if (paidAmount > totalBilled) {
+          changeAmount = paidAmount - totalBilled;
         } else {
-          if (paidAmount > totalBilled) {
-            changeAmount = paidAmount - totalBilled;
-          } else {
-            changeAmount = 0;
-          }
+          changeAmount = 0;
         }
 
         // returning updated payment info
@@ -2371,9 +2369,68 @@
           paidAmount,
           changeAmount,
           shouldSaveChangeInAccount,
-          paymentMethod,
+          paymentMethodId,
           discountPresetId
         };
+      }
+
+      calculateTotalProductAmount() {
+        let totalProductAmount = 0;
+
+        this.productList.forEach(product => {
+          let { salePrice, selectedCount } = product;
+          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
+          totalProductAmount += salePriceForAllSelected;
+        });
+
+        return totalProductAmount;
+      }
+
+      calculateTotalServiceAmount() {
+        let totalServiceAmount = 0;
+
+        this.serviceList.forEach(service => {
+          let { salePrice } = product;
+          totalServiceAmount += parseFloat(salePrice);
+        });
+
+        return totalServiceAmount;
+      }
+
+      calculateVatBeforeDiscount() {
+        let vatAmount = 0;
+
+        this.productList.forEach(product => {
+          let { salePrice, selectedCount, vatValue } = product;
+          let salePriceForAllSelected = parseFloat(salePrice * selectedCount);
+          vatAmount += salePriceForAllSelected * (vatValue / 100);
+        });
+
+        this.serviceList.forEach(service => {
+          let { salePrice, vatValue } = product;
+          vatAmount += parseFloat(salePrice) * (vatValue / 100);
+        });
+
+        return vatAmount;
+      }
+
+      calculateDiscount({ discountType, discountValue, totalAmount }) {
+        let discountedAmount = 0;
+
+        if (discountValue) {
+          if (discountType === 'percent') {
+            discountedAmount = totalAmount * (discountValue / 100);
+          } else if (discountType === 'fixed') {
+            discountedAmount = discountValue;
+          }
+        }
+
+        return discountedAmount;
+      }
+
+      calculateVatAfterDiscount({ vatAmount, discountValue }) {
+        vatAmount -= vatAmount * (discountValue / 100);
+        return vatAmount;
       }
 
       clearRounderByAmountTapped(e = null) {
@@ -2477,13 +2534,14 @@
         return (discountType === 'percent');
       }
 
-      isPaymentMethodCash(paymentMethod) {
-        return (paymentMethod === 'cash');
-      }
+      // NOTE: Probably not in use
+      // isPaymentMethodCash(paymentMethod) {
+      //   return (paymentMethod === 'cash');
+      // }
 
-      isPaymentMethodChangeWallet(paymentMethod) {
-        return (paymentMethod === 'change-wallet');
-      }
+      // isPaymentMethodChangeWallet(paymentMethod) {
+      //   return (paymentMethod === 'change-wallet');
+      // }
 
       isValidCreditSale(customer, totalBilled, paidAmount) {
         return (customer && totalBilled > paidAmount);

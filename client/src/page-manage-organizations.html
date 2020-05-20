@@ -57,6 +57,8 @@
                 <div class="title">[[organization.name]]</div>
                 <div class="description">[[organization.employment.designation]] ([[organization.employment.role]])</div>
               </div>
+
+              <paper-icon-button icon="create" on-tap="editTapped"></paper-icon-button>
               <paper-button raised class="primary" on-tap="selectTapped">[[verses.general.select]]</paper-button>
             </div>
           </template>
@@ -95,7 +97,9 @@
         this.app.pushPageTitle(this.app.verses.organization.manageOrganizationTitle);
         if (!this._ensureAccess()) return;
         this._processOrganizationList(_ => {
-          this.isReady = true;
+          this._updateCurrentOrganization(_ => {
+            this.isReady = true;
+          });
         });
       }
 
@@ -129,6 +133,14 @@
         });
       }
 
+      _updateCurrentOrganization(cbfn) {
+        let organization = this.organizationList.find(organization => organization.id === this.app.organization.id);
+        this.app.removeSettings();
+        this.app.removePreviousOrganization();
+        this.app.saveOrganization(organization);
+        cbfn();
+      }
+
       // region: ui  ===========================
 
       createTapped(e = null) {
@@ -143,6 +155,11 @@
         return this.app.navigateTo(`/home/org:${organization.id}`);
         // this.app.wasLastNavigationBypassed = false;
         // return this.app.navigateTo('/home/bypassable:yes');
+      }
+
+      editTapped(e) {
+        let { organization } = e.model;
+        return this.app.navigateTo(`/edit-organization/organization:${organization.id}`);
       }
 
       // region: misc =================================

@@ -198,6 +198,7 @@
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্টস",
+    "managePaymentMethods": "মূল্যপরিশোধ পদ্ধতি",
     "productSalesReport": "পণ্য বিক্রয় রিপোর্ট"
   },
   "titleBar": {
@@ -272,6 +273,8 @@
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
+    "editOrganizationTitle": "আপডেট সংস্থা",
+    "updateOrganization": "সংস্থা আপডেট করুন ",
     "isNotOneOutletOrg": "এই সংস্থার একের বেশি দোকান আছে।",
     "industryCategory": "সংস্থার শিল্পের ধরণ",
     "nameOfYourOrganization": "আপনার সংস্থার নাম",
@@ -282,6 +285,7 @@
     "primaryBusinessAddressInputError": "সঠিক ঠিকানা লিখুন।",
     "createOrganization": "সংস্থা তৈরি করুন",
     "organizationCreatedToast": "নতুন সংস্থা তৈরি করা হয়েছে।",
+    "organizationUpdatedToast": "সংস্থা আপডেট হয়ে গিয়েছে।",
     "phoneInputError": "সঠিক ফোন নম্বর লিখুন।",
     "phoneInput": "আপনার সংস্থার ফোন নম্বর",
     "manageOrganizationTitle": "সংস্থা"
@@ -907,6 +911,10 @@
     "defaultOutletSelection": "আউটলেট বাছাই",
     "monetaryUnit": "মুদ্রা (সর্বোচ দৈর্ঘ ৩, যেমন USD)",
     "monetaryUnitDetail": "নোট: আর্থিক মুদ্রা পরিবর্তন আপনার বিক্রয় প্রভাবিত করে না।",
+    "vatRuleDetail": "আপনার সংস্থা কিভাবে ভ্যাট নির্ধারণ করে তা বাছাই করুন; [1] ছাড়ের আগে ভ্যাট [2] ছাড়ের পরে ভ্যাট",
+    "vatRule": "ভ্যাট নিয়ম",
+    "beforeDiscount": "ছাড়ের আগে ভ্যাট হিসেব",
+    "afterDiscount": "ছাড়ের পরে ভ্যাট হিসেব",
     "moreOptionsForthcoming": "আরো সেটিংস আসন্ন।",
     "minimumProductQuantity": "নূন্যতম পণ্য পরিমান",
     "minimumProductQuantityDetail": "এই সংখ্যাটির নীচে পণ্য গণনা লাল রঙে দেখানো হবে।",
@@ -1103,6 +1111,21 @@
     "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
     "deleteQuestionMessage": "আপনি কি ডিসকাউন্ট প্রিসেটটি মুছে ফেলতে চান?",
     "discountPresetNameInput": "ডিসকাউন্ট প্রিসেটের নাম "
+  },
+  "paymentMethod": {
+    "pageTitle": "ডিসকাউন্টস",
+    "editPaymentMethodTitle": "মূল্যপরিশোধ পদ্ধতি এডিট করুন",
+    "addPaymentMethodTitle": "মূল্যপরিশোধ পদ্ধতি যোগ করুন",
+    "noPaymentMethodFound": "কোনো মূল্যপরিশোধ পদ্ধতি পাওয়া যায়নি। ",
+    "createPaymentMethod": "মূল্যপরিশোধ পদ্ধতি তৈরি করুন",
+    "updatePaymentMethod": "মূল্যপরিশোধ পদ্ধতি পরিবর্তন করুন ",
+    "paymentMethodCreated": "নতুন মূল্যপরিশোধ পদ্ধতি তৈরি করা হয়েছে।",
+    "paymentMethodUpdated": "মূল্যপরিশোধ পদ্ধতি পরিবর্তন করা হয়েছে। ",
+    "createNewPaymentMethod": "নতুন মূল্যপরিশোধ পদ্ধতি তৈরি করুন",
+    "paymentMethodDeleted": "মূল্যপরিশোধ পদ্ধতি মুছে ফেলা হয়েছে ",
+    "deleteQuestion": "প্রিসেট মুছে ফেলুন?",
+    "deleteQuestionMessage": "আপনি কি মূল্যপরিশোধ পদ্ধতিটি মুছে ফেলতে চান?",
+    "paymentMethodNameInput": "মূল্যপরিশোধ পদ্ধতির নাম"
   },
   "collectionReport": {
     "collectionReportTitle": "সংগ্রহ বিবরণ",

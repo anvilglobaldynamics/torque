@@ -14,6 +14,7 @@ exports.OrganizationSettingsCollection = class extends Collection {
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       organizationId: Joi.number().max(999999999999999).required(),
       monetaryUnit: Joi.string().min(1).max(3).required(),
+      vatRule: Joi.string().valid('vat-before-discount', 'vat-after-discount').required(),
       decimalFormatPreset: Joi.string().valid('XX,XX,XXX.XX', 'X,XXX,XXX.XX', 'X XXX XXX,XX', 'X.XXX.XXX,XX').required(),
       receiptText1: Joi.string().min(0).max(64).allow('').required(),
       receiptText2: Joi.string().min(0).max(64).allow('').required(),
@@ -43,17 +44,17 @@ exports.OrganizationSettingsCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset }) {
+  async create({ organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule,decimalFormatPreset }) {
     return await this._insert({
-      organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset,
+      organizationId, receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset,
       isDeleted: false
     });
   }
 
-  async setDetailsByOrganizationId({ organizationId }, { receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset }) {
+  async setDetailsByOrganizationId({ organizationId }, { receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset }) {
     return await this._update({ organizationId }, {
       $set: {
-        receiptText1, receiptText2, logoImageId, monetaryUnit, decimalFormatPreset
+        receiptText1, receiptText2, logoImageId, monetaryUnit, vatRule, decimalFormatPreset
       }
     });
   }
