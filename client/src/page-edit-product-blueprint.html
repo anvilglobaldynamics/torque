@@ -31,6 +31,11 @@
         font-size: 12px;
         color: #616161;
       }
+
+      .create-product-category-link {
+        font-size: 14px;
+        padding-top: 14px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -90,8 +95,11 @@
           <template is="dom-if" if="[[shouldShowProductCategoryCreationPrompt]]">
             <div class="card helpful-tips">
               [[verses.productBlueprint.productCategoryCreationPromptmessage]]<br>
-              <div class="button-row">
-                <paper-button raised class="secondary" on-tap="buttonCreateProductCategoryTapped">[[verses.productBlueprint.createProductCategory]]</paper-button>
+
+              <div class="horizontal layout">
+                <a class="link primary create-product-category-link" on-tap="buttonCreateProductCategoryTapped">
+                  [[verses.productBlueprint.createProductCategory]]
+                </a>
               </div>
             </div>
           </template>
