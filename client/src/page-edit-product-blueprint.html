@@ -36,6 +36,7 @@
         font-size: 14px;
         padding-top: 14px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -84,9 +85,16 @@
 
               <div class="horizontal layout center">
                 <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
-                <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
-                  <iron-icon icon="search"></iron-icon>
-                </paper-button>
+                <template is="dom-if" if="[[newCategoryInput.length]]">
+                  <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
+                    <iron-icon icon="search"></iron-icon>
+                  </paper-button>
+                </template>
+                <template is="dom-if" if="[[!newCategoryInput.length]]">
+                  <paper-button class="neutral" disabled raised icon="search">
+                    <iron-icon icon="search"></iron-icon>
+                  </paper-button>
+                </template>
               </div>
             </div>
           </template>
@@ -362,7 +370,7 @@
               .filter(productCategory =>
                 !this.productCategoryList.find(_productCategory => productCategory.id === _productCategory.id)
               )
-              // .slice(0, 8);
+            // .slice(0, 8);
           } catch (ex) {
             productCategoryList = [];
           }
