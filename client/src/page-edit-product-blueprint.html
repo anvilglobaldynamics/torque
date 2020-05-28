@@ -362,7 +362,7 @@
 
       _processVendorList(cbfn) {
         this.vendorSelectedIndex = -1;
-        if (!this.hasModule('MOD_VENDOR')) {
+        if (!this.hasModule('MOD_VENDOR') || !this.hasPrivilege('PRIV_VIEW_VENDOR')) {
           this.vendorList = [];
           cbfn();
           return;
@@ -374,6 +374,12 @@
       }
 
       _processInventoryContainerList(cbfn) {
+        if (!this.hasPrivilege('PRIV_VIEW_ALL_INVENTORIES')) {
+          this.inventoryContainerList = [];
+          cbfn();
+          return;
+        }
+
         let data = { organizationId: this.app.organization.id };
         this.app.callGetInventoryListApi(data, (err, response) => {
           if (err) return;
