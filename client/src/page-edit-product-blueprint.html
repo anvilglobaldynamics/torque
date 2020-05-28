@@ -161,8 +161,8 @@
 
           <div class="horizontal layout button-row end">
             <div class="flex"></div>
-            <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
-            <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
+            <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
+            <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
           </div>
 
         </form>
@@ -418,7 +418,6 @@
         // loop through inventories
         window.baselib.asyncForIn(this.inventoryContainerList).forEach((next, inventoryContainer, index) => {
           if (!(inventoryContainer.count > 0)) return next();
-          console.log({ inventoryContainer });
 
           let data = {
             inventoryId: inventoryContainer.inventoryId,
@@ -443,7 +442,6 @@
       calculateAccountsPayable() {
         let sum = 0;
         this.inventoryContainerList.forEach(inventoryContainer => {
-          console.log(inventoryContainer.count, this.editProductBlueprintForm.defaultPurchasePrice)
           sum += parseFloat(inventoryContainer.count) * parseFloat(this.editProductBlueprintForm.defaultPurchasePrice);
         });
         this.totalAccountsPayable = sum || 0;
