@@ -354,6 +354,8 @@
           }
 
           this._processTransactionList(() => {
+            this.elem('elem-party-selector').refreshVariables();
+
             this.self = this;
             this.isReady = true;
           });

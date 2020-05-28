@@ -200,10 +200,14 @@
           if (!this._ensureAccess()) return;
           if (this.editMode) {
             this._processGetTransaction(() => {
+              this.elem('elem-party-selector').refreshVariables();
+            
               this.isReady = true;
             });
           } else {
             this.delay(300, () => {
+              this.elem('elem-party-selector').refreshVariables();
+            
               this.isReady = true;
             });
           }
