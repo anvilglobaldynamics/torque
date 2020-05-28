@@ -389,7 +389,8 @@
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?",
     "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
     "createProductCategory": "Go to Create Product Category Page",
-    "addProducts": "Add Products to Inventories"
+    "addProducts": "Add Products to Inventories",
+    "addProductsNote": "You can add products to the inventory directly from here. This is optional. Leave count 0 if you want to add to inventory later."
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -1221,8 +1222,8 @@
     "allOutlets": "All Outlets"
   },
   "receipt": {
-    "dialogTitle":"Receipt",
-    "noReceipt":"No Receipt",
+    "dialogTitle": "Receipt",
+    "noReceipt": "No Receipt",
     "printReceipt": "Print Receipt",
     "emailReceipt": "Send Receipt by Email",
     "smsReceipt": "Send Receipt by Sms",
@@ -1234,10 +1235,8 @@
     "manageMonetaryAccountPageTitle": "Monetary Accounts",
     "editAccountPageTitle": "Edit Account",
     "addAccountPageTitle": "Add Account",
-
     "manageTransactionPageTitle": "Manage Transactions",
     "accountingReportPageTitle": "Accounting Reports",
-    
     "viewManualTransaction": "View Manual Transactions",
     "addManualTransaction": "Add Manual Transaction",
     "viewIncome": "View Income",
@@ -1246,18 +1245,15 @@
     "addExpense": "Add Expense",
     "viewAssetPurchase": "View Asset Transactions",
     "addAssetPurchase": "Add Asset Purchase",
-
     "addManualTransactionPageTitle": "Add Manual Transaction",
     "editManualTransactionPageTitle": "Edit Manual Transaction",
-
     "noAccountFound": "No account found",
     "createNewAccount": "Create new account",
     "updateOldAccount": "Update old account",
     "accountCreated": "Account created successfully.",
     "accountUpdated": "Account update successfully.",
-
     "accountNameInput": "Account Name",
-    "accountNameInputError": "Enter valid account name.", 
+    "accountNameInputError": "Enter valid account name.",
     "accountNoteInput": "Note",
     "accountNoteInputError": "Note is too long.",
     "transactionAmountInput": "Amount",
@@ -1266,24 +1262,18 @@
     "addEditIncomeTransactionPageTitle": "Income Transaction",
     "addEditExpenseTransactionPageTitle": "Expense Transaction",
     "addEditAssetPurchasePageTitle": "Asset Purchase",
-
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
     "monetaryAccountPurposeNote": "Note: Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
-
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
-
     "account": "Account",
-
     "debitAccount": "Debited Account",
     "creditAccount": "Credited Account",
-
     "accountLedger": "Account Ledger",
     "accountInvalidMessage": "The account is not valid.",
-
     "asset": "Asset",
     "assets": "Assets",
     "liability": "Liability",
@@ -1300,50 +1290,37 @@
     "moneyCollected": "Money Collected",
     "moneyPaid": "Money Paid",
     "transactions": "Transactions",
-
     "debit": "Debit",
     "credit": "Credit",
     "balance": "Balance",
     "againstAccount": "Against Account",
     "note": "Note",
-
     "employee": "Employee",
     "noParty": "No Party",
     "party": "Party",
     "incomeStatement": "Income Statement",
     "trialBalance": "Trial Balance",
     "balanceSheet": "Balance Sheet",
-
     "totalRevenue": "Total Revenue",
     "totalExpense": "Total Expense",
     "totalAssets": "Total Assets",
     "totalLiabilities": "Total Liabilities",
     "totalEquity": "Total Equity",
     "netProfit": "Net Profit",
-
     "asOfDate": "As of Date",
-
     "totalLiabilitiesAndEquity": "Total Liabilities and Equity",
-
     "group": "Group",
     "particulars": "Particulars",
-
     "payables": "Payables",
     "receivables": "Receivables",
-
     "transactionListTitle": "Transactions",
-
     "productAcquisitionMessage": " will be added as Accounts Payable.",
-
     "transactionSaved": "Transaction Saved!",
-
     "chartOfAccounts": "Chart of Accounts",
-
     "makePayment": "Make Payment",
     "collectPayment": "Collect Payment",
     "addEditDebtPaymentPageTitle": "Debt Payment",
     "addEditDebtCollectionPageTitle": "Debt Collection",
-
     "incomeStatementDescription": "Income Statement (also called Profit and Loss Statement) shows your business's Revenues, Expenses and Net Profit over a certain period of time.",
     "balanceSheetDescription": "Balance sheet shows you the financial position of your business. It lists the total value of your Fixed and Current Assets, your Liabilities, your Investments and any Retained Profits.",
     "trialBalanceDescription": "Trial Balance is a list of all your account heads and their total balance. Trial Balance is specially useful to your accountant.",

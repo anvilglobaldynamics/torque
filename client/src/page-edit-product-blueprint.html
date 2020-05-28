@@ -37,6 +37,12 @@
         padding-top: 14px;
       }
 
+      .acc-payable {
+        margin-top: 12px;
+        /* color: rgb(255, 145, 0); */
+        color: var(--app-button-label-alternative);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -115,16 +121,19 @@
           <!-- new product category prompt - end -->
 
           <!-- add products to inventory - start -->
-          <template is="dom-if" if="[[!editMode]]">
+          <template is="dom-if" if="[[$shouldShowAddProducts(editMode, inventoryContainerList)]]">
             <div class="card vertical layout list">
 
               <div class="mb-4" style="font-weight: bold;">[[verses.productBlueprint.addProducts]]:</div>
+              <div class="note" style="padding-top: 15px; padding-bottom: 15px;">
+                [[verses.productBlueprint.addProductsNote]]
+              </div>
 
               <template is="dom-repeat" items="[[inventoryContainerList]]" as="inventoryContainer" index-as="inventoryContainerIndex">
                 <div class="horizontal layout item center">
                   <div>[[inventoryContainer.inventoryContainerName]]</div>
                   <div class="flex"></div>
-                  <paper-input step="0.01" value="{{inventoryContainer.count}}" type="number" min="0" label=[[verses.general.quantity]] style="max-width: 100px">
+                  <paper-input step="0.01" value="{{inventoryContainer.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[verses.general.count]] style="max-width: 100px">
                     <div slot="suffix">[[editProductBlueprintForm.unit]]</div>
                   </paper-input>
                 </div>
@@ -139,6 +148,13 @@
                   </paper-listbox>
                 </paper-dropdown-menu>
               </template>
+
+              <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+                <template is="dom-if" if="[[totalAccountsPayable]]">
+                  <div class="acc-payable"> [[$applyThousandDecimalFormatting(totalAccountsPayable)]] [[app.organization.settings.monetaryUnit]] [[verses.accounting.productAcquisitionMessage]]</div>
+                </template>
+              </template>
+
             </div>
           </template>
           <!-- add products to inventory - end -->
@@ -380,7 +396,8 @@
                 inventoryContainerId,
                 inventoryContainerName,
                 inventoryContainerType,
-                inventoryId: id
+                inventoryId: id,
+                count: 0
               });
             }
           });
@@ -423,7 +440,21 @@
         });
       }
 
+      calculateAccountsPayable() {
+        let sum = 0;
+        this.inventoryContainerList.forEach(inventoryContainer => {
+          console.log(inventoryContainer.count, this.editProductBlueprintForm.defaultPurchasePrice)
+          sum += parseFloat(inventoryContainer.count) * parseFloat(this.editProductBlueprintForm.defaultPurchasePrice);
+        });
+        this.totalAccountsPayable = sum || 0;
+      }
+
       // region: ui =================================
+
+      genericNumericInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        this.calculateAccountsPayable();
+      }
 
       buttonCreateProductCategoryTapped(e = null) {
         this.app.navigateTo(`/edit-product-category`);
@@ -541,6 +572,10 @@
         e.stopPropagation();
         if (e.which !== 13) return;
         this._addNewCategory();
+      }
+
+      $shouldShowAddProducts(editMode, inventoryContainerList) {
+        return (!editMode && inventoryContainerList.length > 0);
       }
 
       // region: misc =================================
