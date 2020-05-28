@@ -53,6 +53,10 @@
 
       .move-to-inventory-help {}
 
+      .negative {
+        color: var(--app-button-label-danger);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -163,7 +167,9 @@
                   <paper-input class="small-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
-                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  <!-- [[verses.general.deselect]] -->
+                  <!-- <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button> -->
+                  <paper-icon-button class="negative" on-tap="deselectTapped" icon="remove-circle"></paper-icon-button>
                 </template>
 
               </div>
@@ -467,7 +473,7 @@
               let productList = this.selectedProductList.filter(product => product.isSelected).map(product => {
                 if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
                 let { productId, selectedCount } = product;
-                let count = parseInt(selectedCount, 10);
+                let count = parseFloat(selectedCount);
                 return { count, productId };
               });
               this._processMoveProducts({ fromInventoryId, toInventoryId, productList, vendorId }, () => {

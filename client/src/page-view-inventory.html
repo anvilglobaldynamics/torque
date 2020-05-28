@@ -42,10 +42,16 @@
       .manage-inventory-button {
         width: 100%;
         margin: 5px;
+        margin-top: 14px;
+        margin-left: 0px;
       }
 
       .low-product-count-div {
         color: red;
+      }
+
+      .product-list-card {
+        background-color:#e1f5fe;
       }
 
     </style>
@@ -78,7 +84,7 @@
       </template>
 
       <template is="dom-if" if="[[productList.length]]">
-        <div class="card vertical layout">
+        <div class="card vertical layout product-list-card">
 
           <!-- pagination show previous -->
           <template is="dom-if" if="[[$hasPreviousPagination(paginate.offset)]]">
@@ -124,6 +130,8 @@
       <!-- add products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
         <div class="card">
+          <div class="mb-4" style="font-weight: bold; font-size: 16px; margin-bottom: 12px;">[[verses.inventory.addProductsCardTitle]]:</div>
+
           <div>
             [[verses.inventory.addToInventoryHelp]]
           </div>
@@ -134,8 +142,9 @@
       <!-- transfer products trigger -->
       <template is="dom-if" if="[[hasPrivilege('PRIV_TRANSFER_ALL_INVENTORIES', organization)]]">
         <div class="card">
+          <div class="mb-4" style="font-weight: bold; font-size: 16px; margin-bottom: 12px;">[[verses.inventory.transferProductsCardTitle]]:</div>
           <div class="mb-4">[[verses.inventory.transferInventoryHelp]]</div>
-          <paper-button raised style="width: 100%;" class="secondary" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
+          <paper-button raised style="width: 100%;" class="secondary manage-inventory-button" on-tap="selectProductsToTransferTapped">[[verses.inventory.selectProductsToTransfer]]</paper-button>
         </div>
       </template>
 

@@ -365,10 +365,10 @@
 
             let productList = [];
             this.selectedProductBlueprintList.forEach(productBlueprint => {
-              if (parseInt(productBlueprint.count) > 0) {
+              if (parseFloat(productBlueprint.count) > 0) {
                 productList.push({
                   productBlueprintId: productBlueprint.id,
-                  count: parseInt(String(productBlueprint.count))
+                  count: parseFloat(String(productBlueprint.count))
                 });
               }
             });
