@@ -52,6 +52,7 @@
       }
 
       .move-to-inventory-help {}
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -564,6 +565,7 @@
             inventory.inventoryContainerId === inventoryContainerId && inventory.inventoryContainerType === inventoryContainerType
           );
           this.inventoryList = inventoryList;
+          this.targetInventoryIndex = inventoryList.findIndex((({ type }) => type === 'default'));
         });
       }
 
