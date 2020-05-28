@@ -37,6 +37,12 @@
         padding-top: 14px;
       }
 
+      .acc-payable {
+        margin-top: 12px;
+        /* color: rgb(255, 145, 0); */
+        color: var(--app-button-label-alternative);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -100,6 +106,7 @@
           </template>
           <!-- select/deselect product category - end -->
 
+          <!-- new product category prompt - start -->
           <template is="dom-if" if="[[shouldShowProductCategoryCreationPrompt]]">
             <div class="card helpful-tips">
               [[verses.productBlueprint.productCategoryCreationPromptmessage]]<br>
@@ -111,11 +118,51 @@
               </div>
             </div>
           </template>
+          <!-- new product category prompt - end -->
+
+          <!-- add products to inventory - start -->
+          <template is="dom-if" if="[[$shouldShowAddProducts(editMode, inventoryContainerList)]]">
+            <div class="card vertical layout list">
+
+              <div class="mb-4" style="font-weight: bold;">[[verses.productBlueprint.addProducts]]:</div>
+              <div class="note" style="padding-top: 15px; padding-bottom: 15px;">
+                [[verses.productBlueprint.addProductsNote]]
+              </div>
+
+              <template is="dom-repeat" items="[[inventoryContainerList]]" as="inventoryContainer" index-as="inventoryContainerIndex">
+                <div class="horizontal layout item center">
+                  <div>[[inventoryContainer.inventoryContainerName]]</div>
+                  <div class="flex"></div>
+                  <paper-input step="0.01" value="{{inventoryContainer.count}}" type="number" min="0" on-change="genericNumericInputChanged" label=[[verses.general.count]] style="max-width: 100px">
+                    <div slot="suffix">[[editProductBlueprintForm.unit]]</div>
+                  </paper-input>
+                </div>
+              </template>
+
+              <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
+                <paper-dropdown-menu style="width: 100%;" label=[[verses.general.vendor]] class="mr-4">
+                  <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                    <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                      <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                    </template>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </template>
+
+              <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
+                <template is="dom-if" if="[[totalAccountsPayable]]">
+                  <div class="acc-payable"> [[$applyThousandDecimalFormatting(totalAccountsPayable)]] [[app.organization.settings.monetaryUnit]] [[verses.accounting.productAcquisitionMessage]]</div>
+                </template>
+              </template>
+
+            </div>
+          </template>
+          <!-- add products to inventory - end -->
 
           <div class="horizontal layout button-row end">
             <div class="flex"></div>
-            <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]] editProductBlueprintForm--submit" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
-            <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]] editProductBlueprintForm--submit" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
+            <paper-button raised class$="primary [[$if(editMode, 'hidden', '')]]" on-tap="createProductBlueprintTapped">[[verses.productBlueprint.createProductBlueprint]]</paper-button>
+            <paper-button raised class$="primary [[$if(editMode, '', 'hidden')]]" on-tap="updateProductBlueprintTapped">[[verses.productBlueprint.updateProductBlueprint]]</paper-button>
           </div>
 
         </form>
@@ -167,6 +214,14 @@
                 };
               }
             }
+          },
+          inventoryContainerList: {
+            type: Array,
+            value: []
+          },
+          vendorList: {
+            type: Array,
+            value: []
           }
         };
       }
@@ -202,8 +257,10 @@
               this.isReady = true;
             });
           } else {
-            this.delay(300, () => {
-              this.isReady = true;
+            this._processInventoryContainerList(() => {
+              this._processVendorList(_ => {
+                this.isReady = true;
+              });
             });
           }
         });
@@ -213,7 +270,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.newCategoryInput = '';
-        this.resetProperties('editProductBlueprintForm');
+        this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
         this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }
 
@@ -262,7 +319,7 @@
         });
       }
 
-      _processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }) {
+      _processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, cbfn) {
         let productCategoryIdList = this.productCategoryList
           .map(productCategory => productCategory.id);
         let data = {
@@ -272,10 +329,7 @@
         this.app.callAddProductBlueprintApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
-          let message = this.app.verses.productBlueprint.productBlueprintCreated;
-          this.app.showToast(message, _ => {
-            this.backButtonOnTopBarPressed();
-          });
+          cbfn(response)
         });
       }
 
@@ -297,7 +351,114 @@
         });
       }
 
+      _fetchVendorList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetVendorListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.vendorList);
+        });
+      }
+
+      _processVendorList(cbfn) {
+        this.vendorSelectedIndex = -1;
+        if (!this.hasModule('MOD_VENDOR') || !this.hasPrivilege('PRIV_VIEW_VENDOR')) {
+          this.vendorList = [];
+          cbfn();
+          return;
+        }
+        this._fetchVendorList(newVendorList => {
+          this.vendorList = newVendorList;
+          cbfn();
+        });
+      }
+
+      _processInventoryContainerList(cbfn) {
+        if (!this.hasPrivilege('PRIV_VIEW_ALL_INVENTORIES')) {
+          this.inventoryContainerList = [];
+          cbfn();
+          return;
+        }
+
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetInventoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let inventoryList = response.inventoryList;
+          inventoryList = inventoryList.filter(inventory => inventory.type === "default");
+
+          let inventoryContainerList = [];
+          inventoryList.forEach(inventory => {
+            let {
+              inventoryContainerId,
+              inventoryContainerName,
+              inventoryContainerType,
+              id
+            } = inventory;
+            if (!inventoryContainerList.find(item =>
+              item.inventoryContainerId === inventoryContainerId && item.inventoryContainerType === inventoryContainerType
+            )) {
+              inventoryContainerList.push({
+                inventoryContainerId,
+                inventoryContainerName,
+                inventoryContainerType,
+                inventoryId: id,
+                count: 0
+              });
+            }
+          });
+          this.inventoryContainerList = inventoryContainerList;
+          return cbfn();
+        });
+      }
+
+      _processAddProductsToInventory({ productBlueprintId }, cbfn) {
+        // vendor
+        let vendorId = null;
+        if (this.hasModule('MOD_VENDOR')) {
+          try {
+            vendorId = this.vendorList[this.vendorSelectedIndex].id;
+          } catch (ex) { }
+        }
+
+        // loop through inventories
+        window.baselib.asyncForIn(this.inventoryContainerList).forEach((next, inventoryContainer, index) => {
+          if (!(inventoryContainer.count > 0)) return next();
+
+          let data = {
+            inventoryId: inventoryContainer.inventoryId,
+            productList: [{
+              productBlueprintId,
+              count: inventoryContainer.count
+            }],
+            vendorId
+          }
+
+          this.app.callAddProductToInventoryApi(data, (err, response) => {
+            if (err) return;
+            if (response.hasError) return this.onApiError(response.error);
+            return next();
+          });
+
+        })["finally"](() => {
+          cbfn();
+        });
+      }
+
+      calculateAccountsPayable() {
+        let sum = 0;
+        this.inventoryContainerList.forEach(inventoryContainer => {
+          sum += parseFloat(inventoryContainer.count) * parseFloat(this.editProductBlueprintForm.defaultPurchasePrice);
+        });
+        this.totalAccountsPayable = sum || 0;
+      }
+
       // region: ui =================================
+
+      genericNumericInputChanged(e) {
+        this.enforceMinMaxOnPaperInput(e);
+        this.calculateAccountsPayable();
+      }
 
       buttonCreateProductCategoryTapped(e = null) {
         this.app.navigateTo(`/edit-product-category`);
@@ -314,8 +475,21 @@
         this.storeInCache('editProductBlueprintForm--defaultVat', this.editProductBlueprintForm.defaultVat);
         this.storeInCache('editProductBlueprintForm--unit', this.editProductBlueprintForm.unit);
 
+        let hasProductToAdd = this.inventoryContainerList.some(({ count }) => count > 0)
+        if (this.hasModule('MOD_VENDOR') && this.vendorSelectedIndex < 0 && hasProductToAdd) {
+          this.app.showModalDialog(this.app.verses.product.vendorNeededMessageTitle, this.app.verses.product.vendorNeededMessageBody);
+          return;
+        }
+
         let { name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable } = this.editProductBlueprintForm;
-        this._processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable });
+        this._processCreateProductBlueprint({ name, unit, identifierCode, defaultPurchasePrice, defaultVat, defaultSalePrice, isReturnable }, ({ productBlueprintId }) => {
+          this._processAddProductsToInventory({ productBlueprintId }, () => {
+            let message = this.app.verses.productBlueprint.productBlueprintCreated;
+            this.app.showToast(message, _ => {
+              this.backButtonOnTopBarPressed();
+            });
+          });
+        });
       }
 
       updateProductBlueprintTapped(e = null) {
@@ -402,6 +576,10 @@
         e.stopPropagation();
         if (e.which !== 13) return;
         this._addNewCategory();
+      }
+
+      $shouldShowAddProducts(editMode, inventoryContainerList) {
+        return (!editMode && inventoryContainerList.length > 0);
       }
 
       // region: misc =================================

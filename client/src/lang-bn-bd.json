@@ -104,7 +104,7 @@
     "gymModule": "জিমনেসিয়াম মডিউল",
     "customerAccountBalanceModule": "গ্রাহকের ব্যালান্স মডিউল",
     "vendorModule": "সরবরাহকারী মডিউল",
-    "restaurantModule":"রেস্টুরেন্ট মডিউল",
+    "restaurantModule": "রেস্টুরেন্ট মডিউল",
     "accountingModule": "একাউন্টিং মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
@@ -390,7 +390,9 @@
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
     "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?",
     "productCategoryCreationPromptmessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।",
-    "createProductCategory": "পণ্যের ধরণ তৈরির পেজ এ যান"
+    "createProductCategory": "পণ্যের ধরণ তৈরির পেজ এ যান",
+    "addProducts": "পণ্য তালিকায় পণ্য যুক্ত করুন",
+    "addProductsNote": "আপনি এখান থেকে সরাসরি পণ্যতালিকাতে পণ্য যুক্ত করতে পারেন। এটি ঐচ্ছিক। আপনি যদি পরে পণ্যতালিকাতে পণ্য যোগ করতে চান তবে গণনা 0 রেখে দিন।"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
@@ -1221,8 +1223,8 @@
     "allOutlets": "সব আউটলেট"
   },
   "receipt": {
-    "dialogTitle":"রসিদ",
-    "noReceipt":"রসিদ নেই",
+    "dialogTitle": "রসিদ",
+    "noReceipt": "রসিদ নেই",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "emailReceipt": "ই-মেইলে রিসিট পাঠান",
     "smsReceipt": "SMS রিসিট পাঠান",
@@ -1234,10 +1236,8 @@
     "manageMonetaryAccountPageTitle": "অর্থ অ্যাকাউন্ট",
     "editAccountPageTitle": "অ্যাকাউন্টিং পরিবর্তন",
     "addAccountPageTitle": "অ্যাকাউন্টিং তৈরী",
-
     "manageTransactionPageTitle": "লেনদেন পরিচালনা",
     "accountingReportPageTitle": "অ্যাকাউন্টিং রিপোর্ট",
-    
     "viewManualTransaction": "ম্যানুয়াল লেনদেন দেখুন",
     "addManualTransaction": "ম্যানুয়াল লেনদেন যোগ",
     "viewIncome": "আয় দেখুন",
@@ -1246,18 +1246,15 @@
     "addExpense": "ব্যয় যোগ",
     "viewAssetPurchase": "অ্যাসেট লেনদেন দেখুন",
     "addAssetPurchase": "অ্যাসেট ক্রয় যোগ",
-
     "addManualTransactionPageTitle": "ম্যানুয়াল লেনদেন যুক্ত করুন",
     "editManualTransactionPageTitle": "ম্যানুয়াল লেনদেন আপডেট করুন",
-
     "noAccountFound": "অ্যাকাউন্ট পাওয়া যায়",
     "createNewAccount": "নতুন অ্যাকাউন্ট তৈরী করুন",
     "updateOldAccount": "অ্যাকাউন্ট আপডেট করুন ",
     "accountCreated": "নতুন অ্যাকাউন্ট তৈরী হয়েছে",
     "accountUpdated": "অ্যাকাউন্ট আপডেট হয়েছে",
-
     "accountNameInput": "অ্যাকাউন্ট এর নাম",
-    "accountNameInputError": "একটি বৈধ নাম দিন", 
+    "accountNameInputError": "একটি বৈধ নাম দিন",
     "accountNoteInput": "মন্তব্য",
     "accountNoteInputError": "মন্তব্য বেশি দীর্ঘ",
     "transactionAmountInput": "অর্থ",
@@ -1266,24 +1263,18 @@
     "addEditIncomeTransactionPageTitle": "আয় লেনদেন",
     "addEditExpenseTransactionPageTitle": "ব্যয় লেনদেন",
     "addEditAssetPurchasePageTitle": "অ্যাসেট ক্রয়",
-
     "monetaryAccount": "অর্থ অ্যাকাউন্ট",
     "createNewTransaction": "লেনদেন যোগ করুন",
     "updateOldTransaction": "লেনদেন আপডেট করুন",
     "monetaryAccountPurposeNote": "বিঃদ্রঃ সংগৃহীত অর্থ এই আর্থিক অ্যাকাউন্টে জমা করা হবে। এবং এটি লেজারে দেখা যাবে।",
-
     "natureOfAccount": "অ্যাকাউন্টের প্রকৃতি",
     "debitAccountNatureText": "ডেবিট অ্যাকাউন্টের প্রকৃতি",
     "creditAccountNatureText": "ক্রেডিট অ্যাকাউন্টের প্রকৃতি",
-
     "account": "অ্যাকাউন্ট",
-
     "debitAccount": "ডেবিট করা অ্যাকাউন্ট",
     "creditAccount": "ক্রেডিট করা অ্যাকাউন্ট",
-
     "accountLedger": "অ্যাকাউন্ট লেজার",
     "accountInvalidMessage": "অ্যাকাউন্ট বৈধ না",
-
     "asset": "অ্যাসেট",
     "assets": "অ্যাসেটস",
     "liability": "দায়",
@@ -1300,50 +1291,37 @@
     "moneyCollected": "অর্থ সংগ্রহ",
     "moneyPaid": "অর্থ প্রদেয়",
     "transactions": "লেনদেন",
-
     "debit": "ডেবিট",
     "credit": "ক্রেডিট",
     "balance": "ব্যালান্স",
     "againstAccount": "অ্যাকাউন্টের বিপরীতে",
     "note": "মন্তব্য",
-
     "employee": "কর্মচারী",
     "noParty": "পার্টি নেই",
     "party": "পার্টি",
     "incomeStatement": "ইনকাম স্টেটমেন্ট",
     "trialBalance": "ট্রায়াল ব্যালান্স",
     "balanceSheet": "ব্যালান্স শিট",
-
     "totalRevenue": "মোট রেভিনিউ",
     "totalExpense": "মোট ব্যয়",
     "totalAssets": "মোট অ্যাসেটস",
     "totalLiabilities": "মোট দায়",
     "totalEquity": "মোট ইকুইটি",
     "netProfit": "মোট লাভ",
-
     "asOfDate": "তারিখ পর্যন্ত",
-
     "totalLiabilitiesAndEquity": "মোট দায় এবং ইকুইটি",
-
     "group": "শ্রেণী",
     "particulars": "বিবরণ",
-
     "payables": "পরিশোধযোগ্য",
     "receivables": "গ্রহণযোগ্য",
-
     "transactionListTitle": "লেনদেন",
-
     "productAcquisitionMessage": " অ্যাকাউন্ট পরিশোধযোগ্যে যোগ হবে",
-
     "transactionSaved": "লেনদেন সংরক্ষিত",
-
     "chartOfAccounts": "চার্ট অফ একাউন্টস",
-
     "makePayment": "বাকি পরিশোধ করুন",
     "collectPayment": "পাওনা সংগ্রহ করুন",
     "addEditDebtPaymentPageTitle": "বাকি পরিশোধ",
     "addEditDebtCollectionPageTitle": "পাওনা সংগ্রহ",
-
     "incomeStatementDescription": "ইনকাম স্টেটমেন্ট (যাকে লাভ ও ক্ষতির বিবৃতিও বলা হয়) আপনার ব্যবসায়িক আয়, ব্যয় এবং মোট লাভ দেখায়।",
     "balanceSheetDescription": "ব্যালেন্স শিট আপনাকে আপনার ব্যবসায়ের আর্থিক অবস্থান দেখায়। এই রিপোর্টএ আপনার ফিক্সড এবং কারেন্ট অ্যাসেটস, আপনার দায়, আপনার বিনিয়োগ এবং মোট লাভ দেখতে পারবেন।",
     "trialBalanceDescription": "ট্রায়াল ব্যালেন্স আপনার সমস্ত অ্যাকাউন্টের এবং তাদের মোট ব্যালেন্সের একটি তালিকা। ট্রায়াল ব্যালান্স আপনার একাউন্টেন্টএর জন্য প্রয়োজনীয়।",
