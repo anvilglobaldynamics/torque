@@ -97,12 +97,6 @@
                     <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
                       [[product.count]] [[product.unit]]
                     </div>
-
-                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[$applyThousandDecimalFormatting(product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]</div>
-                    </template>
-
-                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[$applyThousandDecimalFormatting(product.salePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                   </div>
 
                 </div>
