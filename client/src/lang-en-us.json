@@ -253,7 +253,7 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
-    "promptForDefaultOutletGoButton": "Select outlet",
+    "promptForDefaultOutletGoButton": "Select Outlet",
     "salesTrendGraphTitle": "This week's Sales Trend",
     "viewActivationHistory": "View Activation History",
     "promptCreateOutlet": "There are no outlets in your organization. An Outlet is necessary for selling products/services.",
