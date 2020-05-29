@@ -948,6 +948,7 @@
   },
   "inventory": {
     "inventoryTitle": "Inventory",
+    "manageInventoryTitle": "Manage Inventory",
     "selectedProductsMoved": "Selected products have been moved.",
     "totalSelectedProducts": "Total selected products",
     "moveToInventory": "Move Selected Products to Inventory",
