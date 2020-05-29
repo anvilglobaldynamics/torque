@@ -39,6 +39,7 @@
         padding-top: 20px;
         margin-top: 40px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -54,7 +55,7 @@
               [[verses.general.outlets]]
             </div>
             <div class="flex"></div>
-            
+
             <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
               <paper-button raised class="btn primary" on-tap="createOutletTapped">
                 <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
@@ -110,31 +111,31 @@
         <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_WAREHOUSES', organization)]]">
           <div class="warehouse-list-container">
 
-          <!-- warehouse title section - start -->
-          <div class="title-container horizontal layout center">
-            <div class="title" style="font-size: 24px; font-weight: bold;">
-              [[verses.general.warehouses]]
+            <!-- warehouse title section - start -->
+            <div class="title-container horizontal layout center">
+              <div class="title" style="font-size: 24px; font-weight: bold;">
+                [[verses.general.warehouses]]
+              </div>
+              <div class="flex"></div>
+
+              <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
+                <paper-button raised class="btn primary" on-tap="createWarehouseTapped">
+                  <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+                  [[verses.warehouse.createNewWarehouse]]
+                </paper-button>
+              </template>
             </div>
-            <div class="flex"></div>
-            
-            <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
-              <paper-button raised class="btn primary" on-tap="createWarehouseTapped">
-                <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-                [[verses.warehouse.createNewWarehouse]]
-              </paper-button>
-            </template>
-          </div>
-          <!-- warehouse title section - end -->
+            <!-- warehouse title section - end -->
 
             <template is="dom-if" if="{{!warehouseList.length}}">
               <div class="card">
                 [[verses.warehouse.noWarehouseFound]]
               </div>
             </template>
-      
+
             <template is="dom-if" if="{{warehouseList.length}}">
-      
-              <div class="card vertical layout">  
+
+              <div class="card vertical layout">
                 <div class="list">
                   <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
                     <div class="horizontal layout item center">
@@ -150,7 +151,7 @@
                   </template>
                 </div>
               </div>
-      
+
             </template>
 
           </div>
