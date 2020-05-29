@@ -388,6 +388,7 @@
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?",
     "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
+    "productCategoryUsageMessage": "Product Category helps you search and organise products. You can add multiple product categories to a product blueprint.",
     "createProductCategory": "Go to Create Product Category Page",
     "addProducts": "Add Products to Inventories",
     "addProductsNote": "You can add products to the inventory directly from here. This is optional. Leave count 0 if you want to add to inventory later."

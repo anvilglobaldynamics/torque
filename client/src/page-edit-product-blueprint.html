@@ -27,7 +27,7 @@
   <template>
     <style include="shared-styles">
       .note {
-        margin-top: 8px;
+        margin-top: 12px;
         font-size: 12px;
         color: #616161;
       }
@@ -80,6 +80,10 @@
 
               <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
 
+              <div class="note">
+                [[verses.productBlueprint.productCategoryUsageMessage]]
+              </div>
+
               <div class="horizontal layout wrap">
                 <template is="dom-repeat" items="[[productCategoryList]]" as="productCategory" index-as="productCategoryIndex">
                   <div class="product-category-pillet" style$="background-color: #{{productCategory.colorCode}}; color: #{{$guessCategoryFontColorCode(productCategory.colorCode)}}; margin: 4px; border: none; display: inline-block;">
@@ -125,7 +129,7 @@
             <div class="card vertical layout list">
 
               <div class="mb-4" style="font-weight: bold;">[[verses.productBlueprint.addProducts]]:</div>
-              <div class="note" style="padding-top: 15px; padding-bottom: 15px;">
+              <div class="note" style="padding-bottom: 15px;">
                 [[verses.productBlueprint.addProductsNote]]
               </div>
 
