@@ -5,6 +5,19 @@
 <dom-module id="shared-styles">
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment">
+      paper-button {
+        text-transform: initial;
+        padding-top: 6px;
+        padding-bottom: 5px;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+
+      paper-button iron-icon {
+        height: 21px;
+        width: 21px;
+      }
+
       /* ============= notes ============= */
 
       /* 
@@ -115,6 +128,7 @@
       .list .item {
         border-bottom: 1px dashed rgb(192, 198, 214);
         padding-bottom: 12px;
+        margin-top: 8px;
       }
 
       .list .item:last-of-type {
@@ -135,7 +149,6 @@
 
       @media (min-width: 481px) {
         .list .item {
-          margin-top: 8px;
           display: -ms-flexbox;
           display: -webkit-flex;
           display: flex;

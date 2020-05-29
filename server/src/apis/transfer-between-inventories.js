@@ -108,6 +108,10 @@ exports.TransferBetweenInventoriesApi = class extends Api {
     let { fromInventoryId, toInventoryId, productList, vendorId } = body;
     let { organizationId } = this.interimData;
 
+    if (fromInventoryId === toInventoryId) {
+      throw new CodedError("INVENTORY_MOVEMENT_INVALID", "Cannot move product from and to the same inventory");
+    }
+
     await this._verifyVendorIfNeeded({ vendorId, organizationId });
 
     let { fromInventory, toInventory } = await this._getInventoriesWithId({ fromInventoryId, toInventoryId });

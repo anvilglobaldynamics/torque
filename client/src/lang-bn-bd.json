@@ -104,7 +104,7 @@
     "gymModule": "জিমনেসিয়াম মডিউল",
     "customerAccountBalanceModule": "গ্রাহকের ব্যালান্স মডিউল",
     "vendorModule": "সরবরাহকারী মডিউল",
-    "restaurantModule":"রেস্টুরেন্ট মডিউল",
+    "restaurantModule": "রেস্টুরেন্ট মডিউল",
     "accountingModule": "একাউন্টিং মডিউল",
     "retail": "পণ্য বিক্রয়",
     "service": "সেবা বিক্রয়",
@@ -306,7 +306,7 @@
     "outletCreatedToast": "নতুন দোকান তৈরি করা হয়েছে।",
     "outletUpdatedToast": "দোকান আপডেট করা হয়েছে।",
     "manageOutletTitle": "দোকান পরিচালনা",
-    "createNewOutlet": "নতুন দোকান যুক্ত করুন",
+    "createNewOutlet": "নতুন তৈরি করুন",
     "outletTitle": "দোকান",
     "deleteOutletQuestion": "দোকান মুছুন?",
     "deleteOutletQuestionPartOne": "আপনি কি এই দোকানটি মুছে ফেলতে চান?",
@@ -358,6 +358,7 @@
     "productBlueprintNameInputError": "একটি সঠিক নাম লিখুন",
     "productBlueprintUnitInput": "একক নির্দিষ্ট করুন (যেমন কেজি, পিস্)",
     "productBlueprintUnitInputError": "একটি সঠিক একক লিখুন",
+    "identifierCodeNote": "সনাক্তকরণ কোড বিক্রয়ের সময়ে এবং পণ্য তালিকায় পণ্য সন্ধান করতে ব্যবহার করা যাবে। প্রতিটি পণ্যের সনাক্তকরণ কোড ভিন্ন হতে হবে। আপনি এই ক্ষেত্রে পণ্যের এস.কে.ইউ., বারকোড বা কিউ.আর. কোড ব্যবহার করতে পারেন।",
     "identifierCodeInput": "সনাক্তকরণ কোড",
     "identifierCodeInputError": "একটি সঠিক সনাক্তকরণ কোড লিখুন",
     "defaultPurchasePriceInput": "ক্রয় মূল্য",
@@ -389,7 +390,10 @@
     "whatIsProductBlueprintMessage": "পণ্যের পরিকল্পনা একটু পণ্যের নকশা। প্রতি পণ্যের জন্য একবারই পণ্যের পরিকল্পনা তৈরি করতে হবে। পণ্যের পরিকল্পনায় দেয়া তথ্য পণ্য সংক্রান্ত সকল কাজে ব্যবহত হবে। বর্তমান পণ্যের পরিকল্পনা পুনঃব্যবহার বা সম্পাদনা করার পরিবর্তে, পণ্য পরিকল্পনায় সামান্যতম ভিন্নতা থাকলেও নতুন পণ্য পরিকল্পনা তৈরি করুন।",
     "productBlueprintEditConfirmMessage": "পণ্যের পরিকল্পনায় পরিবর্তন করলে সংশ্লিষ্ট পণ্য-ও পরিবর্তন হয়ে যাবে। পণ্যের মূল্য পরিবর্তন করলে হিসেবে পরিবর্তন আসবে। আপনি কি নিশ্চিত করছেন?",
     "productCategoryCreationPromptmessage": "পণ্যের ধরণ আপনাকে পণ্য অনুসন্ধান এবং গোছাতে সাহায্য করে। ব্র্যান্ড, মডেল, বৈশিষ্ট্য এবং পণ্যের প্রকারের উপর ভিত্তি করে বিভিন্ন পণ্যের ধরণ তৈরি করার চেষ্টা করুন।",
-    "createProductCategory": "পণ্যের ধরণ যুক্ত করুন"
+    "productCategoryUsageMessage": "পণ্যের ধরণ আপনাকে পণ্য খুঁজতে এবং গোছাতে সহায়তা করে। আপনি একটি পণ্য পরিকল্পনায় একাধিক পণ্যের ধরণ যুক্ত করতে পারবেন।",
+    "createProductCategory": "পণ্যের ধরণ তৈরির পেজ এ যান",
+    "addProducts": "পণ্য তালিকায় পণ্য যুক্ত করুন",
+    "addProductsNote": "আপনি এখান থেকে সরাসরি পণ্যতালিকাতে পণ্য যুক্ত করতে পারেন। এটি ঐচ্ছিক। আপনি যদি পরে পণ্যতালিকাতে পণ্য যোগ করতে চান তবে গণনা 0 রেখে দিন।"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "সেবা পরিকল্পনা পরিচালনা",
@@ -720,7 +724,7 @@
     "createWarehouse": "গুদাম তৈরি করুন",
     "updateWarehouse": "গুদাম আপডেট করুন",
     "manageWarehouseTitle": "গুদাম পরিচালনা",
-    "createNewWarehouse": "নতুন গুদাম তৈরি করুন",
+    "createNewWarehouse": "নতুন তৈরি করুন",
     "warehouseTitle": "গুদাম",
     "deleteWarehouseQuestionPartOne": "আপনি কি এই গুদামটি মুছে ফেলতে চান?",
     "deleteWarehouseQuestionPartTwo": "একবার মুছে ফেলা হলে, আপনি এই গুদামটি পুনরুদ্ধার করতে পারবেন না।",
@@ -946,6 +950,7 @@
   },
   "inventory": {
     "inventoryTitle": "পণ্য তালিকা",
+    "manageInventoryTitle": "পণ্য তালিকা পরিচালনা",
     "selectedProductsMoved": "নির্বাচিত পণ্য সরানো হয়েছে।",
     "totalSelectedProducts": "মোট নির্বাচিত পণ্য",
     "moveToInventory": "পণ্য অন্য তালিকায় সরান",
@@ -961,9 +966,11 @@
     "addedOn": "যুক্ত হয়েছে",
     "addToInventoryHelp": "পণ্য তালিকায় যোগ করা নতুন পণ্য বিদ্যমান একই পণ্যের গণনা বৃদ্ধি করবে না, পরিবর্তে পণ্যের একটি নতুন ব্যাচ হিসেবে গণনা হবে। আজকের তারিখ নতুন ব্যাচের পণ্যগুলির 'যুক্ত তারিখ' হিসাবে ব্যবহার করা হবে।",
     "transferInventoryHelp": "একটি পণ্য তালিকা থেকে অন্য পণ্য তালিকায় পণ্য সরাতে পারেন। পণ্য বাছাই শুরু করতে নিচে ক্লিক করুন।",
-    "selectProductsToTransfer": "সরানোর জন্য পণ্য বাছাই শুরু করুন",
+    "selectProductsToTransfer": "সরানোর জন্য পণ্য বাছাই করুন",
     "stopSelectingProductsToTransfer": "সরানোর জন্য পণ্য বাছাই বন্ধ করুন",
-    "moveProductConfirmMessage": "নিশ্চিত হন বাছাইকৃত পণ্য তালিকা এবং পণ্যের গণনা সঠিক। স্থানান্তরিত পণ্য স্বয়ংক্রিয় ভাবে ফেরৎ আনা যায় না।"
+    "moveProductConfirmMessage": "নিশ্চিত হন বাছাইকৃত পণ্য তালিকা এবং পণ্যের গণনা সঠিক। স্থানান্তরিত পণ্য স্বয়ংক্রিয় ভাবে ফেরৎ আনা যায় না।",
+    "addProductsCardTitle": "পণ্য যুক্ত করুন",
+    "transferProductsCardTitle": "পণ্য সরান"
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",
@@ -980,7 +987,7 @@
     "instructionThree": "৩. পণ্য পরিকল্পনার একটি একক (Unit) দিন, যেমন: কেজি, পিস অথবা বাক্স;",
     "instructionFour": "৪. পণ্য পরিকল্পনার কেনা দাম (Purchase Price), বিক্রি দাম (Sale Price) এবং ভ্যাট শতাংশ (VAT) দিন, এভাবে;",
     "instructionFive": "৫. Returnable এর নিচে yes (হ্যা) দিন যদি পণ্য ফেরতযোগ্য হয়ে, no (না) দিন যদি নয়;",
-    "instructionSix": "৬. Barcode এর নিচে পণ্যের বারকোড নম্বর দিন (অথবা খালি রাখতে পারেন);",
+    "instructionSix": "৬. Barcode এর নিচে পণ্যের বারকোড, এস.কে.ইউ. বা কিউ.আর. কোড নম্বর দিন (অথবা খালি রাখতে পারেন);",
     "instructionLast": "৭. সকল স্থান পূরণ থাকতে হবে, নাহলে লিপি ফাইলটি গ্রহণ করবে না;",
     "uploadSectionTip": "পণ্যের পরিকল্পনা ধারণকারী CSV ফাইলটি জমা করুন;",
     "uploadButtonLabel": "ফাইল জমা করুন",
@@ -1220,8 +1227,8 @@
     "allOutlets": "সব আউটলেট"
   },
   "receipt": {
-    "dialogTitle":"রসিদ",
-    "noReceipt":"রসিদ নেই",
+    "dialogTitle": "রসিদ",
+    "noReceipt": "রসিদ নেই",
     "printReceipt": "রসিদ প্রিন্ট করুন",
     "emailReceipt": "ই-মেইলে রিসিট পাঠান",
     "smsReceipt": "SMS রিসিট পাঠান",
@@ -1233,10 +1240,8 @@
     "manageMonetaryAccountPageTitle": "অর্থ অ্যাকাউন্ট",
     "editAccountPageTitle": "অ্যাকাউন্টিং পরিবর্তন",
     "addAccountPageTitle": "অ্যাকাউন্টিং তৈরী",
-
     "manageTransactionPageTitle": "লেনদেন পরিচালনা",
     "accountingReportPageTitle": "অ্যাকাউন্টিং রিপোর্ট",
-    
     "viewManualTransaction": "ম্যানুয়াল লেনদেন দেখুন",
     "addManualTransaction": "ম্যানুয়াল লেনদেন যোগ",
     "viewIncome": "আয় দেখুন",
@@ -1245,18 +1250,15 @@
     "addExpense": "ব্যয় যোগ",
     "viewAssetPurchase": "অ্যাসেট লেনদেন দেখুন",
     "addAssetPurchase": "অ্যাসেট ক্রয় যোগ",
-
     "addManualTransactionPageTitle": "ম্যানুয়াল লেনদেন যুক্ত করুন",
     "editManualTransactionPageTitle": "ম্যানুয়াল লেনদেন আপডেট করুন",
-
     "noAccountFound": "অ্যাকাউন্ট পাওয়া যায়",
     "createNewAccount": "নতুন অ্যাকাউন্ট তৈরী করুন",
     "updateOldAccount": "অ্যাকাউন্ট আপডেট করুন ",
     "accountCreated": "নতুন অ্যাকাউন্ট তৈরী হয়েছে",
     "accountUpdated": "অ্যাকাউন্ট আপডেট হয়েছে",
-
     "accountNameInput": "অ্যাকাউন্ট এর নাম",
-    "accountNameInputError": "একটি বৈধ নাম দিন", 
+    "accountNameInputError": "একটি বৈধ নাম দিন",
     "accountNoteInput": "মন্তব্য",
     "accountNoteInputError": "মন্তব্য বেশি দীর্ঘ",
     "transactionAmountInput": "অর্থ",
@@ -1265,24 +1267,18 @@
     "addEditIncomeTransactionPageTitle": "আয় লেনদেন",
     "addEditExpenseTransactionPageTitle": "ব্যয় লেনদেন",
     "addEditAssetPurchasePageTitle": "অ্যাসেট ক্রয়",
-
     "monetaryAccount": "অর্থ অ্যাকাউন্ট",
     "createNewTransaction": "লেনদেন যোগ করুন",
     "updateOldTransaction": "লেনদেন আপডেট করুন",
     "monetaryAccountPurposeNote": "বিঃদ্রঃ সংগৃহীত অর্থ এই আর্থিক অ্যাকাউন্টে জমা করা হবে। এবং এটি লেজারে দেখা যাবে।",
-
     "natureOfAccount": "অ্যাকাউন্টের প্রকৃতি",
     "debitAccountNatureText": "ডেবিট অ্যাকাউন্টের প্রকৃতি",
     "creditAccountNatureText": "ক্রেডিট অ্যাকাউন্টের প্রকৃতি",
-
     "account": "অ্যাকাউন্ট",
-
     "debitAccount": "ডেবিট করা অ্যাকাউন্ট",
     "creditAccount": "ক্রেডিট করা অ্যাকাউন্ট",
-
     "accountLedger": "অ্যাকাউন্ট লেজার",
     "accountInvalidMessage": "অ্যাকাউন্ট বৈধ না",
-
     "asset": "অ্যাসেট",
     "assets": "অ্যাসেটস",
     "liability": "দায়",
@@ -1299,50 +1295,37 @@
     "moneyCollected": "অর্থ সংগ্রহ",
     "moneyPaid": "অর্থ প্রদেয়",
     "transactions": "লেনদেন",
-
     "debit": "ডেবিট",
     "credit": "ক্রেডিট",
     "balance": "ব্যালান্স",
     "againstAccount": "অ্যাকাউন্টের বিপরীতে",
     "note": "মন্তব্য",
-
     "employee": "কর্মচারী",
     "noParty": "পার্টি নেই",
     "party": "পার্টি",
     "incomeStatement": "ইনকাম স্টেটমেন্ট",
     "trialBalance": "ট্রায়াল ব্যালান্স",
     "balanceSheet": "ব্যালান্স শিট",
-
     "totalRevenue": "মোট রেভিনিউ",
     "totalExpense": "মোট ব্যয়",
     "totalAssets": "মোট অ্যাসেটস",
     "totalLiabilities": "মোট দায়",
     "totalEquity": "মোট ইকুইটি",
     "netProfit": "মোট লাভ",
-
     "asOfDate": "তারিখ পর্যন্ত",
-
     "totalLiabilitiesAndEquity": "মোট দায় এবং ইকুইটি",
-
     "group": "শ্রেণী",
     "particulars": "বিবরণ",
-
     "payables": "পরিশোধযোগ্য",
     "receivables": "গ্রহণযোগ্য",
-
     "transactionListTitle": "লেনদেন",
-
     "productAcquisitionMessage": " অ্যাকাউন্ট পরিশোধযোগ্যে যোগ হবে",
-
     "transactionSaved": "লেনদেন সংরক্ষিত",
-
     "chartOfAccounts": "চার্ট অফ একাউন্টস",
-
     "makePayment": "বাকি পরিশোধ করুন",
     "collectPayment": "পাওনা সংগ্রহ করুন",
     "addEditDebtPaymentPageTitle": "বাকি পরিশোধ",
     "addEditDebtCollectionPageTitle": "পাওনা সংগ্রহ",
-
     "incomeStatementDescription": "ইনকাম স্টেটমেন্ট (যাকে লাভ ও ক্ষতির বিবৃতিও বলা হয়) আপনার ব্যবসায়িক আয়, ব্যয় এবং মোট লাভ দেখায়।",
     "balanceSheetDescription": "ব্যালেন্স শিট আপনাকে আপনার ব্যবসায়ের আর্থিক অবস্থান দেখায়। এই রিপোর্টএ আপনার ফিক্সড এবং কারেন্ট অ্যাসেটস, আপনার দায়, আপনার বিনিয়োগ এবং মোট লাভ দেখতে পারবেন।",
     "trialBalanceDescription": "ট্রায়াল ব্যালেন্স আপনার সমস্ত অ্যাকাউন্টের এবং তাদের মোট ব্যালেন্সের একটি তালিকা। ট্রায়াল ব্যালান্স আপনার একাউন্টেন্টএর জন্য প্রয়োজনীয়।",

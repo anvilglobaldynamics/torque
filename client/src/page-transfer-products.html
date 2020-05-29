@@ -52,6 +52,11 @@
       }
 
       .move-to-inventory-help {}
+
+      .negative {
+        color: var(--app-button-label-danger);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -111,12 +116,6 @@
                     <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
                       [[$applyThousandDecimalFormatting(product.count)]] [[product.unit]]
                     </div>
-
-                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <div class="inventory-product-price-container">[[verses.inventory.buyingPrice]]: [[$applyThousandDecimalFormatting(product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]</div>
-                    </template>
-
-                    <div class="inventory-product-price-container">[[verses.inventory.sellingPrice]]: [[$applyThousandDecimalFormatting(product.salePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                   </div>
 
                   <!-- select -->
@@ -162,19 +161,15 @@
                   <div class$="inventory-product-important-detail-container [[$isProductCountLow(product.count)]]">
                     [[$applyThousandDecimalFormatting(product.count)]] [[product.unit]]
                   </div>
-
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                    <div class="inventory-product-price-container">[[verses.general.purchase]]: [[$applyThousandDecimalFormatting(product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]</div>
-                  </template>
-
-                  <div class="inventory-product-price-container">[[verses.general.sale]]: [[$applyThousandDecimalFormatting(product.salePrice)]] [[app.organization.settings.monetaryUnit]]</div>
                 </div>
 
                 <template is="dom-if" if="[[product.isSelected]]">
                   <paper-input class="small-input" value="{{product.selectedCount}}" type="number" on-change="genericSelectedCountInputChanged" min="1" max="[[product.count]]" label="[[verses.general.count]]">
                     <div slot="suffix">&nbsp;[[product.unit]]</div>
                   </paper-input>
-                  <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button>
+                  <!-- [[verses.general.deselect]] -->
+                  <!-- <paper-button raised class="danger" on-tap="deselectTapped">[[verses.general.deselect]]</paper-button> -->
+                  <paper-icon-button class="negative" on-tap="deselectTapped" icon="remove-circle"></paper-icon-button>
                 </template>
 
               </div>
@@ -478,7 +473,7 @@
               let productList = this.selectedProductList.filter(product => product.isSelected).map(product => {
                 if (!('selectedCount' in product)) product.selectedCount = '' + product.count;
                 let { productId, selectedCount } = product;
-                let count = parseInt(selectedCount, 10);
+                let count = parseFloat(selectedCount);
                 return { count, productId };
               });
               this._processMoveProducts({ fromInventoryId, toInventoryId, productList, vendorId }, () => {
@@ -564,6 +559,7 @@
             inventory.inventoryContainerId === inventoryContainerId && inventory.inventoryContainerType === inventoryContainerType
           );
           this.inventoryList = inventoryList;
+          this.targetInventoryIndex = inventoryList.findIndex((({ type }) => type === 'default'));
         });
       }
 

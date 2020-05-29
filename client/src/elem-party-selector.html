@@ -66,7 +66,7 @@
       <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.accounting.party]] [[verses.general.optional]]" class="mr-4" on-iron-select="collectionNameSelected">
         <paper-listbox slot="dropdown-content" selected="{{selectedCollectionName}}" attr-for-selected="key">
           <paper-item key="no-party">[[verses.accounting.noParty]]</paper-item>
-          <template is="dom-if" if="[[$hasVendorModule()]]">
+          <template is="dom-if" if="[[$hasVendorModuleAndPrivilege()]]">
             <paper-item key="vendor">[[verses.general.vendor]] </paper-item>
           </template>
           <paper-item key="employee">[[verses.accounting.employee]] </paper-item>
@@ -134,10 +134,19 @@
       pageChanged() {
         if (!this.page) return;
         this.useLanguageServices();
-        if (this.page.hasModule('MOD_VENDOR')) {
+        if (this.$hasVendorModuleAndPrivilege()) {
           this._processVendorList(() => { this.__notify(); });
         }
         this._processEmployeeList(() => { this.__notify(); });
+      }
+
+      // NOTE: This is necessary to reload the vendors and employess
+      // every time the user enters the page
+      refreshVariables() {
+        if (this.$hasVendorModuleAndPrivilege()) {
+          this._processVendorList(() => { });
+        }
+        this._processEmployeeList(() => { });
       }
 
       selectedCollectionNameChanged(newValue, oldValue) {
@@ -221,8 +230,8 @@
         });
       }
 
-      $hasVendorModule() {
-        return this.page.hasModule('MOD_VENDOR');
+      $hasVendorModuleAndPrivilege() {
+        return this.page.hasModule('MOD_VENDOR') && this.page.hasPrivilege('PRIV_VIEW_VENDOR');
       }
 
     }

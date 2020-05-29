@@ -148,7 +148,7 @@
   },
   "register": {
     "registerTitle": "Register for Lipi",
-    "register": "REGISTER",
+    "register": "Register",
     "fullnameInput": "Your full name",
     "fullnameInputError": "Enter a longer name.",
     "phoneInput": "Your phone number",
@@ -221,7 +221,7 @@
     "salesThisMonth": "Sales this month",
     "verifyPhoneNumberManually": "Verify Phone Number Manually",
     "resendSms": "Resend SMS",
-    "setYourEmail": "Set your email",
+    "setYourEmail": "Set Your Email",
     "pleaseSetYourEmail": "Enter a valid email address below:",
     "emailIsSet": "Email is Set",
     "verifyEmailManually": "Verify Email Manually",
@@ -253,7 +253,7 @@
     "outlets": "Outlets",
     "warehouses": "Warehouses",
     "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
-    "promptForDefaultOutletGoButton": "Select outlet",
+    "promptForDefaultOutletGoButton": "Select Outlet",
     "salesTrendGraphTitle": "This week's Sales Trend",
     "viewActivationHistory": "View Activation History",
     "promptCreateOutlet": "There are no outlets in your organization. An Outlet is necessary for selling products/services.",
@@ -304,7 +304,7 @@
     "outletCreatedToast": "New outlet has been created.",
     "outletUpdatedToast": "Outlet has been updated.",
     "manageOutletTitle": "Manage Outlet",
-    "createNewOutlet": "Create New Outlet",
+    "createNewOutlet": "Add New",
     "outletTitle": "Outlet",
     "deleteOutletQuestion": "Delete outlet?",
     "deleteOutletQuestionPartOne": "Are you sure you want to delete this outlet",
@@ -356,6 +356,7 @@
     "productBlueprintNameInputError": "Enter a valid name",
     "productBlueprintUnitInput": "Specify unit (i.e. kg, pcs etc)",
     "productBlueprintUnitInputError": "Enter a valid name",
+    "identifierCodeNote": "Identifier Code can be used to search for product in POS and Inventory. Identifier Code should be unique for every product. You can enter product's SKU, Barcode or QR code in this field.",
     "identifierCodeInput": "Identifier Code",
     "identifierCodeInputError": "Enter a valid identifier code.",
     "defaultPurchasePriceInput": "Default Purchase Price",
@@ -386,8 +387,11 @@
     "productCategoryNotFoundDetails": "Unable to find product category with that name",
     "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?",
-    "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product.",
-    "createProductCategory": "Create a Product Category"
+    "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
+    "productCategoryUsageMessage": "Product Category helps you search and organise products. You can add multiple product categories to a product blueprint.",
+    "createProductCategory": "Go to Create Product Category Page",
+    "addProducts": "Add Products to Inventories",
+    "addProductsNote": "You can add products to the inventory directly from here. This is optional. Leave count 0 if you want to add to inventory later."
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -467,8 +471,8 @@
     "role": "Role",
     "isEmployeeActive": "Currently Employed",
     "isNotEmployeeActive": "Not Currently Employed",
-    "hireUserEmployee": "Hire Lipi user Employee",
-    "addUserAsEmployee": "Add New User As Employee",
+    "hireUserEmployee": "Hire Lipi User Employee",
+    "addUserAsEmployee": "Add New User as Employee",
     "hireUserEmployeeDetail": "Click here to hire an employee for your organization who is already a user of Lipi",
     "addUserAsEmployeeDetail": "Click here to add a new user and hire him/her as an employee for your organization",
     "viewEmployeeTitle": "Employee",
@@ -503,7 +507,7 @@
   "about": {
     "aboutUsTitle": "About",
     "about": "About",
-    "tos": "Terms & Conditions",
+    "tos": "Terms and Conditions",
     "contactUs": "Contact",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
@@ -718,7 +722,7 @@
     "createWarehouse": "Create Warehouse",
     "updateWarehouse": "Update Warehouse",
     "manageWarehouseTitle": "Manage Warehouse",
-    "createNewWarehouse": "Create New Warehouse",
+    "createNewWarehouse": "Add New",
     "warehouseTitle": "Warehouse",
     "deleteWarehouseQuestionPartOne": "Are you sure you want to delete this warehouse",
     "deleteWarehouseQuestionPartTwo": "Once deleted, you can not restore this warehouse.",
@@ -776,7 +780,7 @@
     "changeAmount": "Change Amount",
     "changeAmountIfNegative": "Additional Payment Required",
     "confirmSales": "Confirm Sales",
-    "confirmSalesAndPrint": "Confirm Sales & Print",
+    "confirmSalesAndPrint": "Confirm Sales and Print",
     "sellingPrice": "Selling Price",
     "discount": "Discount",
     "vat": "VAT",
@@ -816,7 +820,7 @@
     "productSearchLabel": "Name/Identifirer Code of product",
     "selectedProducts": "Selected Products",
     "selectedServices": "Selected Services",
-    "continueWithoutCustomer": "Continue without customer",
+    "continueWithoutCustomer": "Continue Without Customer",
     "selectACustomer": "Select a customer",
     "selectADifferentCustomer": "Select a different customer",
     "customerSectionBlocked": "Select Product/Service to view Customer section.",
@@ -945,6 +949,7 @@
   },
   "inventory": {
     "inventoryTitle": "Inventory",
+    "manageInventoryTitle": "Manage Inventories",
     "selectedProductsMoved": "Selected products have been moved.",
     "totalSelectedProducts": "Total selected products",
     "moveToInventory": "Move Selected Products to Inventory",
@@ -952,7 +957,7 @@
     "moveSelectedHelp": "The above selected products can now be moved to any other Inventory. Select an Inventory from below list and confirm Inventory Transfer;",
     "inventoryContainerTitle": "Warehouse/Outlet",
     "addProductsBatchToInventory": "Add products to this inventory.",
-    "addProducts": "Add Products to this inventory",
+    "addProducts": "Add Products to this Inventory",
     "noProductsInInventory": "No products in this Inventory. Add a new product or you can transfer product from other inventories to this inventory.",
     "buyingPrice": "Buying Price",
     "sellingPrice": "Selling Price",
@@ -960,9 +965,11 @@
     "addedOn": "Added On",
     "addToInventoryHelp": "Products added to Inventory will not increase the count of existing similar products, instead will be a new Batch. Today's date will be used as 'Added-On date' for the new Batch of products.",
     "transferInventoryHelp": "Product can be transfered between inventories. You can start selecting product(s) to be transfered by clicking below.",
-    "selectProductsToTransfer": "Start Selecting Products to Transfer",
+    "selectProductsToTransfer": "Select Products to Transfer",
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer",
-    "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically."
+    "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically.",
+    "addProductsCardTitle": "Add Products",
+    "transferProductsCardTitle": "Transfer Products"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",
@@ -979,7 +986,7 @@
     "instructionThree": "3. Enter a Unit of the product blueprint, example: kg, piece or box;",
     "instructionFour": "4. Enter Purchase Price, Sale Price and VAT percentage of the product blueprint;",
     "instructionFive": "5. Under Returnable enter 'yes' if customers can return this product blueprint, 'no' if not;",
-    "instructionSix": "6. Under Barcode enter the product's barcode number (you can leave it empty);",
+    "instructionSix": "6. Under Barcode enter the product's barcode, QR code or SKU number (you can leave it empty);",
     "instructionLast": "7. All the fields must be entered, like below, or else Lipi will not accept this file;",
     "uploadSectionTip": "Upload the CSV file containing Product Blueprint data;",
     "uploadButtonLabel": "Upload File",
@@ -1219,8 +1226,8 @@
     "allOutlets": "All Outlets"
   },
   "receipt": {
-    "dialogTitle":"Receipt",
-    "noReceipt":"No Receipt",
+    "dialogTitle": "Receipt",
+    "noReceipt": "No Receipt",
     "printReceipt": "Print Receipt",
     "emailReceipt": "Send Receipt by Email",
     "smsReceipt": "Send Receipt by Sms",
@@ -1232,10 +1239,8 @@
     "manageMonetaryAccountPageTitle": "Monetary Accounts",
     "editAccountPageTitle": "Edit Account",
     "addAccountPageTitle": "Add Account",
-
     "manageTransactionPageTitle": "Manage Transactions",
     "accountingReportPageTitle": "Accounting Reports",
-    
     "viewManualTransaction": "View Manual Transactions",
     "addManualTransaction": "Add Manual Transaction",
     "viewIncome": "View Income",
@@ -1244,18 +1249,15 @@
     "addExpense": "Add Expense",
     "viewAssetPurchase": "View Asset Transactions",
     "addAssetPurchase": "Add Asset Purchase",
-
     "addManualTransactionPageTitle": "Add Manual Transaction",
     "editManualTransactionPageTitle": "Edit Manual Transaction",
-
     "noAccountFound": "No account found",
-    "createNewAccount": "Create new account",
-    "updateOldAccount": "Update old account",
+    "createNewAccount": "Create New Account",
+    "updateOldAccount": "Update Old Account",
     "accountCreated": "Account created successfully.",
     "accountUpdated": "Account update successfully.",
-
     "accountNameInput": "Account Name",
-    "accountNameInputError": "Enter valid account name.", 
+    "accountNameInputError": "Enter valid account name.",
     "accountNoteInput": "Note",
     "accountNoteInputError": "Note is too long.",
     "transactionAmountInput": "Amount",
@@ -1264,24 +1266,18 @@
     "addEditIncomeTransactionPageTitle": "Income Transaction",
     "addEditExpenseTransactionPageTitle": "Expense Transaction",
     "addEditAssetPurchasePageTitle": "Asset Purchase",
-
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
     "monetaryAccountPurposeNote": "Note: Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
-
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
-
     "account": "Account",
-
     "debitAccount": "Debited Account",
     "creditAccount": "Credited Account",
-
     "accountLedger": "Account Ledger",
     "accountInvalidMessage": "The account is not valid.",
-
     "asset": "Asset",
     "assets": "Assets",
     "liability": "Liability",
@@ -1298,50 +1294,37 @@
     "moneyCollected": "Money Collected",
     "moneyPaid": "Money Paid",
     "transactions": "Transactions",
-
     "debit": "Debit",
     "credit": "Credit",
     "balance": "Balance",
     "againstAccount": "Against Account",
     "note": "Note",
-
     "employee": "Employee",
     "noParty": "No Party",
     "party": "Party",
     "incomeStatement": "Income Statement",
     "trialBalance": "Trial Balance",
     "balanceSheet": "Balance Sheet",
-
     "totalRevenue": "Total Revenue",
     "totalExpense": "Total Expense",
     "totalAssets": "Total Assets",
     "totalLiabilities": "Total Liabilities",
     "totalEquity": "Total Equity",
     "netProfit": "Net Profit",
-
     "asOfDate": "As of Date",
-
     "totalLiabilitiesAndEquity": "Total Liabilities and Equity",
-
     "group": "Group",
     "particulars": "Particulars",
-
     "payables": "Payables",
     "receivables": "Receivables",
-
     "transactionListTitle": "Transactions",
-
     "productAcquisitionMessage": " will be added as Accounts Payable.",
-
     "transactionSaved": "Transaction Saved!",
-
     "chartOfAccounts": "Chart of Accounts",
-
     "makePayment": "Make Payment",
     "collectPayment": "Collect Payment",
     "addEditDebtPaymentPageTitle": "Debt Payment",
     "addEditDebtCollectionPageTitle": "Debt Collection",
-
     "incomeStatementDescription": "Income Statement (also called Profit and Loss Statement) shows your business's Revenues, Expenses and Net Profit over a certain period of time.",
     "balanceSheetDescription": "Balance sheet shows you the financial position of your business. It lists the total value of your Fixed and Current Assets, your Liabilities, your Investments and any Retained Profits.",
     "trialBalanceDescription": "Trial Balance is a list of all your account heads and their total balance. Trial Balance is specially useful to your accountant.",

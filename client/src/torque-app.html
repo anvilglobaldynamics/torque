@@ -65,6 +65,8 @@
 <link rel="lazy-import" href="page-view-employee.html">
 <link rel="lazy-import" href="page-edit-employee.html">
 <link rel="lazy-import" href="page-hire-employee.html">
+
+<link rel="lazy-import" href="page-manage-inventories.html">
 <link rel="lazy-import" href="page-manage-outlets.html">
 <link rel="lazy-import" href="page-edit-outlet.html">
 <link rel="lazy-import" href="page-view-outlet.html">
@@ -487,12 +489,16 @@
                     <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
                   </template>
                 </template>
-                <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+
+                <!-- TODO: remove below commented out section -->
+                <!-- <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
                     <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
                   </template>
-                </template>
+                </template> -->
+
+                <a name="manage-inventories" href="#/manage-inventories">[[verses.inventory.inventoryTitle]]</a>
                 <hr class="custom-sidebar-divider">
 
                 <!-- Accounting section - start -->
@@ -598,12 +604,14 @@
               <page-manage-vendors name="manage-vendors"></page-manage-vendors>
               <page-edit-vendor name="edit-vendor"></page-edit-vendor>
 
+              <page-manage-inventories name="manage-inventories"></page-manage-inventories>
               <page-manage-outlets name="manage-outlets"></page-manage-outlets>
               <page-edit-outlet name="edit-outlet"></page-edit-outlet>
               <page-view-outlet name="view-outlet"></page-view-outlet>
               <page-manage-warehouses name="manage-warehouses"></page-manage-warehouses>
               <page-view-warehouse name="view-warehouse"></page-view-warehouse>
               <page-edit-warehouse name="edit-warehouse"></page-edit-warehouse>
+
               <page-manage-product-blueprints name="manage-product-blueprints"></page-manage-product-blueprints>
               <page-edit-product-blueprint name="edit-product-blueprint"></page-edit-product-blueprint>
               <page-manage-service-blueprints name="manage-service-blueprints"></page-manage-service-blueprints>
@@ -796,7 +804,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":308,"datetimeStamp":1589987585687}');
+              return JSON.parse('{"build":309,"datetimeStamp":1590312764580}');
               '%__deploy-end'
             }
           },
