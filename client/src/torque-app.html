@@ -65,11 +65,9 @@
 <link rel="lazy-import" href="page-view-employee.html">
 <link rel="lazy-import" href="page-edit-employee.html">
 <link rel="lazy-import" href="page-hire-employee.html">
-<link rel="lazy-import" href="page-manage-outlets.html">
 
-<!-- FIXME: -->
 <link rel="lazy-import" href="page-manage-inventories.html">
-
+<link rel="lazy-import" href="page-manage-outlets.html">
 <link rel="lazy-import" href="page-edit-outlet.html">
 <link rel="lazy-import" href="page-view-outlet.html">
 <link rel="lazy-import" href="page-manage-warehouses.html">
@@ -491,14 +489,16 @@
                     <a name="manage-service-blueprints" href="#/manage-service-blueprints">[[verses.sidebar.serviceBlueprints]]</a>
                   </template>
                 </template>
-                <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
+
+                <!-- TODO: remove below commented out section -->
+                <!-- <a name="manage-outlets" href="#/manage-outlets">[[verses.sidebar.outlets]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
                     <a name="manage-warehouses" href="#/manage-warehouses">[[verses.sidebar.warehouses]]</a>
                   </template>
-                </template>
+                </template> -->
 
-                <a name="manage-inventories" href="#/manage-inventories">Inventories</a>
+                <a name="manage-inventories" href="#/manage-inventories">[[verses.inventory.inventoryTitle]]</a>
                 <hr class="custom-sidebar-divider">
 
                 <!-- Accounting section - start -->

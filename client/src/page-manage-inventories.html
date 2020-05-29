@@ -24,11 +24,20 @@
   <template>
     <style include="shared-styles">
       .outlet-list-container {
-        border: 1px solid red;
+        /* border: 1px solid red; */
+      }
+
+      .title-container {
+        margin-top: 10px;
+        margin-bottom: 14px;
+        margin-left: 9px;
+        margin-right: 4px;
       }
 
       .warehouse-list-container {
-        border: 1px solid blue;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        padding-top: 20px;
+        margin-top: 40px;
       }
     </style>
 
@@ -38,6 +47,23 @@
 
       <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_OUTLETS', organization)]]">
         <div class="outlet-list-container">
+
+          <!-- outlet title section - start -->
+          <div class="title-container horizontal layout center">
+            <div class="title" style="font-size: 24px; font-weight: bold;">
+              [[verses.outlet.outletTitle]]
+            </div>
+            <div class="flex"></div>
+            
+            <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
+              <paper-button raised class="btn primary" on-tap="createOutletTapped">
+                <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+                [[verses.outlet.createNewOutlet]]
+              </paper-button>
+            </template>
+          </div>
+          <!-- outlet title section - end -->
+
           <template is="dom-if" if="{{!outletList.length}}">
             <div class="card">
               [[verses.outlet.noOutletFound]]
@@ -68,14 +94,14 @@
             </div>
           </template>
 
-          <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
+          <!-- <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_OUTLETS', organization)]]">
             <div class="lone-controls">
               <paper-button raised class="btn primary" on-tap="createOutletTapped">
                 <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
                 [[verses.outlet.createNewOutlet]]
               </paper-button>
             </div>
-          </template>
+          </template> -->
 
         </div>
       </template>
@@ -83,6 +109,23 @@
       <template is="dom-if" if="[[hasModule('MOD_PRODUCT', organization)]]">
         <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_WAREHOUSES', organization)]]">
           <div class="warehouse-list-container">
+
+          <!-- warehouse title section - start -->
+          <div class="title-container horizontal layout center">
+            <div class="title" style="font-size: 24px; font-weight: bold;">
+              [[verses.warehouse.warehouseTitle]]
+            </div>
+            <div class="flex"></div>
+            
+            <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
+              <paper-button raised class="btn primary" on-tap="createWarehouseTapped">
+                <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
+                [[verses.warehouse.createNewWarehouse]]
+              </paper-button>
+            </template>
+          </div>
+          <!-- warehouse title section - end -->
+
             <template is="dom-if" if="{{!warehouseList.length}}">
               <div class="card">
                 [[verses.warehouse.noWarehouseFound]]
@@ -108,15 +151,6 @@
                 </div>
               </div>
       
-            </template>
-      
-            <template is="dom-if" if="[[hasPrivilege('PRIV_MODIFY_ALL_WAREHOUSES', organization)]]">
-              <div class="lone-controls">
-                <paper-button raised class="btn primary" on-tap="createWarehouseTapped">
-                  <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
-                  [[verses.warehouse.createNewWarehouse]]
-                </paper-button>
-              </div>
             </template>
 
           </div>
