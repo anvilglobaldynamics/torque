@@ -473,7 +473,7 @@
 
         <div class="horizontal layout">
           <!-- Drawer content - start -->
-          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped" style$="[[customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)]]">
+          <div class="custom-app-drawer-wrapper" on-tap="customAppDrawerWrapperTapped" style$="[[customAppDrawerStyle(user, organization, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode)]]">
             <div class="custom-app-drawer" on-tap="customAppDrawerTapped">
               <app-toolbar class="sidebar-title">
                 <img class="custom-sidebar-logo-image" src="../images/logo.png">
@@ -1635,9 +1635,11 @@
         }
       }
 
-      customAppDrawerStyle(user, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode) {
+      customAppDrawerStyle(user, organization, isFloatingAppDrawerExpanded, innerWidth, isInOfflineMode) {
         let str = 'display: ';
         if (!user) {
+          str += 'none';
+        } else if (!organization) {
           str += 'none';
         } else if (isInOfflineMode) {
           str += 'none';
