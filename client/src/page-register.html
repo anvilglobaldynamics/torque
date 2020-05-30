@@ -157,8 +157,12 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error, 'registerForm');
 
+          this.storeInCache('loginForm--emailOrPhone', phone);
+
           let message = this.app.verses.register.nowAUserOfTorque;
           this.app.showToast(message, _ => {
+
+
             this.app.navigateTo('/home');
           });
         });
