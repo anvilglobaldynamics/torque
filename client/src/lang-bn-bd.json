@@ -295,7 +295,7 @@
     "addOutletTitle": "দোকান তৈরি",
     "nameOfOutletInput": "দোকান এর নাম",
     "nameOfOutletInputError": "পুরো নাম লিখুন",
-    "physicalAddressInput": "দোকানের ঠিকানা",
+    "physicalAddressInput": "দোকানের ঠিকানা (রিসিটে প্রিন্ট হবে)",
     "physicalAddressInputError": "অন্তত ৮টি অক্ষর দীর্ঘ একটি ঠিকানা লিখুন",
     "contactPersonNameInput": "যোগাযোগ করার ব্যক্তির নাম",
     "contactPersonNameInputError": "পুরো নাম লিখুন",
@@ -334,7 +334,8 @@
     "locationInvalidDialogHeader": "অবস্থান ভুল",
     "locationInvalidDialog": "মানচিত্রে একটি সঠিক অবস্থান নির্বাচন করুন।",
     "showingLocationOnMap": "নীচের মানচিত্রে অবস্থান দেখানো হচ্ছে",
-    "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।"
+    "noLocationOnMap": "এখনো অবস্থান মানচিত্রে চিহ্নিত করা হয়নি।",
+    "locationRequiredNote": "আপনার দোকানের ঠিকানা জানালে আমরা আরও ভাল সেবা দিতে পারবো। প্রথমে লিখিত ঠিকানা দিন। তারপরে মানচিত্রে নির্দেশ করুন।"
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "মানচিত্রে অবস্থান",

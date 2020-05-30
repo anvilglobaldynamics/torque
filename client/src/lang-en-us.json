@@ -279,7 +279,7 @@
     "pleaseEnterAValidName": "Enter a valid name.",
     "emailInput": "Email address of Organization (Optional)",
     "emailInputError": "Enter a valid email",
-    "primaryBusinessAddressInput": "Your primary business address",
+    "primaryBusinessAddressInput": "Primary business address",
     "primaryBusinessAddressInputError": "Enter an address at least 8 characters long",
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created.",
@@ -293,7 +293,7 @@
     "addOutletTitle": "Add Outlet",
     "nameOfOutletInput": "Name of Outlet",
     "nameOfOutletInputError": "Enter a longer name",
-    "physicalAddressInput": "Physical Address",
+    "physicalAddressInput": "Formal Address (Printed on Receipt)",
     "physicalAddressInputError": "Enter an address at least 8 characters long",
     "contactPersonNameInput": "Name of Contact Person",
     "contactPersonNameInputError": "Enter a longer name.",
@@ -332,7 +332,8 @@
     "locationInvalidDialogHeader": "Location Invalid",
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
-    "noLocationOnMap": "Location has not been set on Map yet."
+    "noLocationOnMap": "Location has not been set on Map yet.",
+    "locationRequiredNote": "Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "Set Map Location",
