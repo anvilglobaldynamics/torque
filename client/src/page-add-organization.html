@@ -29,6 +29,7 @@
       .full-width-paper-dropdown {
         width: 100%;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -79,7 +80,7 @@
               if (mode === 'development') {
                 return {
                   name: 'Johns Apparel',
-                  phone: '1700000011',
+                  phone: '',
                   email: 'johndoe@johnsapparel.com',
                   primaryBusinessAddress: 'Road 50\nThis Town',
                   isNotOneOutletOrg: false,
@@ -114,6 +115,9 @@
         this.useLanguageServices();
         this.app.pushPageTitle(this.app.verses.organization.addOrganizationTitle);
         if (!this._ensureAccess()) return;
+
+        this._setKnownFormFields();
+
         this.delay(300, () => {
           this.isReady = true;
         });
@@ -130,6 +134,11 @@
         return this.accessControl({
           authLevel: 'authenticated'
         });
+      }
+
+      _setKnownFormFields(){
+        let user = this.app.user;
+        this.set('addOrganizationForm.phone', user.phone);
       }
 
       // region: addOrganization =================================

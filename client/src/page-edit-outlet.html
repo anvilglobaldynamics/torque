@@ -32,6 +32,7 @@
         height: 300px;
         margin-bottom: 8px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -101,9 +102,9 @@
               if (mode === 'development') {
                 return {
                   name: 'Gulshan Showroom',
-                  phone: '1700000011',
-                  contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 56, Gulshan, Dhaka',
+                  phone: '',
+                  contactPersonName: '',
+                  physicalAddress: '',
                   location: { lat: 23.7945153, lng: 90.4139857 },
                   categoryCode: 'CAT_GENERAL'
                 };
@@ -141,6 +142,9 @@
           this.app.pushPageTitle(this.app.verses.outlet.addOutletTitle);
         }
         if (!this._ensureAccess()) return;
+
+        this._setKnownFormFields();
+
         if (this.editMode) {
           this._processGetOutlet(() => {
             this.fetchOutletCategoryList(() => {
@@ -175,6 +179,15 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
         });
+      }
+
+      _setKnownFormFields() {
+        let user = this.app.user;
+        this.set('editOutletForm.phone', user.phone);
+        this.set('editOutletForm.contactPersonName', user.fullName);
+
+        let organization = this.app.organization;
+        this.set('editOutletForm.physicalAddress', organization.primaryBusinessAddress);
       }
 
       // region: map =================================
