@@ -110,11 +110,27 @@
         // erase all local data
         try {
           this.app.removeUser();
+        } catch (ex) { }
+        try {
           this.app.removePreviousOrganization();
+        } catch (ex) { }
+        try {
           this.disableOfflineMode();
+        } catch (ex) { }
+        try {
           this.app.removeOfflineData();
+        } catch (ex) { }
+        try {
           this.removePreviousUser();
+        } catch (ex) { }
+        try {
           this.app.removeSettings();
+        } catch (ex) { }
+
+        try {
+          let db = this.db || this.app.db;
+          db.remove('organization', (doc => true));
+          this.app.onOrganizationChange();
         } catch (ex) { }
 
         this.app.shouldShowSaveButton = false;
