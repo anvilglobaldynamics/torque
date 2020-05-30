@@ -116,7 +116,7 @@
         this.app.pushPageTitle(this.app.verses.organization.addOrganizationTitle);
         if (!this._ensureAccess()) return;
 
-        this._setKnownFormFields();
+        this._autoFillKnownFormFields();
 
         this.delay(300, () => {
           this.isReady = true;
@@ -136,7 +136,7 @@
         });
       }
 
-      _setKnownFormFields() {
+      _autoFillKnownFormFields() {
         let user = this.app.user;
         this.set('addOrganizationForm.phone', user.phone);
       }

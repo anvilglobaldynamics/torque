@@ -144,7 +144,11 @@
         }
         if (!this._ensureAccess()) return;
 
-        this._setKnownFormFields();
+        if (!this.doNotAutoFillKnownFormFields) {
+          this._autoFillKnownFormFields();
+        } else {
+          this.doNotAutoFillKnownFormFields = false;
+        }
 
         if (this.editMode) {
           this._processGetOutlet(() => {
@@ -182,7 +186,7 @@
         });
       }
 
-      _setKnownFormFields() {
+      _autoFillKnownFormFields() {
         let user = this.app.user;
         this.set('editOutletForm.phone', user.phone);
         this.set('editOutletForm.contactPersonName', user.fullName);
@@ -309,6 +313,8 @@
       // region: ui =================================
 
       selectLocationTapped(e = null) {
+        this.doNotAutoFillKnownFormFields = true;
+
         sessionStorage.setItem('page-select-geolocation:address', this.editOutletForm.physicalAddress || '');
         if (this.editOutletForm.location) {
           sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
