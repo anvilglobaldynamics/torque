@@ -79,11 +79,12 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: 'Johns Apparel',
+                  name: '',
+                  // name: 'Johns Apparel',
                   phone: '',
                   email: 'johndoe@johnsapparel.com',
-                  primaryBusinessAddress: 'Road 50\nThis Town',
-                  isNotOneOutletOrg: false,
+                  // primaryBusinessAddress: 'Road 50\nThis Town',
+                  primaryBusinessAddress: '',
                   industryCategory: 'both'
                 };
               } else {
@@ -92,7 +93,6 @@
                   phone: '',
                   email: '',
                   primaryBusinessAddress: '',
-                  isNotOneOutletOrg: false,
                   industryCategory: 'both'
                 };
               }
@@ -136,14 +136,14 @@
         });
       }
 
-      _setKnownFormFields(){
+      _setKnownFormFields() {
         let user = this.app.user;
         this.set('addOrganizationForm.phone', user.phone);
       }
 
       // region: addOrganization =================================
 
-      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isNotOneOutletOrg, industryCategory }) {
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }) {
         email = email.toLowerCase();
 
         let activeModuleCodeList = [];
@@ -169,12 +169,25 @@
           if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
           let message = this.app.verses.organization.organizationCreatedToast;
           this.app.showToast(message, _ => {
-            if (isNotOneOutletOrg) {
-              this.app.navigateTo(`/home/org:${response.organizationId}`);
-            } else {
+
+            this._fetchOrganizationList((organizationList) => {
+              let organization = organizationList.find(org => org.id === response.organizationId);
+              this.app.removeSettings();
+              this.app.removePreviousOrganization();
+              this.app.saveOrganization(organization);
+
               this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
-            }
+            });
           });
+        });
+      }
+
+      _fetchOrganizationList(cbfn) {
+        let data = {};
+        this.app.callGetOrganizationListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.organizationList);
         });
       }
 
@@ -184,8 +197,8 @@
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
 
-        let { name, phone, email, primaryBusinessAddress, isNotOneOutletOrg, industryCategory } = this.addOrganizationForm;
-        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, isNotOneOutletOrg, industryCategory });
+        let { name, phone, email, primaryBusinessAddress, industryCategory } = this.addOrganizationForm;
+        this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory });
       }
 
       // region: misc =================================

@@ -1473,7 +1473,7 @@
       }
 
       switchOrganizationTapped(e = null) {
-        this.navigateTo('/manage-organizations')
+        this.navigateTo('/manage-organizations/mode:switch')
       }
 
       // ====================== cacheStorage =============================
@@ -1720,6 +1720,10 @@
       // NOTE: We had to duplicate it since this.app is not defined in
       // torque-app.
       hasPrivilege(privilege) {
+        if (!(this.organization && this.organization.employment)) {
+          return false;
+        }
+
         if (!(privilege in this.organization.employment.privileges)) {
           throw new Error(`No such privilege "${privilege}".`);
         }
