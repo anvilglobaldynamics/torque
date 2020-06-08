@@ -162,6 +162,7 @@
     "passwordInputError": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন",
     "retypedPasswordInput": "আবার পাসওয়ার্ড দিন",
     "retypedPasswordInputError": "সঠিকভাবে আবার পাসওয়ার্ড দিন",
+    "retypedPasswordMismatchError": "দুটো পাসওয়ার্ড মিলে নাই।",
     "alreadyHaveAccount": "আপনার কি ইতিমধ্যে একটি একাউন্ট আছে?",
     "tocNotReadHeader": "শর্তাবলী পড়ুন",
     "tocNotRead": "নিবন্ধন করার আগে আপনাকে অবশ্যই শর্তাবলী পড়তে হবে।",

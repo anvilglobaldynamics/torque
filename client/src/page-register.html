@@ -359,7 +359,10 @@
         let { password, retypedPassword } = this.registerForm;
 
         if (password !== retypedPassword) {
-          return this.app.showModalDialog("", this.verses.register.retypedPasswordInputError);
+          let el = this.elem('.registerForm--retypedPassword');
+          el.invalid = true;
+          el.errorMessage = this.verses.register.retypedPasswordMismatchError;
+          return;
         }
 
         this.delay(140, () => {

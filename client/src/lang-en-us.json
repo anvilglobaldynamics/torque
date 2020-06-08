@@ -162,6 +162,7 @@
     "passwordInputError": "Password must be at least 8 characters long.",
     "retypedPasswordInput": "Enter password again",
     "retypedPasswordInputError": "Enter your password again correctly.",
+    "retypedPasswordMismatchError": "Did not match above password.",
     "alreadyHaveAccount": "Already have an account?",
     "tocNotReadHeader": "Read TOC",
     "tocNotRead": "You must read the Terms and Conditions before you proceed.",
