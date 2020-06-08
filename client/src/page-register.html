@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -25,36 +26,87 @@
         margin-top: 8px;
       }
 
+      .registration-tabs {
+        margin-top: 16px;
+      }
+
+      .registration-tabs .tab {
+        font-weight: bold;
+        color: var(--app-button-neutral);
+        cursor: default;
+      }
+
+      .registration-tabs .tab.active {
+        color: var(--app-button-label-secondary);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="page-small layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
-      <iron-form id="registerForm" on-keypress="genericFormSubmitionKeypress">
-        <form>
-          <div class="card vertical layout">
-            <div class="page-small--header">[[verses.register.registerTitle]]</div>
+      <div class="card vertical layout">
+        <div class="page-small--header">[[verses.register.registerTitle]]</div>
+
+        <div class="registration-tabs horizontal layout center-center">
+          <div class$="tab [[$getTabClass(selectedTabIndex, 0)]]">[[verses.register.yourDetails]]</div>
+          <div style="margin-left: 20px; margin-right: 20px;">-</div>
+          <div class$="tab [[$getTabClass(selectedTabIndex, 1)]]">[[verses.register.organizationDetails]]</div>
+        </div>
+
+        <!-- Your details - start -->
+        <iron-form id="registerForm" on-keypress="genericFormSubmitionKeypress" hidden="[[!$equals(selectedTabIndex, 0)]]">
+          <form>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
             <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="4" minlength="14" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
-            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password"></paper-input>
+            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 16px;"></paper-input>
+            <paper-input class="registerForm--retypedPassword" value="{{registerForm.retypedPassword}}" required minlength="8" error-message="[[verses.register.retypedPasswordInputError]]" label="[[verses.register.retypedPasswordInput]]" type="password"></paper-input>
 
-            <div class="toc">[[verses.register.tocLinkPart1]]<a class="link primary" on-tap="viewTocTapped">[[verses.register.tocLinkPart2]]</a>[[verses.register.tocLinkPart3]]</div>
+            <div class="horizontal layout button-row end">
+              <div class="flex"></div>
+              <paper-button raised class="primary" on-tap="continueTapped">[[verses.general.continue]]</paper-button>
+            </div>
+
+          </form>
+        </iron-form>
+        <!-- Your details - end -->
+
+        <!-- company details - start -->
+        <iron-form id="addOrganizationForm" on-keypress="genericFormSubmitionKeypress" hidden="[[!$equals(selectedTabIndex, 1)]]">
+          <form>
+            <paper-input class="addOrganizationForm--name" value="{{addOrganizationForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.organization.nameOfYourOrganization]]></paper-input>
+
+            <paper-textarea class="addOrganizationForm--primaryBusinessAddress" value="{{addOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="3"></paper-textarea>
+
+            <paper-dropdown-menu class="full-width-paper-dropdown addOrganizationForm--categoryCode" label=[[verses.organization.industryCategory]] class="mr-4">
+              <paper-listbox slot="dropdown-content" selected="{{addOrganizationForm.categoryCode}}" attr-for-selected="code">
+                <template is="dom-repeat" items="[[outletCategoryList]]" as="outletCategory">
+                  <paper-item code="[[outletCategory.code]]">[[outletCategory.name]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+
+            <div class="toc" style="margin-top: 16px;">[[verses.register.tocLinkPart1]]<a class="link primary" on-tap="viewTocTapped">[[verses.register.tocLinkPart2]]</a>[[verses.register.tocLinkPart3]]</div>
 
             <template is="dom-if" if="[[hasClickedTheToc]]">
               <paper-checkbox checked="{{agreesToToc}}">[[verses.register.tocCheckbox]]</paper-checkbox>
             </template>
 
-            <div class="horizontal layout button-row end">
+            <div class="horizontal layout button-row end" style="margin-top: 16px;">
+              <paper-button raised class="secondary" on-tap="backTapped" style="margin-right: 4px;">[[verses.general.back]]</paper-button>
               <div class="flex"></div>
-              <paper-button raised class="primary registerForm--submit" on-tap="registerTapped">[[verses.register.register]]</paper-button>
+              <paper-button raised class="primary" on-tap="confirmTapped">[[verses.register.register]]</paper-button>
             </div>
-            <div class="horizontal layout button-row center-center">
-              <div class="link primary" on-tap="loginTapped">[[verses.register.alreadyHaveAccount]]</div>
-            </div>
-          </div>
-        </form>
-      </iron-form>
+          </form>
+        </iron-form>
+        <!-- company details - end -->
+
+        <div class="horizontal layout button-row center-center">
+          <div class="link primary" on-tap="loginTapped">[[verses.register.alreadyHaveAccount]]</div>
+        </div>
+
+      </div>
 
   </template>
 
@@ -74,25 +126,25 @@
             type: Boolean,
             value: true
           },
+          addOrganizationForm: {
+            type: Object,
+            value: _ => {
+              return {
+                name: '',
+                primaryBusinessAddress: '',
+                categoryCode: 'CAT_GENERAL'
+              };
+            }
+          },
           registerForm: {
             type: Object,
             value: _ => {
-              if (mode === 'development') {
-                return {
-                  fullName: '',
-                  phone: '',
-                  password: ''
-                  // fullName: 'John Doe1',
-                  // phone: '1700000011',
-                  // password: 'johndoe1pass'
-                };
-              } else {
-                return {
-                  fullName: '',
-                  phone: '',
-                  password: ''
-                };
-              }
+              return {
+                fullName: '',
+                phone: '',
+                password: '',
+                retypedPassword: ''
+              };
             }
           }
 
@@ -107,6 +159,8 @@
       }
 
       onNavigateIn() {
+        this.selectedTabIndex = 0;
+
         // erase all local data
         try {
           this.app.removeUser();
@@ -136,7 +190,8 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.useLanguageServices();
-        this.delay(300, () => {
+
+        this.fetchOutletCategoryList(() => {
           this.isReady = true;
         });
       }
@@ -148,7 +203,17 @@
 
       // region: register =================================
 
-      _processUserRegister({ fullName, phone, password, hasAgreedToToc }) {
+      fetchOutletCategoryList(cbfn) {
+        let data = {};
+        this.app.callGetOutletCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          this.outletCategoryList = response.categoryList;
+          cbfn();
+        });
+      }
+
+      _processUserRegister({ fullName, phone, password, hasAgreedToToc }, cbfn) {
         // NOTE: Update when Lipi is internationalized
         let countryCode = '+880';
 
@@ -159,12 +224,115 @@
 
           this.storeInCache('loginForm--emailOrPhone', phone);
 
-          let message = this.app.verses.register.nowAUserOfTorque;
+          cbfn();
+        });
+      }
+
+
+      // NOTE: Copied from "page-login" and added cbfn
+      _processUserLogin({ emailOrPhone, password }, cbfn) {
+        emailOrPhone = emailOrPhone.trim();
+        emailOrPhone = emailOrPhone.toLowerCase();
+
+        this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
+
+        // NOTE: Update when Lipi is internationalized
+        let countryCode = '+880';
+
+        let data = { emailOrPhone, password, countryCode };
+
+        this.app.callUserLoginApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) {
+            if (response.error.code === "USER_REQUIRES_PHONE_VERIFICATION") {
+              return this.app.navigateTo(`/verify/phone:${emailOrPhone}`);
+            }
+            return this.onApiError(response.error, 'loginForm');
+          }
+          let { apiKey, warning, sessionId, user } = response;
+          Object.assign(user, { apiKey, warning, sessionId });
+          this.app.saveUser(user);
+
+          // reset cache on organization change
+          let { previousUser, previousOrganization } = this.app.loadPreviousUserAndOrganization();
+          if (!previousUser || (previousUser && user.id !== previousUser.id)) {
+            this.app.removeOfflineData();
+            this.removePreviousUser();
+          }
+
+          this.app.wasLastNavigationBypassed = false;
+          // this.app.navigateToUrlWithoutHistory('/home/bypassable:yes');
+
+          cbfn();
+        });
+      }
+
+      // NOTE: Copied from "page-add-organization" and added cbfn
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, cbfn) {
+        email = email.toLowerCase();
+
+        let activeModuleCodeList = [];
+        if (industryCategory === 'retail') {
+          activeModuleCodeList = ['MOD_PRODUCT'];
+        }
+
+        if (industryCategory === 'service') {
+          activeModuleCodeList = ['MOD_SERVICE'];
+        }
+
+        if (industryCategory === 'both') {
+          activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
+        }
+
+        // Enabling accounting module for every new Lipi user
+        activeModuleCodeList.push('MOD_ACCOUNTING');
+
+        let data = { name, phone, email, primaryBusinessAddress, activeModuleCodeList };
+
+        this.app.callAddOrganizationApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'addOrganizationForm');
+          let message = this.app.verses.organization.organizationCreatedToast;
           this.app.showToast(message, _ => {
 
+            this._fetchOrganizationList((organizationList) => {
+              let organization = organizationList.find(org => org.id === response.organizationId);
+              this.app.removeSettings();
+              this.app.removePreviousOrganization();
+              this.app.saveOrganization(organization);
 
-            this.app.navigateTo('/home');
+              // this.app.navigateTo(`/edit-outlet/fromOrganizationCreatePage:${response.organizationId}`);
+              cbfn();
+            });
           });
+        });
+      }
+
+      // NOTE: Copied from "page-edit-outlet" and added cbfn
+      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }, cbfn) {
+        let organizationId;
+        organizationId = this.app.organization.id;
+        let data = {
+          name, phone, contactPersonName, physicalAddress, location, categoryCode,
+          organizationId
+        };
+        this.app.callAddOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error, 'editOutletForm');
+          let message = this.app.verses.outlet.outletCreatedToast;
+          this.app.showToast(message, _ => {
+            cbfn();
+          });
+        });
+      }
+
+      // NOTE: Copied from "page-add-organization" 
+      _fetchOrganizationList(cbfn) {
+        let data = {};
+        this.app.callGetOrganizationListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response.organizationList);
         });
       }
 
@@ -175,28 +343,77 @@
         this.app.navigateTo('/login');
       }
 
-      registerTapped() {
+      viewTocTapped(e = null) {
+        this.hasClickedTheToc = true;
+        this.app.navigateTo('/toc/from:register');
+      }
+
+      continueTapped(e) {
+        e.stopPropagation();
+
         this.elemAll('#registerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#registerForm').validate()) return;
 
-        if (!this.hasClickedTheToc) {
-          return this.app.showModalDialog(this.verses.register.tocNotReadHeader, this.verses.register.tocNotRead);
+        let { password, retypedPassword } = this.registerForm;
+
+        if (password !== retypedPassword) {
+          return this.app.showModalDialog("", this.verses.register.retypedPasswordInputError);
         }
+
+        this.delay(140, () => {
+          this.selectedTabIndex = 1;
+        })
+      }
+
+      backTapped() {
+        this.selectedTabIndex = 0;
+      }
+
+      confirmTapped() {
+        this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
+        this.elemAll('#addOrganizationForm paper-textarea').forEach(el => el.autoValidate = true);
+        if (!this.elem('#addOrganizationForm').validate()) return;
 
         if (!this.agreesToToc) {
           return this.app.showModalDialog(this.verses.register.tocNotAgreedHeader, this.verses.register.tocNotAgreed);
         }
 
         let { fullName, phone, password } = this.registerForm;
-        this._processUserRegister({ fullName, phone, password, hasAgreedToToc: this.agreesToToc });
-      }
 
-      viewTocTapped(e = null) {
-        this.hasClickedTheToc = true;
-        this.app.navigateTo('/toc/from:register');
+        this._processUserRegister({ fullName, phone, password, hasAgreedToToc: this.agreesToToc }, (cbfn) => {
+
+          this._processUserLogin({ emailOrPhone: phone, password }, (cbfn) => {
+
+            let { name, primaryBusinessAddress, categoryCode } = this.addOrganizationForm;
+            let email = '';
+            let industryCategory = 'retail'; // FIXME
+
+            this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, (cbfn) => {
+
+              let location = { lat: 23.7945153, lng: 90.4139857 }; // FIXME
+              this._processCreateOutlet({ name, phone, contactPersonName: fullName, physicalAddress: primaryBusinessAddress, location, categoryCode }, (cbfn) => {
+
+                let message = this.app.verses.register.nowAUserOfTorque;
+                this.app.showToast(message, _ => {
+                  // this.app.navigateTo('/home');
+                  this.app.navigateToUrlWithoutHistory('/home/bypassable:yes');
+                });
+
+              });
+            });
+          });
+        });
       }
 
       // region: misc =================================
+
+      $getTabClass(selectedTabIndex, tabIndex) {
+        if (selectedTabIndex === tabIndex) {
+          return ' active';
+        } else {
+          return '';
+        }
+      }
 
     }
 

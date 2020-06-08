@@ -120,6 +120,7 @@
     "inventory": "পণ্য তালিকা",
     "payment": "পরিশোধ",
     "change": "বদলান",
+    "continue":"এগিয়ে যান",
     "nextOrContinue": "পরবর্তী",
     "notFound": "পাওয়া যায় নি",
     "update": "আপডেট",
@@ -131,7 +132,8 @@
     "reportScrollNote": "রিপোর্টটি বাম থেকে ডানে স্ক্রল করা যায় ",
     "website":"ওয়েবসাইট",
     "linkedIn":"লিংকডইন",
-    "facebook":"ফেসবুক"
+    "facebook":"ফেসবুক",
+    "back": "ফেরত যান"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -152,12 +154,14 @@
   "register": {
     "registerTitle": "লিপি অ্যাকাউন্ট খুলুন",
     "register": "অ্যাকাউন্ট খুলুন",
-    "fullnameInput": "আপনার পুরো নাম দিন",
+    "fullnameInput": "আপনার পুরো নাম",
     "fullnameInputError": "এই নামটি গ্রহণযোগ্য নয়।",
-    "phoneInput": "আপনার ফোন নম্বর দিন",
+    "phoneInput": "আপনার ফোন নম্বর",
     "phoneInputError": "এই ফোন নম্বরটি সঠিক নয়।",
-    "passwordInput": "সর্বনিম্ন ৮ অক্ষরের পাসওয়ার্ড দিন",
+    "passwordInput": "৮ অক্ষরের পাসওয়ার্ড",
     "passwordInputError": "সর্বনিম্ন ৮ অক্ষরের একটি পাসওয়ার্ড দিন",
+    "retypedPasswordInput": "আবার পাসওয়ার্ড দিন",
+    "retypedPasswordInputError": "সঠিকভাবে আবার পাসওয়ার্ড দিন",
     "alreadyHaveAccount": "আপনার কি ইতিমধ্যে একটি একাউন্ট আছে?",
     "tocNotReadHeader": "শর্তাবলী পড়ুন",
     "tocNotRead": "নিবন্ধন করার আগে আপনাকে অবশ্যই শর্তাবলী পড়তে হবে।",
@@ -167,7 +171,9 @@
     "tocLinkPart2": " শর্তাবলী ",
     "tocLinkPart3": " অনুগ্রহ করে পড়ুন।",
     "tocCheckbox": "আমি উপরের শর্তাবলী পড়ে এবং বুঝে সম্মতি দিচ্ছি।",
-    "nowAUserOfTorque": "আপনি এখন লিপির একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।"
+    "nowAUserOfTorque": "আপনি এখন লিপির একটি ব্যবহারকারী। আপনি এখন লগ ইন করতে পারেন।",
+    "yourDetails":"আপনার পরিচয়",
+    "organizationDetails":"সংস্থার পরিচয়" 
   },
   "sidebar": {
     "lipiName": "লিপি",
@@ -279,7 +285,7 @@
     "editOrganizationTitle": "আপডেট সংস্থা",
     "updateOrganization": "সংস্থা আপডেট করুন ",
     "isNotOneOutletOrg": "এই সংস্থার একের বেশি দোকান আছে।",
-    "industryCategory": "সংস্থার শিল্পের ধরণ",
+    "industryCategory": "আপনার ব্যবসার ধরণ",
     "nameOfYourOrganization": "আপনার সংস্থার নাম",
     "pleaseEnterAValidName": "পুরো নাম লিখুন",
     "emailInput": "আপনার সংস্থার ইমেইল (ঐচ্ছিক)",
