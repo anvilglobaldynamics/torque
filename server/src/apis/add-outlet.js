@@ -21,7 +21,7 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required(),
+      }).allow(null).required(),
       categoryCode: Joi.string().required()
     });
   }
@@ -52,7 +52,9 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
 
     let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
 
-    await this._createGeolocationCache({ outletId, location });
+    if (location) {
+      await this._createGeolocationCache({ outletId, location });
+    }
 
     await this.__createStandardInventories({ inventoryContainerId: outletId, inventoryContainerType: "outlet", organizationId });
     return { status: "success", outletId }

@@ -21,7 +21,7 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required(),
+      }).allow(null).required(),
       categoryCode: Joi.string().required()
     });
   }
@@ -57,7 +57,16 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
     await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
-    await this._updateGeolocationCache({ outletId, location });
+
+    if (location) {
+      let exists = await this.database.cacheOutletGeolocation._findOne({ outletId });
+      if (exists) {
+        await this._updateGeolocationCache({ outletId, location });
+      } else {
+        await this._createGeolocationCache({ outletId, location });
+      }
+    }
+
     return { status: "success" };
   }
 

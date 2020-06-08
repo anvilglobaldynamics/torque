@@ -407,7 +407,8 @@
 
             this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, (cbfn) => {
 
-              let location = { lat: 23.7945153, lng: 90.4139857 }; // FIXME
+              // let location = { lat: 23.7945153, lng: 90.4139857 }; // FIXME
+              let location = null;
               this._processCreateOutlet({ name, phone, contactPersonName: fullName, physicalAddress: primaryBusinessAddress, location, categoryCode }, (cbfn) => {
 
                 let message = this.app.verses.register.nowAUserOfTorque;
