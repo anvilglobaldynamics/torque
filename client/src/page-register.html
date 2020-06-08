@@ -96,7 +96,7 @@
             <div class="horizontal layout button-row end" style="margin-top: 16px;">
               <paper-button raised class="secondary" on-tap="backTapped" style="margin-right: 4px;">[[verses.general.back]]</paper-button>
               <div class="flex"></div>
-              <paper-button raised class="primary" on-tap="confirmTapped">[[verses.register.register]]</paper-button>
+              <paper-button raised class="primary" on-tap="registerTapped">[[verses.register.register]]</paper-button>
             </div>
           </form>
         </iron-form>
@@ -220,14 +220,16 @@
         let data = { fullName, phone, password, hasAgreedToToc, countryCode };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error, 'registerForm');
+          if (response.hasError) {
+            this.selectedTabIndex = 0;
+            return this.onApiError(response.error, 'registerForm');
+          }
 
           this.storeInCache('loginForm--emailOrPhone', phone);
 
           cbfn();
         });
       }
-
 
       // NOTE: Copied from "page-login" and added cbfn
       _processUserLogin({ emailOrPhone, password }, cbfn) {
@@ -369,7 +371,15 @@
         this.selectedTabIndex = 0;
       }
 
-      confirmTapped() {
+      registerTapped() {
+        let serviceIndustryCategoryCodeList = [
+          "CAT_SALON",
+          "CAT_PARLOUR",
+          "CAT_GYM",
+          "CAT_YOGA",
+          "CAT_MUSIC_DANCE"
+        ]
+
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         this.elemAll('#addOrganizationForm paper-textarea').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
@@ -386,7 +396,11 @@
 
             let { name, primaryBusinessAddress, categoryCode } = this.addOrganizationForm;
             let email = '';
-            let industryCategory = 'retail'; // FIXME
+
+            let industryCategory = 'retail';
+            if (serviceIndustryCategoryCodeList.indexOf(categoryCode) > -1) {
+              industryCategory = 'service';
+            }
 
             this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, (cbfn) => {
 
