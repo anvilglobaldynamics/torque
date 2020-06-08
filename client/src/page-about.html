@@ -13,18 +13,23 @@
 <link rel="import" href="torque-page-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
 
+<link rel="import" href="elem-toc.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="page-about">
   <template>
 
     <style include="shared-styles">
-
       paper-tabs.view-selector {
         --paper-tabs: {
           background-color: var(--app-primary-color);
           color: white;
         }
+      }
+
+      .contact-option {
+        margin-bottom: 4px;
       }
 
     </style>
@@ -34,13 +39,34 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
-        <paper-tab>[[verses.about.about]]</paper-tab>
-        <paper-tab>[[verses.about.tos]]</paper-tab>
         <paper-tab>[[verses.about.contactUs]]</paper-tab>
+        <paper-tab>[[verses.about.tos]]</paper-tab>
+        <paper-tab>[[verses.about.about]]</paper-tab>
       </paper-tabs>
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card">
+          <div>
+            [[verses.about.sendYourQuestionsTo]]<br><br>
+            <div class="contact-option">[[verses.general.email]] <a href="mailto:[[contactEmail]]">[[contactEmail]]</a></div>
+            <div class="contact-option">[[verses.general.phone]] <a href="tel:+8801770947908">+8801770947908</a> </div>
+            <div class="contact-option">[[verses.general.website]] <a href="https://www.anvil.live/lipi">anvil.live/lipi</a></div>
+            <div class="contact-option"> <a href="https://www.linkedin.com/company/lipiforbusiness/">[[verses.general.linkedIn]]</a></div>
+            <div class="contact-option"> <a href="https://www.facebook.com/LipiForBusiness">[[verses.general.facebook]]</a></div>
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
+        <div class="card">
+          <elem-toc></elem-toc>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
+        <div class="card">
+          <div>[[verses.about.aboutUsDescription]]</div>
+          <br>
           <div>[[verses.about.projectBy]]
             <a href="[[app.authorWebsite]]">[[app.authorName]]</a>
           </div>
@@ -50,23 +76,6 @@
             <a href="[[app.authorWebsite]]">[[app.authorName]]</a>.
             <br> [[verses.root.rightsReserved]]
             <br>
-          </div>
-        </div>
-
-      </template>
-
-      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 1)]]">
-        <div class="card">
-          <div>[[verses.general.comingSoon]]</div>
-        </div>
-      </template>
-
-      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
-        <div class="card">
-          <div>
-            [[verses.about.sendYourQuestionsTo]]
-            <a href="[[contactEmail]]">[[contactEmail]]</a>
-            [[verses.general.or]] +880 1770 947908
           </div>
         </div>
       </template>
@@ -82,13 +91,13 @@
 
       static get properties() {
         return {
-          contactEmail: { 
-            type: String, 
-            value: 'care@anvil.live' 
+          contactEmail: {
+            type: String,
+            value: 'care@anvil.live'
           },
-          paperTabSelectedViewIndex: { 
-            type: Number, 
-            value: 0 
+          paperTabSelectedViewIndex: {
+            type: Number,
+            value: 0
           }
         };
       }

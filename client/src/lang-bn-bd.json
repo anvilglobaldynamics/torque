@@ -128,7 +128,10 @@
     "warehouses": "গুদাম",
     "author": "রচক",
     "salePrice": "বিক্রয় মূল্য",
-    "reportScrollNote": "রিপোর্টটি বাম থেকে ডানে স্ক্রল করা যায় "
+    "reportScrollNote": "রিপোর্টটি বাম থেকে ডানে স্ক্রল করা যায় ",
+    "website":"ওয়েবসাইট",
+    "linkedIn":"লিংকডইন",
+    "facebook":"ফেসবুক"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -192,7 +195,7 @@
     "inventoryReport": "পণ্য তালিকা রিপোর্টস",
     "profile": "প্রোফাইল",
     "settings": "সেটিংস",
-    "about": "আমাদের কথা",
+    "about": "আমাদের কথা এবং যোগাযোগ",
     "logout": "লগ-আউট",
     "manageProductCategories": "পণ্যের ধরণ",
     "manageProductTransfer": "পণ্য ট্রান্সফার রেকর্ড",
@@ -508,13 +511,14 @@
     "selectedProducts": "বাছাইকৃত পণ্য তালিকা"
   },
   "about": {
-    "aboutUsTitle": "আমাদের কথা",
+    "aboutUsTitle": "আমাদের কথা এবং যোগাযোগ",
     "about": "সম্পর্কিত",
     "tos": "শর্তাবলী",
     "contactUs": "যোগাযোগ",
+    "aboutUsDescription": "লিপি আপনার ব্যবসার সকল দিক পরিচালনার জন্য তৈরী সহজ একটি সফটওয়্যার। লিপি সফটওয়্যার যেকোনো সময় - যেকোনো জায়গা থেকে ব্যবহার করা যায়।",
     "projectBy": "এই প্রজেক্ট তৈরি এবং পরিচালনা করে",
     "logoAndFaviconBy": "লোগো নেয়া হয়েছে",
-    "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা পাঠান"
+    "sendYourQuestionsTo": "আপনার প্রশ্ন, অভিযোগ এবং প্রশংসা আমাদের জানান;"
   },
   "adjustCustomerBalance": {
     "adjustCustomerBalanceTitle": "গ্রাহকের ব্যালেন্স ডেবিট-ক্রেডিট",

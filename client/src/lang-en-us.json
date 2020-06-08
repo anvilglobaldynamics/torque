@@ -128,7 +128,10 @@
     "warehouses": "Warehouses",
     "author": "Author",
     "salePrice": "Sale Price",
-    "reportScrollNote": "Reports scroll left to right"
+    "reportScrollNote": "Reports scroll left to right",
+    "website":"Website",
+    "linkedIn":"LinkedIn",
+    "facebook":"Facebook"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -192,7 +195,7 @@
     "inventoryReport": "Inventories Report",
     "profile": "Profile",
     "settings": "Settings",
-    "about": "About",
+    "about": "About & Contact",
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
     "manageProductTransfer": "Product Transfer Records",
@@ -506,13 +509,14 @@
     "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
-    "aboutUsTitle": "About",
+    "aboutUsTitle": "About & Contact",
     "about": "About",
     "tos": "Terms and Conditions",
     "contactUs": "Contact",
+    "aboutUsDescription": "Lipi (লিপিবদ্ধ, স্বরলিপি থেকে লিপি) is a software that brings your business's Products, People and Books in one place. Lipi is localized and easy, yet full-featured.",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
-    "sendYourQuestionsTo": "Send your questions, complaints and praises to"
+    "sendYourQuestionsTo": "Send your questions, complaints and praises to us;"
   },
   "adjustCustomerBalance": {
     "adjustCustomerBalanceTitle": "Adjust Customer Balance",
