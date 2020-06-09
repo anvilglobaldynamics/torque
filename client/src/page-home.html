@@ -72,8 +72,8 @@
       }
 
       .self-onboarding-card-title {
-        font-size: 22px;
-        margin-bottom: 16px;
+        font-size: 16px;
+        margin-bottom: 18px;
       }
 
       .self-onboarding-task-container {
@@ -141,7 +141,6 @@
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title">[[verses.home.selfOnboardingRegisterTitle]]</div>
-              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingRegisterDetails]]</div>
             </div>
           </div>
           <!-- task : register - end -->
@@ -152,7 +151,6 @@
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title">[[verses.home.selfOnboardingOrganizationTitle]]</div>
-              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingOrganizationDetails]]</div>
             </div>
           </div>
           <!-- task : createOrganization - end -->
@@ -236,7 +234,7 @@
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
-              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingSaleDetails]]
+              <div class="self-onboarding-task-details">
                 <a class="link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleAction]]</a>
               </div>
             </div>
@@ -248,11 +246,11 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Verify Phone</div>
-              <div class="self-onboarding-task-details"> [[verses.home.notYetVerifiedPhonePart1]]
-                <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
-                <a class="link primary" on-click="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</a>
-                <a class="link primary" on-click="resendSmsTapped">[[verses.home.resendSms]]</a></div>
+              <div class="self-onboarding-task-title">[[verses.home.verifyAccount]]</div>
+              <div class="self-onboarding-task-details"> 
+                [[verses.home.callUsToVerify]]
+                <a class="link primary" href="tel:+8801770947908">[[verses.home.callUsButton]]</a> 
+              </div>
 
             </div>
           </div>
