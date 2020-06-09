@@ -95,8 +95,20 @@
         font-size: 13px;
       }
 
-      .self-onboarding-task-container.done .self-onboarding-task-title {
-        /* text-decoration: line-through; */
+      .self-onboarding-task-container .self-onboarding-task-title.primary {
+        display: block;
+      }
+
+      .self-onboarding-task-container .self-onboarding-task-title.done-title {
+        display: none;
+      }
+
+      .self-onboarding-task-container.done .self-onboarding-task-title.primary {
+        display: none;
+      }
+
+      .self-onboarding-task-container.done .self-onboarding-task-title.done-title {
+        display: block;
       }
 
       .self-onboarding-task-container .done-icon {
@@ -142,7 +154,7 @@
           <div class="self-onboarding-card-title">[[verses.home.selfOnboardingTitle]]</div>
 
           <!-- task : register - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.register)]]">
+          <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.register)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
@@ -152,7 +164,7 @@
           <!-- task : register - end -->
 
           <!-- task : createOrganization - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createOrganization)]]">
+          <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createOrganization)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
@@ -162,22 +174,24 @@
           <!-- task : createOrganization - end -->
 
           <!-- task : reviewOutlet - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.reviewOutlet)]]">
+          <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.reviewOutlet)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title link primary" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
+              <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
             </div>
           </div>
           <!-- task : reviewOutlet - end -->
 
           <!-- task : createVendor - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showVendor]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createVendor)]]">
+            <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createVendor)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title link primary" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorTitle]]</div>
+                <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingVendorTitle]]</div>
               </div>
             </div>
           </template>
@@ -185,11 +199,12 @@
 
           <!-- task : createProductBlueprint - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createProductBlueprint)]]">
+            <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createProductBlueprint)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title link primary" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
+                <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
               </div>
             </div>
           </template>
@@ -198,11 +213,12 @@
           <!-- TODO: add condition, disable if no product blueprint -->
           <!-- task : addProductsToInventory - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.addProductsToInventory)]]">
+            <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.addProductsToInventory)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsTitle]]</div>
+                <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
               </div>
             </div>
           </template>
@@ -210,36 +226,38 @@
 
           <!-- task : createServiceBlueprint - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showService]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createServiceBlueprint)]]">
+            <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createServiceBlueprint)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title link primary" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
+                <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
               </div>
             </div>
           </template>
           <!-- task : createServiceBlueprint - end -->
 
           <!-- task : createSale - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createSale)]]">
+          <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createSale)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
+              <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingSaleTitle]]</div>
             </div>
           </div>
           <!-- task : addProductsToInventory - end -->
 
           <!-- task : verifyPhone - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.verifyPhone)]]">
+          <div class$="horizontal layout start self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.verifyPhone)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <a class="self-onboarding-task-title link primary" href="tel:+8801770947908">[[verses.home.verifyAccount]]</a>
-              <div class="self-onboarding-task-details"> 
-                [[verses.home.callUsToVerify]] 
+              <div class="self-onboarding-task-title done-title" style="margin-top: 2px;">[[verses.home.verifyAccount]]</div>
+              <a class="self-onboarding-task-title link primary" href="tel:+8801770947908" style="margin-top: 2px;">[[verses.home.verifyAccount]]</a>
+              <div class="self-onboarding-task-details">
+                [[verses.home.callUsToVerify]]
               </div>
-
             </div>
           </div>
           <!-- task : verifyPhone - end -->
