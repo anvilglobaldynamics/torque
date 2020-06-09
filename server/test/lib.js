@@ -305,10 +305,14 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
     }),
     usageFlags: Joi.object().keys({
       hasAnyOutlet: Joi.boolean().required(),
+      outletIdList: Joi.array().required(),
+      defaultFirstInventoryId: Joi.boolean().required(),
       hasAnyProductBlueprint: Joi.boolean().required(),
       hasAnyVendor: Joi.boolean().required(),
       hasAnyProductAcquisition: Joi.boolean().required(),
-      hasAnyServiceBlueprint: Joi.boolean().required()
+      hasAnyServiceBlueprint: Joi.boolean().required(),
+      hasUpdatedFirstOutlet: Joi.boolean().required(),
+      hasAnySales: Joi.boolean().required()
     }),
   });
 

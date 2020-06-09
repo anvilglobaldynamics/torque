@@ -65,49 +65,6 @@
         background: var(--app-button-alternative);
       }
 
-      .self-onboarding-card {
-        background: var(--app-button-alternative);
-      }
-
-      .self-onboarding-card-title {
-        font-size: 22px;
-        margin-bottom: 16px;
-      }
-
-      .self-onboarding-task-container {
-        margin-bottom: 8px;
-      }
-
-      .self-onboarding-icon {
-        margin-right: 8px;
-      }
-
-      .self-onboarding-task-title {
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      .self-onboarding-task-container.done .self-onboarding-task-title {
-        /* text-decoration: line-through; */
-      }
-
-      .self-onboarding-task-container .done-icon {
-        display: none;
-      }
-
-      .self-onboarding-task-container .pending-icon {
-        display: block;
-      }
-
-      .self-onboarding-task-container.done .done-icon {
-        display: block;
-        color: green;
-      }
-
-      .self-onboarding-task-container.done .pending-icon {
-        display: none;
-      }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -125,129 +82,114 @@
         </div>
       </template>
 
-      <!-- self onboarding area - start -->
-      <template is="dom-if" if="[[!selfOnboardingTasks.all]]">
-
-        <div class="card self-onboarding-card">
-          <div class="self-onboarding-card-title">Let's get your business set up!</div>
-
-          <!-- task : register - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.register)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Register</div>
-              <div class="self-onboarding-task-details">Become a registered user</div>
-            </div>
+      <!-- verifications - start -->
+      <template is="dom-if" if="[[!user.isPhoneVerified]]">
+        <div class="card prompt-card">
+          [[verses.home.notYetVerifiedPhonePart1]]
+          <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
+          <br>
+          <div class="button-row">
+            <paper-button raised class="primary" on-tap="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</paper-button>
+            <paper-button raised class="neutral" on-tap="resendSmsTapped">[[verses.home.resendSms]]</paper-button>
           </div>
-          <!-- task : register - end -->
-
-          <!-- task : createOrganization - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createOrganization)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Organiation Details</div>
-              <div class="self-onboarding-task-details">Tell us about your organization</div>
-            </div>
-          </div>
-          <!-- task : createOrganization - end -->
-
-          <!-- task : reviewOutlet - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.reviewOutlet)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Outlet/Shop Details</div>
-              <div class="self-onboarding-task-details">Check if your shop's details are correct <a class="link primary" on-click="reviewOutletDetailsTapped">Check Details</a></div>
-            </div>
-          </div>
-          <!-- task : reviewOutlet - end -->
-
-          <!-- task : createVendor - start -->
-          <template is="dom-if" if="[[selfOnboardingTasks.showVendor]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createVendor)]]">
-              <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-              <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-              <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Setup your Vendors</div>
-                <div class="self-onboarding-task-details">Add your vendors <a class="link primary" on-click="addVendorTapped">Add Vendor</a></div>
-              </div>
-            </div>
-          </template>
-          <!-- task : createVendor - end -->
-
-          <!-- task : createProductBlueprint - start -->
-          <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createProductBlueprint)]]">
-              <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-              <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-              <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Product Blueprint</div>
-                <div class="self-onboarding-task-details">Add your blueprints <a class="link primary" on-click="addProductBlueprintTapped">Add Product Blueprint</a></div>
-              </div>
-            </div>
-          </template>
-          <!-- task : createProductBlueprint - end -->
-
-          <!-- task : addProductsToInventory - start -->
-          <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.addProductsToInventory)]]">
-              <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-              <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-              <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Add Products</div>
-                <div class="self-onboarding-task-details">Add your products <a class="link primary" on-click="addProductToInventoryTapped">Add Products To Inventory</a></div>
-              </div>
-            </div>
-          </template>
-          <!-- task : addProductsToInventory - end -->
-
-          <!-- task : createServiceBlueprint - start -->
-          <template is="dom-if" if="[[selfOnboardingTasks.showService]]">
-            <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createServiceBlueprint)]]">
-              <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-              <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-              <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Service Blueprint</div>
-                <div class="self-onboarding-task-details">Add your blueprints <a class="link primary" on-click="addServiceBlueprintTapped">Add Service Blueprint</a></div>
-              </div>
-            </div>
-          </template>
-          <!-- task : createServiceBlueprint - end -->
-
-          <!-- task : createSale - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createSale)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Add Sale</div>
-              <div class="self-onboarding-task-details">Add a sale <a class="link primary" on-click="addSalesTapped">Add Sale</a></div>
-            </div>
-          </div>
-          <!-- task : addProductsToInventory - end -->
-
-          <!-- task : verifyPhone - start -->
-          <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.verifyPhone)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Verify Phone</div>
-              <div class="self-onboarding-task-details"> [[verses.home.notYetVerifiedPhonePart1]]
-                <b>[[user.phone]]</b> [[verses.home.notYetVerifiedPhonePart2]]
-                <a class="link primary" on-click="verifyPhoneTapped">[[verses.home.verifyPhoneNumberManually]]</a>
-                <a class="link primary" on-click="resendSmsTapped">[[verses.home.resendSms]]</a></div>
-
-            </div>
-          </div>
-          <!-- task : verifyPhone - end -->
-
         </div>
+      </template>
+
+      <template is="dom-if" if="[[user.isPhoneVerified]]">
+
+        <template is="dom-if" if="[[!user.email]]">
+          <div class="card prompt-card">
+            [[verses.home.whyProvideEmailAddress]]
+            <div class="button-row">
+              <paper-button raised class="secondary m-0" on-tap="setEmailTapped">[[verses.home.setYourEmail]]</paper-button>
+            </div>
+          </div>
+        </template>
+
+        <template is="dom-if" if="[[user.email]]">
+          <template is="dom-if" if="[[!user.isEmailVerified]]">
+            <div class="card prompt-card">
+              [[verses.home.notYetVarifiedEmail]]
+              <b>[[user.email]]</b> [[verses.general.or]] [[verses.general.pressBelowButton]]
+              <br>
+              <div class="button-row">
+                <paper-button raised class="primary" on-tap="verifyEmailTapped">[[verses.home.verifyEmailManually]]</paper-button>
+                <paper-button raised class="neutral" on-tap="resendEmailTapped">[[verses.home.resendEmail]]</paper-button>
+              </div>
+            </div>
+          </template>
+        </template>
 
       </template>
-      <!-- self onboarding area - end -->
+      <!-- verifications - end -->
 
-      <template is="dom-if" if="[[selfOnboardingTasks.all]]">
+      <!-- various prompts - start -->
+      <template is="dom-if" if="[[$and(user.isPhoneVerified, user.isEmailVerified)]]">
+
+        <!-- outlet prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'outlet-creation')]]">
+          <div class="card prompt-card">
+            [[verses.home.promptCreateOutlet]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary" on-tap="buttonCreateOutletTapped">[[verses.home.buttonCreateOutlet]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- outlet prompt - end -->
+
+        <!-- product-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-blueprint-creation')]]">
+          <div class="card prompt-card">
+            [[verses.home.promptCreateProductBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary" on-tap="buttonCreateProductBlueprintTapped">[[verses.home.buttonCreateProductBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-blueprint prompt - end -->
+
+        <!-- vendor prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'vendor-creation')]]">
+          <div class="card prompt-card">
+            [[verses.home.promptCreateVendor]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary" on-tap="buttonCreateVendorTapped">[[verses.home.buttonCreateVendor]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- vendor prompt - end -->
+
+        <!-- product-acquisition prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'product-acquisition-creation')]]">
+          <div class="card prompt-card">
+            [[verses.home.promptCreateProductAcquisition]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary" on-tap="buttonCreateProductAcquisitionTapped">[[verses.home.buttonCreateProductAcquisition]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- product-acquisition prompt - end -->
+
+        <!-- service-blueprint prompt - start -->
+        <template is="dom-if" if="[[$equals(promptName, 'service-blueprint-creation')]]">
+          <div class="card prompt-card">
+            [[verses.home.promptCreateServiceBlueprint]]
+            <br>
+            <div class="button-row">
+              <paper-button raised class="primary" on-tap="buttonCreateServiceBlueprintTapped">[[verses.home.buttonCreateServiceBlueprint]]</paper-button>
+            </div>
+          </div>
+        </template>
+        <!-- service-blueprint prompt - end -->
+
+      </template>
+      <!-- various prompts - end -->
+
+      <template is="dom-if" if="[[$equals(promptName, 'none')]]">
 
         <!-- Shortcut card - start -->
         <template is="dom-if" if="[[hasShortcutCardPrivileges(organization)]]">
@@ -497,7 +439,7 @@
               this.initGraph();
             });
           } else {
-            this._decideWhetherToShowOnboardingCheckList();
+            this._decideWhichPromptToShow();
             this.isReady = true;
             this.initGraph();
           }
@@ -590,12 +532,7 @@
         });
       }
 
-      $getSelfOnboardingTaskClass(value) {
-        if (value) return ' done';
-        return '';
-      }
-
-      _decideWhetherToShowOnboardingCheckList() {
+      _decideWhichPromptToShow() {
         this.selfOnboardingTasks = (() => {
           if (!this.usageFlags) return 'none';
 
@@ -604,25 +541,21 @@
             hasAnyProductBlueprint,
             hasAnyVendor,
             hasAnyProductAcquisition,
-            hasAnyServiceBlueprint,
-            hasUpdatedFirstOutlet,
-            hasAnySales
+            hasAnyServiceBlueprint
           } = this.usageFlags;
 
-          // selfOnboardingTasks.* == true means done
           let selfOnboardingTasks = {
             register: true,
             createOrganization: true,
-            reviewOutlet: hasUpdatedFirstOutlet,
+            reviewOutlet: false, // TODO
             showVendor: (this.hasModule('MOD_VENDOR')),
-            createVendor: hasAnyVendor,
+            createVendor: !hasAnyVendor,
             showProduct: (this.hasModule('MOD_PRODUCT')),
-            createProductBlueprint: hasAnyProductBlueprint,
-            addProductsToInventory: hasAnyProductAcquisition,
-            showService: (this.hasModule('MOD_SERVICE')),
-            createServiceBlueprint: hasAnyServiceBlueprint,
-            createSale: hasAnySales,
-            verifyPhone: this.user.isPhoneVerified
+            createProductBlueprint: !hasAnyProductBlueprint,
+            addProductsToInventory: !hasAnyProductAcquisition,
+            createSale: false,// TODO
+            reviewPaymentMethods: false, // TODO
+            reviewSettings: false // TODO
           };
 
           selfOnboardingTasks.all = selfOnboardingTasks.register
@@ -631,48 +564,12 @@
             && (selfOnboardingTasks.showVendor === false || selfOnboardingTasks.createVendor)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.createProductBlueprint)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.addProductsToInventory)
-            && (selfOnboardingTasks.showService === false || selfOnboardingTasks.createServiceBlueprint)
             && selfOnboardingTasks.createSale
-            && selfOnboardingTasks.verifyPhone;
+            && selfOnboardingTasks.reviewPaymentMethods
+            && selfOnboardingTasks.reviewSettings;
 
           return selfOnboardingTasks;
         })();
-      }
-
-      reviewOutletDetailsTapped(e = null) {
-        if (this.usageFlags.outletIdList.length > 0) {
-          let id = this.usageFlags.outletIdList[0];
-          this.app.navigateTo(`/edit-outlet/outlet:${id}`);
-        } else {
-          // TODO: What to do?
-          this.app.navigateTo(`/edit-outlet`);
-        }
-      }
-
-      addVendorTapped(e = null) {
-        this.app.navigateTo(`/edit-vendor`);
-      }
-
-      addProductBlueprintTapped(e = null) {
-        this.app.navigateTo(`/edit-product-blueprint`);
-      }
-
-      addProductToInventoryTapped(e = null) {
-        if (this.usageFlags.defaultFirstInventoryId !== null) {
-          let id = this.usageFlags.defaultFirstInventoryId;
-          this.app.navigateTo(`/add-products/inventory:${id}`);
-        }
-      }
-
-      addServiceBlueprintTapped(e = null) {
-        this.app.navigateTo(`/edit-service-blueprint`);
-      }
-
-      addSalesTapped(e = null) {
-        if (this.usageFlags.outletIdList.length > 0) {
-          let id = this.usageFlags.outletIdList[0];
-          this.app.navigateTo(`/pos/outlet:${id}`);
-        }
       }
 
       _processDashboardSummary(cbfn) {
@@ -690,7 +587,7 @@
             createdDatetimeStamp,
             expirationDatetimeStamp
           }
-          this._decideWhetherToShowOnboardingCheckList();
+          this._decideWhichPromptToShow();
           cbfn();
         });
       }
@@ -793,7 +690,6 @@
                   user.isPhoneVerified = true;
                   return user;
                 });
-                this._decideWhetherToShowOnboardingCheckList();
               });
             } else {
               let message = this.app.verses.home.phoneCouldNotBeVerified;
