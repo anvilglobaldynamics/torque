@@ -88,16 +88,11 @@
 
       .self-onboarding-task-title {
         font-size: 14px;
-        font-weight: bold;
+        /* font-weight: bold; */
       }
 
       .self-onboarding-task-details {
         font-size: 13px;
-      }
-
-      .self-onboarding-link {
-        font-size: 13px;
-        /* font-weight: bold; */
       }
 
       .self-onboarding-task-container.done .self-onboarding-task-title {
@@ -171,10 +166,7 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
-              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingReviewOutletDetails]]
-                <a class="link primary self-onboarding-link" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletAction]]</a>
-              </div>
+              <div class="self-onboarding-task-title link primary" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
             </div>
           </div>
           <!-- task : reviewOutlet - end -->
@@ -185,10 +177,7 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingVendorTitle]]</div>
-                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingVendorDetails ]]
-                  <a class="link primary self-onboarding-link" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorAction]]</a>
-                </div>
+                <div class="self-onboarding-task-title link primary" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorTitle]]</div>
               </div>
             </div>
           </template>
@@ -200,25 +189,20 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
-                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingProductBlueplrintDetails]]
-                  <a class="link primary self-onboarding-link" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintAction]]</a>
-                </div>
+                <div class="self-onboarding-task-title link primary" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
               </div>
             </div>
           </template>
           <!-- task : createProductBlueprint - end -->
 
+          <!-- TODO: add condition, disable if no product blueprint -->
           <!-- task : addProductsToInventory - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
             <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.addProductsToInventory)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
-                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingAddProductsDetails]]
-                  <a class="link primary self-onboarding-link" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsAction]]</a>
-                </div>
+                <div class="self-onboarding-task-title link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsTitle]]</div>
               </div>
             </div>
           </template>
@@ -230,10 +214,7 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
-                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingServiceBlueprintDetails]]
-                  <a class="link primary self-onboarding-link" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintAction]]</a>
-                </div>
+                <div class="self-onboarding-task-title link primary" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
               </div>
             </div>
           </template>
@@ -244,10 +225,7 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
-              <div class="self-onboarding-task-details">
-                <a class="link primary self-onboarding-link" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleAction]]</a>
-              </div>
+              <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
             </div>
           </div>
           <!-- task : addProductsToInventory - end -->
@@ -257,10 +235,9 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">[[verses.home.verifyAccount]]</div>
+              <a class="self-onboarding-task-title link primary" href="tel:+8801770947908">[[verses.home.verifyAccount]]</a>
               <div class="self-onboarding-task-details"> 
-                [[verses.home.callUsToVerify]]
-                <a class="link primary self-onboarding-link" href="tel:+8801770947908">[[verses.home.callUsButton]]</a> 
+                [[verses.home.callUsToVerify]] 
               </div>
 
             </div>
