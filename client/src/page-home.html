@@ -66,7 +66,9 @@
       }
 
       .self-onboarding-card {
-        background: var(--app-button-alternative);
+        /* background: var(--app-button-alternative); */
+        /* background: #e1f5fe; */
+        background: #FFF9C4;
       }
 
       .self-onboarding-card-title {
@@ -129,15 +131,15 @@
       <template is="dom-if" if="[[!selfOnboardingTasks.all]]">
 
         <div class="card self-onboarding-card">
-          <div class="self-onboarding-card-title">Let's get your business set up!</div>
+          <div class="self-onboarding-card-title">[[verses.home.selfOnboardingTitle]]</div>
 
           <!-- task : register - start -->
           <div class$="horizontal layout self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.register)]]">
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Register</div>
-              <div class="self-onboarding-task-details">Become a registered user</div>
+              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingRegisterTitle]]</div>
+              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingRegisterDetails]]</div>
             </div>
           </div>
           <!-- task : register - end -->
@@ -147,8 +149,8 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Organiation Details</div>
-              <div class="self-onboarding-task-details">Tell us about your organization</div>
+              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingOrganizationTitle]]</div>
+              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingOrganizationDetails]]</div>
             </div>
           </div>
           <!-- task : createOrganization - end -->
@@ -158,8 +160,10 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Outlet/Shop Details</div>
-              <div class="self-onboarding-task-details">Check if your shop's details are correct <a class="link primary" on-click="reviewOutletDetailsTapped">Check Details</a></div>
+              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
+              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingReviewOutletDetails]]
+                <a class="link primary" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletAction]]</a>
+              </div>
             </div>
           </div>
           <!-- task : reviewOutlet - end -->
@@ -170,8 +174,10 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Setup your Vendors</div>
-                <div class="self-onboarding-task-details">Add your vendors <a class="link primary" on-click="addVendorTapped">Add Vendor</a></div>
+                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingVendorTitle]]</div>
+                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingVendorDetails ]]
+                  <a class="link primary" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorAction]]</a>
+                </div>
               </div>
             </div>
           </template>
@@ -183,8 +189,10 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Product Blueprint</div>
-                <div class="self-onboarding-task-details">Add your blueprints <a class="link primary" on-click="addProductBlueprintTapped">Add Product Blueprint</a></div>
+                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
+                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingProductBlueplrintDetails]]
+                  <a class="link primary" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintAction]]</a>
+                </div>
               </div>
             </div>
           </template>
@@ -196,8 +204,10 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Add Products</div>
-                <div class="self-onboarding-task-details">Add your products <a class="link primary" on-click="addProductToInventoryTapped">Add Products To Inventory</a></div>
+                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
+                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingAddProductsDetails]]
+                  <a class="link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsAction]]</a>
+                </div>
               </div>
             </div>
           </template>
@@ -209,8 +219,10 @@
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title">Service Blueprint</div>
-                <div class="self-onboarding-task-details">Add your blueprints <a class="link primary" on-click="addServiceBlueprintTapped">Add Service Blueprint</a></div>
+                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
+                <div class="self-onboarding-task-details">[[verses.home.selfOnboardingServiceBlueprintDetails]]
+                  <a class="link primary" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintAction]]</a>
+                </div>
               </div>
             </div>
           </template>
@@ -221,8 +233,10 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title">Add Sale</div>
-              <div class="self-onboarding-task-details">Add a sale <a class="link primary" on-click="addSalesTapped">Add Sale</a></div>
+              <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
+              <div class="self-onboarding-task-details">[[verses.home.selfOnboardingSaleDetails]]
+                <a class="link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleAction]]</a>
+              </div>
             </div>
           </div>
           <!-- task : addProductsToInventory - end -->
@@ -658,10 +672,11 @@
       }
 
       addProductToInventoryTapped(e = null) {
-        if (this.usageFlags.defaultFirstInventoryId !== null) {
-          let id = this.usageFlags.defaultFirstInventoryId;
-          this.app.navigateTo(`/add-products/inventory:${id}`);
-        }
+        // if (this.usageFlags.defaultFirstInventoryId !== null) {
+        //   let id = this.usageFlags.defaultFirstInventoryId;
+        //   this.app.navigateTo(`/add-products/inventory:${id}`);
+        // }
+        this.buttonCreateProductAcquisitionTapped();
       }
 
       addServiceBlueprintTapped(e = null) {
@@ -669,10 +684,11 @@
       }
 
       addSalesTapped(e = null) {
-        if (this.usageFlags.outletIdList.length > 0) {
-          let id = this.usageFlags.outletIdList[0];
-          this.app.navigateTo(`/pos/outlet:${id}`);
-        }
+        // if (this.usageFlags.outletIdList.length > 0) {
+        //   let id = this.usageFlags.outletIdList[0];
+        //   this.app.navigateTo(`/pos/outlet:${id}`);
+        // }
+        this.buttonGoToPosTapped();
       }
 
       _processDashboardSummary(cbfn) {
