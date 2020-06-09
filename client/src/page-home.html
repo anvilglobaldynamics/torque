@@ -210,14 +210,18 @@
           </template>
           <!-- task : createProductBlueprint - end -->
 
-          <!-- TODO: add condition, disable if no product blueprint -->
           <!-- task : addProductsToInventory - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showProduct]]">
             <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.addProductsToInventory)]]">
               <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
               <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
               <div class="vertical layout self-onboarding-task-body">
-                <div class="self-onboarding-task-title link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsTitle]]</div>
+                <template is="dom-if" if="[[selfOnboardingTasks.createProductBlueprint]]">
+                  <div class="self-onboarding-task-title link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsTitle]]</div>
+                </template>
+                <template is="dom-if" if="[[!selfOnboardingTasks.createProductBlueprint]]">
+                  <div class="self-onboarding-task-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
+                </template>
                 <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
               </div>
             </div>
@@ -242,7 +246,12 @@
             <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
             <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
             <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
+              <template is="dom-if" if="[[selfOnboardingTasks.isReadyToSell]]">
+                <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
+              </template>
+              <template is="dom-if" if="[[!selfOnboardingTasks.isReadyToSell]]">
+                <div class="self-onboarding-task-title" >[[verses.home.selfOnboardingSaleTitle]]</div>
+              </template>
               <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingSaleTitle]]</div>
             </div>
           </div>
@@ -629,6 +638,13 @@
             hasAnySales
           } = this.usageFlags;
 
+          let allowSalesFactor = 0;
+          if (this.hasModule('MOD_PRODUCT')) allowSalesFactor -= 1;
+          if (this.hasModule('MOD_SERVICE')) allowSalesFactor -= 1;
+          if (hasAnyProductAcquisition) allowSalesFactor += 1;
+          if (hasAnyServiceBlueprint) allowSalesFactor += 1;
+          let isReadyToSell = (allowSalesFactor >= 0);
+
           // selfOnboardingTasks.* == true means done
           let selfOnboardingTasks = {
             register: true,
@@ -641,6 +657,7 @@
             addProductsToInventory: hasAnyProductAcquisition,
             showService: (this.hasModule('MOD_SERVICE')),
             createServiceBlueprint: hasAnyServiceBlueprint,
+            isReadyToSell,
             createSale: hasAnySales,
             verifyPhone: this.user.isPhoneVerified
           };
