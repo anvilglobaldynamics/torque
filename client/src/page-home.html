@@ -250,7 +250,7 @@
                 <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
               </template>
               <template is="dom-if" if="[[!selfOnboardingTasks.isReadyToSell]]">
-                <div class="self-onboarding-task-title" >[[verses.home.selfOnboardingSaleTitle]]</div>
+                <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
               </template>
               <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingSaleTitle]]</div>
             </div>
@@ -524,11 +524,17 @@
             this._processDashboardSummary(() => {
               this.isReady = true;
               this.initGraph();
+              this.delay(100, () => {
+                this.elem('.self-onboarding-card').scrollIntoView();
+              })
             });
           } else {
             this._decideWhetherToShowOnboardingCheckList();
             this.isReady = true;
             this.initGraph();
+            this.delay(100, () => {
+              this.elem('.self-onboarding-card').scrollIntoView();
+            })
           }
         });
       }

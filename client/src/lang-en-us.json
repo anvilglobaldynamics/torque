@@ -284,9 +284,9 @@
     "shortcutToPos": "POS",
     "shortcutToAddProduct": "Add Products",
 
-    "selfOnboardingTitle": "Let's setup Lipi",
-    "selfOnboardingRegisterTitle": "Your Lipi account registration",
-    "selfOnboardingOrganizationTitle": "Saved your Organization's details",
+    "selfOnboardingTitle": "Use this checklist to setup Lipi",
+    "selfOnboardingRegisterTitle": "Your Lipi account is registered",
+    "selfOnboardingOrganizationTitle": "Your Organization's details are saved",
     "selfOnboardingReviewOutletTitle": "Check your Outlet's (shop) details",
     "selfOnboardingVendorTitle": "Add a Vendor of yours",
     "selfOnboardingProductBlueplrintTitle": "Enter which type of Product you sell",    
