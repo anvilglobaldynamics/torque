@@ -72,12 +72,14 @@
       }
 
       .self-onboarding-card-title {
-        font-size: 16px;
-        margin-bottom: 18px;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 6px;
       }
 
       .self-onboarding-task-container {
-        margin-bottom: 8px;
+        margin-top: 18px;
+        /* border: 1px red solid; */
       }
 
       .self-onboarding-icon {
@@ -85,8 +87,17 @@
       }
 
       .self-onboarding-task-title {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
+      }
+
+      .self-onboarding-task-details {
+        font-size: 13px;
+      }
+
+      .self-onboarding-link {
+        font-size: 13px;
+        /* font-weight: bold; */
       }
 
       .self-onboarding-task-container.done .self-onboarding-task-title {
@@ -162,7 +173,7 @@
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
               <div class="self-onboarding-task-details">[[verses.home.selfOnboardingReviewOutletDetails]]
-                <a class="link primary" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletAction]]</a>
+                <a class="link primary self-onboarding-link" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletAction]]</a>
               </div>
             </div>
           </div>
@@ -176,7 +187,7 @@
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title">[[verses.home.selfOnboardingVendorTitle]]</div>
                 <div class="self-onboarding-task-details">[[verses.home.selfOnboardingVendorDetails ]]
-                  <a class="link primary" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorAction]]</a>
+                  <a class="link primary self-onboarding-link" on-click="addVendorTapped">[[verses.home.selfOnboardingVendorAction]]</a>
                 </div>
               </div>
             </div>
@@ -191,7 +202,7 @@
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title">[[verses.home.selfOnboardingProductBlueplrintTitle]]</div>
                 <div class="self-onboarding-task-details">[[verses.home.selfOnboardingProductBlueplrintDetails]]
-                  <a class="link primary" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintAction]]</a>
+                  <a class="link primary self-onboarding-link" on-click="addProductBlueprintTapped">[[verses.home.selfOnboardingProductBlueplrintAction]]</a>
                 </div>
               </div>
             </div>
@@ -206,7 +217,7 @@
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title">[[verses.home.selfOnboardingAddProductsTitle]]</div>
                 <div class="self-onboarding-task-details">[[verses.home.selfOnboardingAddProductsDetails]]
-                  <a class="link primary" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsAction]]</a>
+                  <a class="link primary self-onboarding-link" on-click="addProductToInventoryTapped">[[verses.home.selfOnboardingAddProductsAction]]</a>
                 </div>
               </div>
             </div>
@@ -221,7 +232,7 @@
               <div class="vertical layout self-onboarding-task-body">
                 <div class="self-onboarding-task-title">[[verses.home.selfOnboardingServiceBlueprintTitle]]</div>
                 <div class="self-onboarding-task-details">[[verses.home.selfOnboardingServiceBlueprintDetails]]
-                  <a class="link primary" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintAction]]</a>
+                  <a class="link primary self-onboarding-link" on-click="addServiceBlueprintTapped">[[verses.home.selfOnboardingServiceBlueprintAction]]</a>
                 </div>
               </div>
             </div>
@@ -235,7 +246,7 @@
             <div class="vertical layout self-onboarding-task-body">
               <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
               <div class="self-onboarding-task-details">
-                <a class="link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleAction]]</a>
+                <a class="link primary self-onboarding-link" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleAction]]</a>
               </div>
             </div>
           </div>
@@ -249,7 +260,7 @@
               <div class="self-onboarding-task-title">[[verses.home.verifyAccount]]</div>
               <div class="self-onboarding-task-details"> 
                 [[verses.home.callUsToVerify]]
-                <a class="link primary" href="tel:+8801770947908">[[verses.home.callUsButton]]</a> 
+                <a class="link primary self-onboarding-link" href="tel:+8801770947908">[[verses.home.callUsButton]]</a> 
               </div>
 
             </div>
