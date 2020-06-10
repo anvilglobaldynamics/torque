@@ -132,6 +132,8 @@
         </div>
 
         <div class="lone-controls">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
@@ -295,7 +297,7 @@
           }
           this._processTransactionList(() => {
             this.elem('elem-party-selector').refreshVariables();
-            
+
             this.self = this;
             this.isReady = true;
           });
@@ -304,11 +306,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties(
-          'shouldShowFilters',
-          'fromDate',
-          'toDate'
-        );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }
@@ -399,6 +396,18 @@
         } else {
           return this.app.navigateTo(`/edit-usual-transaction/transaction:${transaction.id}/transaction-origin:${transaction.transactionOrigin}`);
         }
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'fromDate',
+          'toDate'
+        );
+
+        this.partyCollectionName = 'no-party';
+        this.partyDocumentId = -1;
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {
