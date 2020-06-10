@@ -302,7 +302,7 @@
     "industryCategory": "আপনার ব্যবসার ধরণ",
     "nameOfYourOrganization": "আপনার সংস্থার নাম",
     "pleaseEnterAValidName": "পুরো নাম লিখুন",
-    "emailInput": "আপনার সংস্থার ইমেইল (ঐচ্ছিক)",
+    "emailInput": "আপনার সংস্থার ইমেইল",
     "emailInputError": "সঠিক ইমেইল লিখুন।",
     "primaryBusinessAddressInput": "আপনার সংস্থার ঠিকানা",
     "primaryBusinessAddressInputError": "সঠিক ঠিকানা লিখুন।",

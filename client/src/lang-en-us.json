@@ -300,7 +300,7 @@
     "industryCategory": "Type of business",
     "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
-    "emailInput": "Email address of Organization (Optional)",
+    "emailInput": "Email address of Organization",
     "emailInputError": "Enter a valid email",
     "primaryBusinessAddressInput": "Business address",
     "primaryBusinessAddressInputError": "Enter an address at least 8 characters long",
