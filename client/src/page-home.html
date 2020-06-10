@@ -524,17 +524,13 @@
             this._processDashboardSummary(() => {
               this.isReady = true;
               this.initGraph();
-              this.delay(100, () => {
-                this.elem('.self-onboarding-card').scrollIntoView();
-              })
+              this._scrollToTop();
             });
           } else {
             this._decideWhetherToShowOnboardingCheckList();
             this.isReady = true;
             this.initGraph();
-            this.delay(100, () => {
-              this.elem('.self-onboarding-card').scrollIntoView();
-            })
+            this._scrollToTop();
           }
         });
       }
@@ -548,6 +544,13 @@
         return this.accessControl({
           authLevel: 'authenticated'
         });
+      }
+
+      _scrollToTop() {
+        this.delay(100, () => {
+          let el = this.elem('.self-onboarding-card');
+          if (el) el.scrollIntoView();
+        })
       }
 
       _clearSessionStorageItems() {
