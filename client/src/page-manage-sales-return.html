@@ -65,7 +65,7 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> 
+                  <b>[[customer.fullName]]</b>
                   <br>[[customer.phone]]
 
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
@@ -107,6 +107,8 @@
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
         <div class="lone-controls">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
@@ -174,6 +176,10 @@
           shouldShowFilters: {
             type: Boolean,
             value: false
+          },
+          salesNumberToSearch: {
+            type: Number,
+            value: ''
           },
           outletId: {
             type: String,
@@ -248,25 +254,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-
-        this.salesNumberToSearch = '';
-        if (!this.doNotResetOnNextNavigation) {
-          this.resetProperties(
-            'shouldShowFilters',
-            'shouldFilterByOutlet',
-            'shouldFilterByCustomer',
-            'outletId',
-            'fromDate',
-            'toDate',
-            'isSearchingCustomer',
-            'customer',
-            'isSearchingOutlet',
-            'outlet'
-          );
-        } else {
-          this.doNotResetOnNextNavigation = false;
-        }
-
         this.app.popPageTitle();
       }
 
@@ -391,6 +378,23 @@
         let { saleReturn } = e.model;
         this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-sales-return/salesReturn:${saleReturn.id}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'salesNumberToSearch',
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet'
+        );
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

@@ -171,6 +171,8 @@
         </div>
 
         <div class="lone-controls">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
@@ -363,19 +365,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties('shouldShowFilters',
-          'shouldFilterByOutlet',
-          'shouldFilterByCustomer',
-          'outletId',
-          'fromDate',
-          'toDate',
-          'isSearchingCustomer',
-          'customer',
-          'isSearchingOutlet',
-          'outlet',
-          'showProductDetails',
-          'paymentMethodId'
-        );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }
@@ -472,7 +461,11 @@
       }
 
       $getPaymentMethodName(id) {
-        return this._findPaymentMethod(id).name;
+        try{
+          return this._findPaymentMethod(id).name;
+        } catch (ex){
+          return ''
+        }
       }
 
       _processCollectionList(cbfn) {
@@ -544,6 +537,24 @@
       viewTapped(e) {
         let { sale } = e.model;
         return this.app.navigateTo(`/view-collection/collection:${sale.id}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet',
+          'showProductDetails',
+          'paymentMethodId'
+        );
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

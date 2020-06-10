@@ -87,6 +87,8 @@
         </div>
 
         <div class="lone-controls">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
@@ -322,6 +324,18 @@
         let { productTransfer } = e.model;
         this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-product-transfer/product-transfer:${productTransfer.productTransferNumber}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'vendorSelectedIndex',
+          'fromDate',
+          'toDate'
+        );
+
+        this.productTransferNumberToSearch = '';
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {
