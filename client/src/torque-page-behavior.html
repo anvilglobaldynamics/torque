@@ -17,12 +17,12 @@
           el = el.parentNode;
         }
         if (!el) return;
-        el.querySelectorAll(`.${el.id}--submit`).forEach(submitEl => {
-          if (submitEl) {
-            if (submitEl.className.indexOf("hidden") > -1) return;
-            submitEl.click();
-          }
-        });
+        // el.querySelectorAll(`.${el.id}--submit`).forEach(submitEl => {
+        //   if (submitEl) {
+        //     if (submitEl.className.indexOf("hidden") > -1) return;
+        //     submitEl.click();
+        //   }
+        // });
       }
 
       static get properties() {

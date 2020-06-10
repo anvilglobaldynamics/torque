@@ -112,8 +112,7 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b>
-                  <br>[[customer.phone]]
+                  <b>[[customer.fullName]]</b> [[customer.phone]]
 
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                     <br> [[verses.general.balance]]:
@@ -171,7 +170,9 @@
         </div>
 
         <div class="lone-controls">
-          <paper-button raised class="primary" on-tap="filterTapped">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
         </div>
@@ -363,19 +364,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-        this.resetProperties('shouldShowFilters',
-          'shouldFilterByOutlet',
-          'shouldFilterByCustomer',
-          'outletId',
-          'fromDate',
-          'toDate',
-          'isSearchingCustomer',
-          'customer',
-          'isSearchingOutlet',
-          'outlet',
-          'showProductDetails',
-          'paymentMethodId'
-        );
         this.app.shouldShowPrintButton = false;
         this.app.popPageTitle();
       }
@@ -462,7 +450,7 @@
 
           let defaultPaymentMethod = 'all';
 
-          this.set('paymentMethodId', defaultPaymentMethod);
+          // this.set('paymentMethodId', defaultPaymentMethod);
           return cbfn();
         });
       }
@@ -472,7 +460,11 @@
       }
 
       $getPaymentMethodName(id) {
-        return this._findPaymentMethod(id).name;
+        try{
+          return this._findPaymentMethod(id).name;
+        } catch (ex){
+          return ''
+        }
       }
 
       _processCollectionList(cbfn) {
@@ -544,6 +536,24 @@
       viewTapped(e) {
         let { sale } = e.model;
         return this.app.navigateTo(`/view-collection/collection:${sale.id}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet',
+          'showProductDetails',
+          'paymentMethodId'
+        );
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

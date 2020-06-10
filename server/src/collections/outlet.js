@@ -20,7 +20,7 @@ exports.OutletCollection = class extends Collection {
       location: Joi.object().keys({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      }).required(),
+      }).allow(null).required(),
       categoryCode: Joi.string().required(),
       isDeleted: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),

@@ -164,7 +164,7 @@
             <span>[[verses.inventoriesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.inventoriesReport.filteringByPart2Blueprints]]</span>
           </template>
 
-          <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.inventoriesReport.clearFilters]]</paper-button>
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
 
         </div>
 
@@ -256,17 +256,17 @@
                   <!-- total - start -->
                   <tr>
                     <td class="cell label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
-                    <td class="cell monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                    <td class="cell monetary-cell-in-reports" style="font-weight: bold;" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <td class="cell monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                      <td class="cell monetary-cell-in-reports" style="font-weight: bold;" align="center">
                         {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                       </td>
                     </template>
 
-                    <td class="cell cell-right monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                    <td class="cell cell-right monetary-cell-in-reports" style="font-weight: bold;" align="center">
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
                   </tr>
@@ -299,17 +299,17 @@
                   <!-- total - start -->
                   <tr>
                     <td class="cell cell-bottom label-cell-in-reports" style="font-weight: bold;">[[verses.general.total]]</td>
-                    <td class="cell cell-bottom monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                    <td class="cell cell-bottom monetary-cell-in-reports" style="font-weight: bold;" align="center">
                       {{computeTotalProductCount(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_PURCHASE_PRICE', organization)]]">
-                      <td class="cell cell-bottom monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                      <td class="cell cell-bottom monetary-cell-in-reports" style="font-weight: bold;" align="center">
                         {{computeTotalPurchasePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                       </td>
                     </template>
 
-                    <td class="cell cell-bottom cell-right monetary-cell-in-reports"  style="font-weight: bold;" align="center">
+                    <td class="cell cell-bottom cell-right monetary-cell-in-reports" style="font-weight: bold;" align="center">
                       {{computeTotalSalePrice(aggregatedInventoryDetail.aggregatedProductList)}}
                     </td>
                   </tr>

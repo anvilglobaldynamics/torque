@@ -43,6 +43,7 @@
         width: 100%;
         margin: 5px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -124,20 +125,23 @@
       }
 
       _processOrganizationList(cbfn) {
-        this._fetchOrganizationList(newOrganizationList => {
-          if (newOrganizationList.length === 0) {
+        this._fetchOrganizationList(organizationList => {
+          if (organizationList.length === 0) {
             return this.app.navigateTo('/add-organization');
           }
-          this.organizationList = newOrganizationList;
+          this.organizationList = organizationList;
           cbfn();
         });
       }
 
       _updateCurrentOrganization(cbfn) {
-        let organization = this.organizationList.find(organization => organization.id === this.app.organization.id);
-        this.app.removeSettings();
-        this.app.removePreviousOrganization();
-        this.app.saveOrganization(organization);
+        let organization = null;
+        if (this.app.organization) {
+          organization = this.organizationList.find(organization => organization.id === this.app.organization.id);
+          this.app.removeSettings();
+          this.app.removePreviousOrganization();
+          this.app.saveOrganization(organization);
+        }
         cbfn();
       }
 

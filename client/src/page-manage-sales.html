@@ -133,7 +133,9 @@
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
         <div class="lone-controls">
-          <paper-button raised class="primary" on-tap="filterTapped">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
         </div>
@@ -218,9 +220,13 @@
 
       static get properties() {
         return {
-          shouldShowFilters:{
+          shouldShowFilters: {
             type: Boolean,
             value: false
+          },
+          salesNumberToSearch: {
+            type: Number,
+            value: ''
           },
           outletId: {
             type: String,
@@ -309,25 +315,7 @@
       }
 
       onNavigateOut() {
-        super.onNavigateOut();
-
-        if (!this.doNotResetOnNextNavigation) {
-          this.resetProperties(
-            'shouldShowFilters',
-            'shouldFilterByOutlet',
-            'shouldFilterByCustomer',
-            'outletId',
-            'fromDate',
-            'toDate',
-            'isSearchingCustomer',
-            'customer',
-            'isSearchingOutlet',
-            'outlet'
-          );
-        } else {
-          this.doNotResetOnNextNavigation = false;
-        }
-
+        super.onNavigateOut()
         this.app.popPageTitle();
       }
 
@@ -450,8 +438,24 @@
 
       viewTapped(e) {
         let { sale } = e.model;
-        this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-sales/sales:${sale.id}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'salesNumberToSearch',
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet'
+        );
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

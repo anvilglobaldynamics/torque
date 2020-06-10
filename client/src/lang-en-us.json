@@ -59,7 +59,9 @@
     "customer": "Customer",
     "vendor": "Vendor",
     "outlet": "Outlet",
-    "filter": "Apply Filter",
+    "filter": "Apply Filters",
+    "clearFilters": "Reset Filters",
+    "showFilters": "Filters",
     "date": "Date",
     "dated": "Dated",
     "number": "Number",
@@ -112,7 +114,6 @@
     "both": "Both",
     "optional": "(Optional)",
     "print": "Print",
-    "showFilters": "Filters",
     "verificationUnsuccessful": "Verification Unsuccessful",
     "modalConfirmationPleaseConfirm": "Please confirm.",
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
@@ -120,6 +121,7 @@
     "inventory": "Inventory",
     "payment": "Payment",
     "change": "Change",
+    "continue": "Continue",
     "nextOrContinue": "Next",
     "notFound": "Not found",
     "update": "Update",
@@ -128,7 +130,11 @@
     "warehouses": "Warehouses",
     "author": "Author",
     "salePrice": "Sale Price",
-    "reportScrollNote": "Reports scroll left to right"
+    "reportScrollNote": "Reports scroll left to right",
+    "website": "Website",
+    "linkedIn": "LinkedIn",
+    "facebook": "Facebook",
+    "back": "Back"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -153,8 +159,11 @@
     "fullnameInputError": "Enter a longer name.",
     "phoneInput": "Your phone number",
     "phoneInputError": "Enter your valid phone number.",
-    "passwordInput": "A minimum 8 digit password",
+    "passwordInput": "8 digit password",
     "passwordInputError": "Password must be at least 8 characters long.",
+    "retypedPasswordInput": "Enter password again",
+    "retypedPasswordInputError": "Enter your password again correctly.",
+    "retypedPasswordMismatchError": "Did not match above password.",
     "alreadyHaveAccount": "Already have an account?",
     "tocNotReadHeader": "Read TOC",
     "tocNotRead": "You must read the Terms and Conditions before you proceed.",
@@ -164,7 +173,9 @@
     "tocLinkPart2": "The Terms and Conditions",
     "tocLinkPart3": " before you register.",
     "tocCheckbox": "I have read, understood and agree to the Terms and Conditions above.",
-    "nowAUserOfTorque": "You are now a user of Lipi. You now may log in."
+    "nowAUserOfTorque": "You are now a user of Lipi. You now may log in.",
+    "yourDetails": "Your Details",
+    "organizationDetails": "Organization Details"
   },
   "sidebar": {
     "lipiName": "Lipi",
@@ -192,7 +203,7 @@
     "inventoryReport": "Inventories Report",
     "profile": "Profile",
     "settings": "Settings",
-    "about": "About",
+    "about": "About & Contact",
     "logout": "Logout",
     "manageProductCategories": "Product Categories",
     "manageProductTransfer": "Product Transfer Records",
@@ -240,6 +251,9 @@
     "emailCouldNotBeVerified": "Your email could not be verified. Make sure the verification code is correct.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct",
     "checkYourPhoneForVerification": "Please check your phone. We have sent you a verification SMS.",
+    "verifyAccount": "Call Us to Confirm Account",
+    "callUsToVerify": "Call us at +880 1770 947908 to confirm your account. ",
+    "callUsButton": "Call Us",
     "verificationSmsSent": "Verification SMS Sent",
     "notYetVerifiedPhonePart1": "You need to verify your account. Either click the link in the sms we sent to",
     "notYetVerifiedPhonePart2": "or press the button below",
@@ -267,19 +281,28 @@
     "promptCreateServiceBlueprint": "There are no service blueprints in your organization. You can not sell services without adding service blueprints first.",
     "buttonCreateServiceBlueprint": "Create Service Blueprint",
     "shortcutToPos": "POS",
-    "shortcutToAddProduct": "Add Products"
+    "shortcutToAddProduct": "Add Products",
+    "selfOnboardingTitle": "Use this checklist to setup Lipi",
+    "selfOnboardingRegisterTitle": "Your Lipi account is registered",
+    "selfOnboardingOrganizationTitle": "Your Organization's details are saved",
+    "selfOnboardingReviewOutletTitle": "Check your Outlet's (shop) details",
+    "selfOnboardingVendorTitle": "Add a Vendor of yours",
+    "selfOnboardingProductBlueplrintTitle": "Enter which type of Product you sell",
+    "selfOnboardingAddProductsTitle": "Add Product to Inventory",
+    "selfOnboardingServiceBlueprintTitle": "Enter which type of Services you provide",
+    "selfOnboardingSaleTitle": "Make a Sell from POS"
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",
     "editOrganizationTitle": "Edit Organization",
     "updateOrganization": "Update Organization",
     "isNotOneOutletOrg": "This organization has more than one outlets.",
-    "industryCategory": "Industry Category of Organization",
+    "industryCategory": "Type of business",
     "nameOfYourOrganization": "Name of your Organization",
     "pleaseEnterAValidName": "Enter a valid name.",
-    "emailInput": "Email address of Organization (Optional)",
+    "emailInput": "Email address of Organization",
     "emailInputError": "Enter a valid email",
-    "primaryBusinessAddressInput": "Your primary business address",
+    "primaryBusinessAddressInput": "Business address",
     "primaryBusinessAddressInputError": "Enter an address at least 8 characters long",
     "createOrganization": "Create Organization",
     "organizationCreatedToast": "New organization has been created.",
@@ -293,7 +316,7 @@
     "addOutletTitle": "Add Outlet",
     "nameOfOutletInput": "Name of Outlet",
     "nameOfOutletInputError": "Enter a longer name",
-    "physicalAddressInput": "Physical Address",
+    "physicalAddressInput": "Formal Address (Printed on Receipt)",
     "physicalAddressInputError": "Enter an address at least 8 characters long",
     "contactPersonNameInput": "Name of Contact Person",
     "contactPersonNameInputError": "Enter a longer name.",
@@ -332,7 +355,8 @@
     "locationInvalidDialogHeader": "Location Invalid",
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
-    "noLocationOnMap": "Location has not been set on Map yet."
+    "noLocationOnMap": "Location has not been set on Map yet.",
+    "locationRequiredNote": "Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "Set Map Location",
@@ -505,13 +529,14 @@
     "selectedProducts": "Selected Product Blueprint"
   },
   "about": {
-    "aboutUsTitle": "About",
+    "aboutUsTitle": "About & Contact",
     "about": "About",
     "tos": "Terms and Conditions",
     "contactUs": "Contact",
+    "aboutUsDescription": "Lipi (লিপিবদ্ধ, স্বরলিপি থেকে লিপি) is a software that brings your business's Products, People and Books in one place. Lipi is localized and easy, yet full-featured.",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
-    "sendYourQuestionsTo": "Send your questions, complaints and praises to"
+    "sendYourQuestionsTo": "Send your questions, complaints and praises to us;"
   },
   "adjustCustomerBalance": {
     "adjustCustomerBalanceTitle": "Adjust Customer Balance",
@@ -875,8 +900,7 @@
     "filterByProductCategories": "Filter By Product Categories",
     "filteringByPart1": "Filtering by ",
     "filteringByPart2Categories": " product categories.",
-    "filteringByPart2Blueprints": " product blueprints.",
-    "clearFilters": "Reset Filters"
+    "filteringByPart2Blueprints": " product blueprints."
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",
@@ -902,7 +926,8 @@
   },
   "settings": {
     "settingsTitle": "Settings",
-    "app": "App",
+    "app": "Only this App",
+    "organization": "For whole Org.",
     "general": "General",
     "others": "Others",
     "useWebsockets": "Use Websockets",
@@ -1222,7 +1247,6 @@
     "filteringByPart1": "Filtering by ",
     "filteringByPart2Categories": " product categories.",
     "filteringByPart2Blueprints": " product blueprints.",
-    "clearFilters": "Reset Filters",
     "allOutlets": "All Outlets"
   },
   "receipt": {

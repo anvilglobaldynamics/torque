@@ -87,7 +87,9 @@
         </div>
 
         <div class="lone-controls">
-          <paper-button raised class="primary flex" on-tap="filterTapped">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
         </div>
@@ -214,18 +216,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-
-        if (!this.doNotResetOnNextNavigation) {
-          this.resetProperties(
-            'shouldShowFilters',
-            'vendorSelectedIndex',
-            'fromDate',
-            'toDate'
-          );
-        } else {
-          this.doNotResetOnNextNavigation = false;
-        }
-
         this.app.popPageTitle();
       }
 
@@ -289,7 +279,7 @@
           id: null,
           name: this.app.verses.productAcquisition.wholeOrganization
         }
-        this.vendorSelectedIndex = 0;
+        // this.vendorSelectedIndex = 0;
         if (!this.hasModule('MOD_VENDOR')) {
           this.vendorList = [allVendors];
           cbfn();
@@ -307,6 +297,18 @@
         let { productAcquisition } = e.model;
         this.doNotResetOnNextNavigation = true;
         return this.app.navigateTo(`/view-product-acquisition/product-acquisition:${productAcquisition.productAcquisitionNumber}`);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'vendorSelectedIndex',
+          'fromDate',
+          'toDate'
+        );
+
+        this.productAcquisitionNumberToSearch = '';
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

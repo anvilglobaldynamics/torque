@@ -62,7 +62,7 @@ exports.SalesCollection = class extends Collection {
             changeAmount: Joi.number().max(999999999999999).required(),
 
             paymentMethodId: Joi.number().max(999999999999999).required(),
-            
+
             wasChangeSavedInChangeWallet: Joi.boolean().required()
           })
         )
@@ -139,9 +139,10 @@ exports.SalesCollection = class extends Collection {
     });
   }
 
-  async findBySalesNumber({ salesNumber }) {
+  async findBySalesNumber({ salesNumber, outletIdList }) {
     let query = {
-      salesNumber
+      salesNumber,
+      outletId: { $in: outletIdList }
     }
     return await this._findOne(query);
   }

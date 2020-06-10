@@ -55,6 +55,7 @@
         background-color: var(--app-button-secondary);
         color: var(--app-button-label-secondary);
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -114,8 +115,7 @@
                 </template>
                 <template is="dom-if" if="[[customer]]">
                   [[verses.general.customer]]:
-                  <b>[[customer.fullName]]</b> 
-                  <br>[[customer.phone]]
+                  <b>[[customer.fullName]]</b> [[customer.phone]]
 
                   <template is="dom-if" if="[[hasModule('MOD_CUSTOMER_ACCOUNT_BALANCE')]]">
                     <br>[[verses.general.balance]]:
@@ -163,7 +163,9 @@
         <!-- outlet search - end -->
 
         <div class="lone-controls">
-          <paper-button raised class="primary flex" on-tap="filterTapped">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
         </div>
@@ -485,6 +487,25 @@
       removeServiceBlueprintTapped(e = null) {
         this.serviceBlueprint = null;
         this.app.storeInSession('last-selected-service-blueprint', null);
+      }
+
+      clearFiltersTapped(e = null) {
+        this.resetProperties(
+          'shouldFilterByOutlet',
+          'shouldFilterByCustomer',
+          'shouldFilterByServiceBlueprint',
+          'isSearchingServiceBlueprint',
+          'serviceBlueprint',
+          'outletId',
+          'fromDate',
+          'toDate',
+          'isSearchingCustomer',
+          'customer',
+          'isSearchingOutlet',
+          'outlet'
+        );
+
+        this.filterTapped();
       }
 
       filterTapped(e = null) {

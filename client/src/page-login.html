@@ -30,6 +30,7 @@
         padding-top: 10px;
         /* text-decoration: none; */
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -79,12 +80,13 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || '1700000011'),
-                  password: 'johndoe1pass'
+                  emailOrPhone: '',
+                  password: ''
+                  // password: 'johndoe1pass'
                 };
               } else {
                 return {
-                  emailOrPhone: (this.getFromCache('loginForm--emailOrPhone') || ''),
+                  emailOrPhone: '',
                   password: ''
                 };
               }
@@ -108,6 +110,9 @@
         this.useLanguageServices();
         this.disableOfflineMode();
         window.sessionStorage.clear();
+
+        this.set('loginForm.emailOrPhone', (this.getFromCache('loginForm--emailOrPhone') || ''))
+
         this.delay(300, () => {
           this.isReady = true;
         });

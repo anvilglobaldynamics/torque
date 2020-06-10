@@ -32,6 +32,13 @@
         height: 300px;
         margin-bottom: 8px;
       }
+
+      .note {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #616161;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -42,7 +49,6 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
-            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
             <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
 
@@ -54,6 +60,12 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
+            <div class="note">
+              [[verses.outlet.locationRequiredNote]]
+            </div>
+
+            <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
+
             <!-- map location section - start -->
             <template is="dom-if" if="[[editOutletForm.location]]">
               <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
@@ -63,7 +75,13 @@
             <template is="dom-if" if="[[!editOutletForm.location]]">
               <div class="location-msg">[[verses.outlet.noLocationOnMap]]</div>
             </template>
-            <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocationButton]]</paper-button>
+
+            <template is="dom-if" if="[[$shouldShowMapSelection(editOutletForm.physicalAddress)]]">
+              <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocationButton]]</paper-button>
+            </template>
+            <template is="dom-if" if="[[!$shouldShowMapSelection(editOutletForm.physicalAddress)]]">
+              <paper-button raised class="neutral" disabled>[[verses.outlet.selectLocationButton]]</paper-button>
+            </template>
             <!-- map location section - end -->
 
             <div class="horizontal layout button-row end">
@@ -100,11 +118,13 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  name: 'Gulshan Showroom',
-                  phone: '1700000011',
-                  contactPersonName: 'Johns Apparel',
-                  physicalAddress: 'Road 56, Gulshan, Dhaka',
-                  location: { lat: 23.7945153, lng: 90.4139857 },
+                  name: '',
+                  // name: 'Gulshan Showroom',
+                  phone: '',
+                  contactPersonName: '',
+                  physicalAddress: '',
+                  // location: { lat: 23.7945153, lng: 90.4139857 },
+                  location: null,
                   categoryCode: 'CAT_GENERAL'
                 };
               } else {
@@ -141,6 +161,13 @@
           this.app.pushPageTitle(this.app.verses.outlet.addOutletTitle);
         }
         if (!this._ensureAccess()) return;
+
+        if (!this.doNotAutoFillKnownFormFields) {
+          this._autoFillKnownFormFields();
+        } else {
+          this.doNotAutoFillKnownFormFields = false;
+        }
+
         if (this.editMode) {
           this._processGetOutlet(() => {
             this.fetchOutletCategoryList(() => {
@@ -175,6 +202,15 @@
           authLevel: 'organization-selected',
           privilegeList: ['PRIV_MODIFY_ALL_OUTLETS']
         });
+      }
+
+      _autoFillKnownFormFields() {
+        let user = this.app.user;
+        this.set('editOutletForm.phone', user.phone);
+        this.set('editOutletForm.contactPersonName', user.fullName);
+
+        let organization = this.app.organization;
+        this.set('editOutletForm.physicalAddress', organization.primaryBusinessAddress);
       }
 
       // region: map =================================
@@ -295,6 +331,8 @@
       // region: ui =================================
 
       selectLocationTapped(e = null) {
+        this.doNotAutoFillKnownFormFields = true;
+
         sessionStorage.setItem('page-select-geolocation:address', this.editOutletForm.physicalAddress || '');
         if (this.editOutletForm.location) {
           sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
@@ -329,6 +367,10 @@
           return;
         }
         this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
+      }
+
+      $shouldShowMapSelection(physicalAddress) {
+        return physicalAddress && physicalAddress.length > 5;
       }
 
       // region: misc =================================

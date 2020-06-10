@@ -107,7 +107,7 @@
         </div>
       </template>
 
-      <template is="dom-if" if="[[hasModule('MOD_PRODUCT', organization)]]">
+      <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
         <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_WAREHOUSES', organization)]]">
           <div class="warehouse-list-container">
 
