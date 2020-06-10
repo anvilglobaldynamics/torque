@@ -59,7 +59,9 @@
     "customer": "Customer",
     "vendor": "Vendor",
     "outlet": "Outlet",
-    "filter": "Apply Filter",
+    "filter": "Apply Filters",
+    "clearFilters": "Reset Filters",
+    "showFilters": "Filters",
     "date": "Date",
     "dated": "Dated",
     "number": "Number",
@@ -112,7 +114,6 @@
     "both": "Both",
     "optional": "(Optional)",
     "print": "Print",
-    "showFilters": "Filters",
     "verificationUnsuccessful": "Verification Unsuccessful",
     "modalConfirmationPleaseConfirm": "Please confirm.",
     "scanButtonHelp": "Use code scanner to select multiple products quickly",
@@ -250,14 +251,12 @@
     "emailCouldNotBeVerified": "Your email could not be verified. Make sure the verification code is correct.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct",
     "checkYourPhoneForVerification": "Please check your phone. We have sent you a verification SMS.",
-    
     "verifyAccount": "Call Us to Confirm Account",
     "callUsToVerify": "Call us at +880 1770 947908 to confirm your account. ",
     "callUsButton": "Call Us",
     "verificationSmsSent": "Verification SMS Sent",
     "notYetVerifiedPhonePart1": "You need to verify your account. Either click the link in the sms we sent to",
     "notYetVerifiedPhonePart2": "or press the button below",
-
     "whyProvideEmailAddress": "By providing your email address, you can get organization's performance report, login alerts and other important information delivered to you to your email.",
     "activatedPackage": "Activated Package",
     "activationHistory": "Activation History",
@@ -283,13 +282,12 @@
     "buttonCreateServiceBlueprint": "Create Service Blueprint",
     "shortcutToPos": "POS",
     "shortcutToAddProduct": "Add Products",
-
     "selfOnboardingTitle": "Use this checklist to setup Lipi",
     "selfOnboardingRegisterTitle": "Your Lipi account is registered",
     "selfOnboardingOrganizationTitle": "Your Organization's details are saved",
     "selfOnboardingReviewOutletTitle": "Check your Outlet's (shop) details",
     "selfOnboardingVendorTitle": "Add a Vendor of yours",
-    "selfOnboardingProductBlueplrintTitle": "Enter which type of Product you sell",    
+    "selfOnboardingProductBlueplrintTitle": "Enter which type of Product you sell",
     "selfOnboardingAddProductsTitle": "Add Product to Inventory",
     "selfOnboardingServiceBlueprintTitle": "Enter which type of Services you provide",
     "selfOnboardingSaleTitle": "Make a Sell from POS"
@@ -902,8 +900,7 @@
     "filterByProductCategories": "Filter By Product Categories",
     "filteringByPart1": "Filtering by ",
     "filteringByPart2Categories": " product categories.",
-    "filteringByPart2Blueprints": " product blueprints.",
-    "clearFilters": "Reset Filters"
+    "filteringByPart2Blueprints": " product blueprints."
   },
   "posSelectProduct": {
     "posSelectProductTitle": "Select Products",
@@ -1249,7 +1246,6 @@
     "filteringByPart1": "Filtering by ",
     "filteringByPart2Categories": " product categories.",
     "filteringByPart2Blueprints": " product blueprints.",
-    "clearFilters": "Reset Filters",
     "allOutlets": "All Outlets"
   },
   "receipt": {

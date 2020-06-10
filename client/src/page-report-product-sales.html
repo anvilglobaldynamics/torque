@@ -191,11 +191,11 @@
             <template is="dom-if" if="[[_productBlueprintList.length]]">
               <span style="padding-bottom: 10px;">[[verses.productSalesReport.filteringByPart1]] [[_productBlueprintList.length]] [[verses.productSalesReport.filteringByPart2Blueprints]]</span>
             </template>
-
-            <paper-button raised class="btn danger" on-tap="clearFiltersTapped">[[verses.productSalesReport.clearFilters]]</paper-button>
           </template>
 
-          <paper-button raised class="btn primary" on-tap="filterTapped">
+          <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
+
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
             [[verses.general.filter]]
           </paper-button>
 
@@ -433,15 +433,6 @@
       onNavigateOut() {
         super.onNavigateOut();
         this.app.shouldShowPrintButton = false;
-        this.resetProperties(
-          'shouldShowFilters',
-          'productSalesSummaryList',
-          'sortBy',
-          'sortDirection',
-          'selectedOutletId',
-          'fromDate',
-          'toDate'
-        );
         this.app.popPageTitle();
       }
 
@@ -524,6 +515,18 @@
         this.app.extractFromSession('report-selected-product-category-list');
         this.app.extractFromSession('report-selected-product-blueprint-list');
         this._preprocessFilters();
+
+        this.resetProperties(
+          'shouldShowFilters',
+          'productSalesSummaryList',
+          'sortBy',
+          'sortDirection',
+          'selectedOutletId',
+          'fromDate',
+          'toDate'
+        );
+
+        this.filterTapped();
       }
 
       filterByProductBlueprintTapped(e = null) {
