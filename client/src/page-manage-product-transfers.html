@@ -219,18 +219,6 @@
 
       onNavigateOut() {
         super.onNavigateOut();
-
-        if (!this.doNotResetOnNextNavigation) {
-          this.resetProperties(
-            'shouldShowFilters',
-            'vendorSelectedIndex',
-            'fromDate',
-            'toDate'
-          );
-        } else {
-          this.doNotResetOnNextNavigation = false;
-        }
-
         this.app.popPageTitle();
       }
 
