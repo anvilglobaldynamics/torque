@@ -104,17 +104,50 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
   }
 
   async _getUsageFlags({ organizationId }) {
-    let hasAnyOutlet = (await this.database.outlet._find({ organizationId })).length > 0;
+    let outletList = await this.database.outlet._find({ organizationId }, {
+      sort: {
+        createdDatetimeStamp: 1
+      }
+    });
+    let outletIdList = outletList.map(outlet => outlet.id);
+
+    let hasAnyOutlet = (outletList).length > 0;
     let hasAnyProductBlueprint = (await this.database.productBlueprint._find({ organizationId })).length > 0;
     let hasAnyVendor = (await this.database.vendor._find({ organizationId })).length > 0;
     let hasAnyProductAcquisition = (await this.database.productAcquisition._find({ organizationId })).length > 0;
     let hasAnyServiceBlueprint = (await this.database.serviceBlueprint._find({ organizationId })).length > 0;
+
+    let hasAnySales = false;
+    if (outletList.length > 0) {
+      let salesList = (await this.database.sales._find({ outletId: { $in: outletIdList } }))
+      hasAnySales = salesList.length > 0;
+    }
+
+    let hasUpdatedFirstOutlet = false;
+    if (outletList.length > 0) {
+      let outlet = outletList[0];
+      if (outlet.createdDatetimeStamp !== outlet.lastModifiedDatetimeStamp) {
+        hasUpdatedFirstOutlet = true;
+      }
+    }
+
+    let defaultFirstInventory = await this.database.inventory._findOne({ organizationId, inventoryContainerType: 'outlet', type: 'default' }, {
+      sort: {
+        createdDatetimeStamp: 1
+      }
+    });
+    let defaultFirstInventoryId = (defaultFirstInventory ? defaultFirstInventory.id : null);
+
     return {
       hasAnyOutlet,
+      outletIdList,
+      defaultFirstInventoryId,
       hasAnyProductBlueprint,
       hasAnyVendor,
       hasAnyProductAcquisition,
-      hasAnyServiceBlueprint
+      hasAnyServiceBlueprint,
+      hasUpdatedFirstOutlet,
+      hasAnySales
     }
   }
 

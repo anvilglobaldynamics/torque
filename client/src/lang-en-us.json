@@ -250,9 +250,14 @@
     "emailCouldNotBeVerified": "Your email could not be verified. Make sure the verification code is correct.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct",
     "checkYourPhoneForVerification": "Please check your phone. We have sent you a verification SMS.",
+    
+    "verifyAccount": "Call Us to Confirm Account",
+    "callUsToVerify": "Call us at +880 1770 947908 to confirm your account. ",
+    "callUsButton": "Call Us",
     "verificationSmsSent": "Verification SMS Sent",
     "notYetVerifiedPhonePart1": "You need to verify your account. Either click the link in the sms we sent to",
     "notYetVerifiedPhonePart2": "or press the button below",
+
     "whyProvideEmailAddress": "By providing your email address, you can get organization's performance report, login alerts and other important information delivered to you to your email.",
     "activatedPackage": "Activated Package",
     "activationHistory": "Activation History",
@@ -277,7 +282,17 @@
     "promptCreateServiceBlueprint": "There are no service blueprints in your organization. You can not sell services without adding service blueprints first.",
     "buttonCreateServiceBlueprint": "Create Service Blueprint",
     "shortcutToPos": "POS",
-    "shortcutToAddProduct": "Add Products"
+    "shortcutToAddProduct": "Add Products",
+
+    "selfOnboardingTitle": "Use this checklist to setup Lipi",
+    "selfOnboardingRegisterTitle": "Your Lipi account is registered",
+    "selfOnboardingOrganizationTitle": "Your Organization's details are saved",
+    "selfOnboardingReviewOutletTitle": "Check your Outlet's (shop) details",
+    "selfOnboardingVendorTitle": "Add a Vendor of yours",
+    "selfOnboardingProductBlueplrintTitle": "Enter which type of Product you sell",    
+    "selfOnboardingAddProductsTitle": "Add Product to Inventory",
+    "selfOnboardingServiceBlueprintTitle": "Enter which type of Services you provide",
+    "selfOnboardingSaleTitle": "Make a Sell from POS"
   },
   "organization": {
     "addOrganizationTitle": "Add Organization",

@@ -165,8 +165,9 @@ class Collection {
   async _insert(doc) {
     if ('createdDatetimeStamp' in doc) throw new CodedError("DevError:", "createdDatetimeStamp must not be set manually.");
     if ('lastModifiedDatetimeStamp' in doc) throw new CodedError("DevError:", "lastModifiedDatetimeStamp must not be set manually.");
-    doc.createdDatetimeStamp = Date.now();
-    doc.lastModifiedDatetimeStamp = Date.now();
+    let now = Date.now();
+    doc.createdDatetimeStamp = now;
+    doc.lastModifiedDatetimeStamp = now;
     await this.__validateDocument(doc, false);
     return await this._db.insertOne(this.name, doc);
   }
