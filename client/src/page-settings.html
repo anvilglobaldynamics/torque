@@ -68,8 +68,8 @@
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
         <paper-tab>[[verses.settings.app]]</paper-tab>
-        <paper-tab>[[verses.general.organization]]</paper-tab>
-        <paper-tab>[[verses.settings.others]]</paper-tab>
+        <paper-tab>[[verses.settings.organization]]</paper-tab>
+        <!-- <paper-tab>[[verses.settings.others]]</paper-tab> -->
       </paper-tabs>
 
       <!-- View Index 0 Start -->
@@ -210,11 +210,7 @@
       <!-- View Index 1 End -->
       <!-- View Index 2 Start -->
 
-      <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
-
-        <!-- <div class="card vertical layout">
-          [[verses.settings.moreOptionsForthcoming]]
-        </div> -->
+      <!-- <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 2)]]">
 
         <div class="card vertical layout">
           <div class="option">
@@ -229,7 +225,7 @@
           </div>
         </div>
 
-      </template>
+      </template> -->
 
       <!-- View Index 2 End -->
 

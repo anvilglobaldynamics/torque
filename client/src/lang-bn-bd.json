@@ -927,7 +927,8 @@
   },
   "settings": {
     "settingsTitle": "সেটিংস",
-    "app": "অ্যাপ",
+    "app": "শুধু এই অ্যাপ",
+    "organization": "সম্পূর্ণ সংস্থার জন্য",
     "general": "সার্বজনীন",
     "others": "অন্যান্য",
     "useWebsockets": "ওয়েবসকেট ব্যবহার করুন",
