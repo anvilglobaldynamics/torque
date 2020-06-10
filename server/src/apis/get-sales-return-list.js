@@ -88,7 +88,8 @@ exports.GetSalesReturnListApi = class extends Api {
     let salesReturnList = [];
     let filterBySalesNumber = this._getFilterBySalesNumberFromSearchString(searchString);
     if (filterBySalesNumber) {
-      let sales = await this.database.sales.findBySalesNumber({ salesNumber: filterBySalesNumber });
+      let outletIdList = (await this.database.outlet._find({ organizationId })).map(outlet => outlet.id);
+      let sales = await this.database.sales.findBySalesNumber({ salesNumber: filterBySalesNumber, outletIdList });
       if (sales) {
         salesReturnList = await this.database.salesReturn.listBySalesId({ salesId: sales.id });
         salesReturnList.forEach(salesReturn => salesReturn.salesNumber = sales.salesNumber);
