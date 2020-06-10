@@ -927,7 +927,7 @@
   "settings": {
     "settingsTitle": "Settings",
     "app": "Only this App",
-    "organization": "For whole Organization",
+    "organization": "For whole Org.",
     "general": "General",
     "others": "Others",
     "useWebsockets": "Use Websockets",
