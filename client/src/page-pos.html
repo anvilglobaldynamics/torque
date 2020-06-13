@@ -2188,7 +2188,9 @@
         this._customerVariablesChanged();
         this.elem('elem-customer-selector').cancelTapped();
         this._scrollToNavBar();
-        this.customerSelectionDoneTapped(null);
+        if (!this.isMultiColumn) {
+          this.customerSelectionDoneTapped(null);
+        }
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
