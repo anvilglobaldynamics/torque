@@ -56,6 +56,10 @@
             <paper-input class="editProductBlueprintForm--name" value="{{editProductBlueprintForm.name}}" required minlength="3" error-message=[[verses.productBlueprint.productBlueprintNameInputError]] label=[[verses.productBlueprint.productBlueprintNameInput]]></paper-input>
             <paper-input class="editProductBlueprintForm--unit" value="{{editProductBlueprintForm.unit}}" required minlength="1" error-message=[[verses.productBlueprint.productBlueprintUnitInputError]] label=[[verses.productBlueprint.productBlueprintUnitInput]]></paper-input>
 
+            <div class="note" style="padding-top: 30px;">
+              [[verses.productBlueprint.priceAndVatNote]]
+            </div>
+
             <paper-input class="editProductBlueprintForm--defaultPurchasePrice" step="0.01" value="{{editProductBlueprintForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.defaultPurchasePriceInputError]] label=[[verses.productBlueprint.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
             </paper-input>
@@ -209,7 +213,7 @@
               } else {
                 return {
                   name: "",
-                  unit: (this.getFromCache('editProductBlueprintForm--unit') || ''),
+                  unit: (this.getFromCache('editProductBlueprintForm--unit') || 'piece'),
                   identifierCode: '',
                   defaultPurchasePrice: '',
                   defaultVat: (this.getFromCache('editProductBlueprintForm--defaultVat') || ''),
