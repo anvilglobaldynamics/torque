@@ -68,6 +68,9 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+        if (this.params.from && this.params.from === 'register') {
+          this.app.storeInSession('is-coming-from-toc-page', true);
+        }
         this.delay(300, () => {
           this.isReady = true;
         });

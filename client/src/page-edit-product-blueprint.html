@@ -260,6 +260,14 @@
           if (productCategoryList.length === 0) {
             this.shouldShowProductCategoryCreationPrompt = true;
           }
+
+          // select recently created category
+          let name = this.app.extractFromSession('last-created-product-category-name');
+          if (name) {
+            this.newCategoryInput = name;
+            this._addNewCategory();
+          }
+
           if (this.editMode) {
             this._processGetProductBlueprint(() => {
               this.isReady = true;
@@ -278,7 +286,6 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.newCategoryInput = '';
-        this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
         this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }
 
@@ -354,6 +361,7 @@
           if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
           let message = this.app.verses.productBlueprint.productBlueprintUpdated;
           this.app.showToast(message, _ => {
+            this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
             this.backButtonOnTopBarPressed();
           });
         });
@@ -469,7 +477,7 @@
       }
 
       buttonCreateProductCategoryTapped(e = null) {
-        this.app.navigateTo(`/edit-product-category`);
+        this.app.navigateTo(`/edit-product-category/from:blueprint`);
       }
 
       backButtonOnTopBarPressed(e = null) {
@@ -477,8 +485,7 @@
       }
 
       createProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.storeInCache('editProductBlueprintForm--defaultVat', this.editProductBlueprintForm.defaultVat);
         this.storeInCache('editProductBlueprintForm--unit', this.editProductBlueprintForm.unit);
@@ -494,6 +501,7 @@
           this._processAddProductsToInventory({ productBlueprintId }, () => {
             let message = this.app.verses.productBlueprint.productBlueprintCreated;
             this.app.showToast(message, _ => {
+              this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
               this.backButtonOnTopBarPressed();
             });
           });
@@ -501,8 +509,7 @@
       }
 
       updateProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.app.showModalConfirmation(
           this.app.verses.general.modalConfirmationPleaseConfirm,
