@@ -186,6 +186,10 @@
           if (response.hasError) return this.onApiError(response.error, 'editProductCategoryForm');
           let message = this.app.verses.productCategory.productCategoryCreated;
           this.app.showToast(message, _ => {
+            this.app.extractFromSession('last-created-product-category-name');
+            if (this.params.from === 'blueprint') {
+              this.app.storeInSession('last-created-product-category-name', name);
+            }
             this.backButtonOnTopBarPressed();
           });
         });
