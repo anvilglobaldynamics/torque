@@ -481,8 +481,7 @@
       }
 
       createProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.storeInCache('editProductBlueprintForm--defaultVat', this.editProductBlueprintForm.defaultVat);
         this.storeInCache('editProductBlueprintForm--unit', this.editProductBlueprintForm.unit);
@@ -506,8 +505,7 @@
       }
 
       updateProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.app.showModalConfirmation(
           this.app.verses.general.modalConfirmationPleaseConfirm,
