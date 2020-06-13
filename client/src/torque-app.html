@@ -1150,7 +1150,14 @@
         }
       }
 
+      _scrollCurrentPageToTop() {
+        // Scroll to top on every page load
+        let mainWrapper = this.elem('.main-iron-pages-wrapper');
+        if (mainWrapper) mainWrapper.scrollTop = 0;
+      }
+
       _pageNameChanged() {
+        this._scrollCurrentPageToTop();
         this.isFloatingAppDrawerExpanded = false;
         this._preparePageNameForNavigationMenu();
         this.initiateAppDrawerControls();
@@ -1738,6 +1745,7 @@
           this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
+            this._scrollCurrentPageToTop();
           }, 1);
         }
       }
@@ -1748,6 +1756,7 @@
           this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
+            this._scrollCurrentPageToTop();
           }, 1);
         }
       }
