@@ -1222,8 +1222,8 @@
     "salesCount": "বিক্রয় সংখ্যা",
     "periodWeek": "সপ্তাহ",
     "periodMonth": "মাস",
-    "periodYearMonthly": "বছর (মাসিক)",
-    "periodYearQUarterly": "বছর (ত্রৈমাসিক)"
+    "periodYearMonthly": "বছর (12 মাস)",
+    "periodYearQUarterly": "বছর (প্রতি 3 মাস)"
   },
   "productAcquisition": {
     "manageProductAcquisitionTitle": "পণ্য ক্রয় রেকর্ড",

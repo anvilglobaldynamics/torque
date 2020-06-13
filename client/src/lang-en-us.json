@@ -1221,8 +1221,8 @@
     "salesCount": "Sales Count",
     "periodWeek": "Week",
     "periodMonth": "Month",
-    "periodYearMonthly": "Year (monhtly)",
-    "periodYearQUarterly": "Year (quarterly)"
+    "periodYearMonthly": "Year (12 months)",
+    "periodYearQUarterly": "Year (4 quarters)"
   },
   "productAcquisition": {
     "manageProductAcquisitionTitle": "Product Acquisition Records",
