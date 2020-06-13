@@ -99,7 +99,7 @@
     "noDataFound": "No Data Found",
     "activatedModules": "Activated Modules",
     "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",
-    "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
+    "moduleDescriptionLineTwo": "💡 To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
     "productModule": "Product Module",
     "serviceModule": "Service Module",
     "sellWarehouseProductModule": "Sell Warehouse Products Module",
@@ -266,7 +266,7 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
+    "promptForDefaultOutlet": "💡 Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
     "promptForDefaultOutletGoButton": "Select Outlet",
     "salesTrendGraphTitle": "This week's Sales Trend",
     "viewActivationHistory": "View Activation History",
@@ -356,7 +356,7 @@
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
     "noLocationOnMap": "Location has not been set on Map yet.",
-    "locationRequiredNote": "Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
+    "locationRequiredNote": "💡 Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "Set Map Location",
@@ -409,9 +409,9 @@
     "productCategoryNameInput": "Name of Product Category",
     "productCategoryNotFound": "Category not found",
     "productCategoryNotFoundDetails": "Unable to find product category with that name",
-    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
+    "whatIsProductBlueprintMessage": "💡 Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?",
-    "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
+    "productCategoryCreationPromptmessage": "💡 Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
     "productCategoryUsageMessage": "Product Category helps you search and organise products. You can add multiple product categories to a product blueprint.",
     "createProductCategory": "Go to Create Product Category Page",
     "addProducts": "Add Products to Inventories",
@@ -444,7 +444,7 @@
     "isEmployeeAssignable": "Should an Employee be assigned?",
     "isRefundable": "Is this Service Refundable?",
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
-    "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
+    "whatIsServiceBlueprintMessage": "💡 Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint",
     "serviceBlueprintCreated": "Service Blueprint Created",
@@ -940,12 +940,12 @@
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
-    "vatRuleDetail": "Select which type of VAT rule your organization uses; [1] VAT Before Discount [2] VAT After Discount",
+    "vatRuleDetail": "💡 Select which type of VAT rule your organization uses; [1] VAT Before Discount [2] VAT After Discount",
     "vatRule": "VAT rule",
     "beforeDiscount": "Calculate VAT Before discount",
     "afterDiscount": "Calculate VAT After discount",
     "monetaryUnit": "Monetary Unit (Max. 3 characters, example: USD)",
-    "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
+    "monetaryUnitDetail": "💡 Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
     "minimumProductQuantity": "Minimum Product Quantity",
     "minimumProductQuantityDetail": "Product Quantity will be colored Red below this number.",
@@ -1181,7 +1181,8 @@
   "assignAssistedByEmployee": {
     "assignAssistedByEmployeeTitle": "Assisted By Employee",
     "clearEmployeeLabel": "Clear Selected Employee",
-    "searchFieldTips": "Name or phone"
+    "searchFieldTips": "Name or phone",
+    "helpfulMessage": "💡 By selecting the employee here you can track which employee has made this sale. Later this will be included in the employee performance report."
   },
   "productCategory": {
     "productCategories": "Product Categories",
@@ -1201,7 +1202,7 @@
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Search by Name",
     "searchForProductCategoryInputError": "Error in Search for Product Category",
-    "whatIsProductCategoryMessage": "Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
+    "whatIsProductCategoryMessage": "💡 Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
   },
   "productCategoryPicker": {
     "pickerTitle": "Select a Category"
@@ -1296,7 +1297,7 @@
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
-    "monetaryAccountPurposeNote": "Note: Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
+    "monetaryAccountPurposeNote": "💡 Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",
