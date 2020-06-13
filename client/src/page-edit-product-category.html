@@ -86,7 +86,7 @@
               if (mode === 'development') {
                 return {
                   name: "Tops and Torso",
-                  colorCode: "#000000"
+                  colorCode: ""
                 };
               } else {
                 return {
@@ -110,6 +110,7 @@
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
+
         if ('product-category' in this.params) {
           this.editMode = true;
           this.app.pushPageTitle(this.app.verses.productCategory.editProductCategoryTitle);
@@ -124,6 +125,7 @@
           });
         } else {
           this.delay(300, () => {
+            this.editProductCategoryForm = { name: '', colorCode: '#00acc1' };
             this.isReady = true;
           });
         }
