@@ -858,7 +858,9 @@
     "discardSalesTitle": "Discard Sale",
     "discardSalesText": "Are you sure you want to discard this sale?",
     "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed.",
-    "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints."
+    "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints.",
+    "categoriesTabTitle": "Categories",
+    "searchProductTabTitle": "Search"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",

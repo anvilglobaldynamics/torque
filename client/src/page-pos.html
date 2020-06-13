@@ -535,10 +535,10 @@
             <template is="dom-if" if="[[!isInOfflineMode]]">
               <div class="horizontal layout">
                 <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
-                  Categories
+                  [[verses.pos.categoriesTabTitle]]
                 </div>
                 <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
-                  Search
+                  [[verses.pos.searchProductTabTitle]]
                 </div>
               </div>
             </template>
