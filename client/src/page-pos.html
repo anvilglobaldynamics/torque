@@ -2178,6 +2178,7 @@
             this.isAnonymousSale = false;
             this._customerVariablesChanged();
             this.elem('elem-customer-selector').cancelTapped();
+            this._scrollToNavBar();
           });
         });
       }
@@ -2186,6 +2187,8 @@
         this.isAnonymousSale = true;
         this._customerVariablesChanged();
         this.elem('elem-customer-selector').cancelTapped();
+        this._scrollToNavBar();
+        this.customerSelectionDoneTapped(null);
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {
