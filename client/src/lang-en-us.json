@@ -782,7 +782,7 @@
   "pos": {
     "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
-    "customerSelectionCardHeader": "Customer Selection",
+    "customerSelectionCardHeader": "Customer Selected",
     "noCustomerSelected": "No customer selected",
     "removeCustomer": "Remove",
     "changeCustomer": "Old",
