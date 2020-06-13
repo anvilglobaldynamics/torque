@@ -451,8 +451,9 @@
     "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "Customer name or phone.",
-    "customerNameOrPhoneInputError": "Enter a name or phone"
+    "customerNameOrPhoneInput": "Customer name or phone",
+    "customerNameOrPhoneInputError": "Enter a name or phone",
+    "searchOldCustomer": "Search Old Customer"
   },
   "outletSelector": {
     "outlets": "Outlet",
