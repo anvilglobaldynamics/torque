@@ -291,6 +291,11 @@
           activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
         }
 
+        // Enabling accounting module for every new Retail/Both user
+        if (industryCategory === 'retail' || industryCategory === 'both') {
+          activeModuleCodeList.push('MOD_VENDOR');
+        }
+
         // Enabling accounting module for every new Lipi user
         activeModuleCodeList.push('MOD_ACCOUNTING');
 

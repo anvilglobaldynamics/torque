@@ -547,7 +547,9 @@
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
                 </template>
-                <hr class="custom-sidebar-divider">
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <hr class="custom-sidebar-divider">
+                </template>
                 <!-- Records - end -->
 
                 <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
