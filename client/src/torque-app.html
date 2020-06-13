@@ -506,9 +506,13 @@
 
                 <!-- Essential Records - start -->
                 <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                  </template>
                 </template>
+
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
                   <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
                     <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
@@ -540,6 +544,9 @@
                     <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
                   </template>
                 </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+                </template>
                 <hr class="custom-sidebar-divider">
                 <!-- Records - end -->
 
@@ -550,9 +557,6 @@
                 <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
                 <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
-                  </template>
                   <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
                 </template>
                 <hr class="custom-sidebar-divider">
