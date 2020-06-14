@@ -88,6 +88,10 @@
             el.autoValidate = true;
             el.invalid = true;
             el.errorMessage = message;
+            try {
+              el.scrollIntoView();
+              el.focus();
+            } catch (ex) { }
           }
           if (missingError) {
             return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, missingError.message, cbfn);
@@ -95,6 +99,22 @@
         } else {
           return this.app.showModalDialog(this.app.verses.general.errorMessageTitle, error.message, cbfn);
         }
+      }
+
+      validateFormAndHighlightError(formQuerySelector) {
+        this.elemAll(`${formQuerySelector} paper-input`).forEach(el => el.autoValidate = true);
+        if (this.elem(formQuerySelector).validate()) {
+          return true;
+        }
+
+        let el = this.elemAll(`${formQuerySelector} paper-input`).find(el => el.invalid === true);
+        if (el) {
+          try {
+            el.scrollIntoView();
+            el.focus();
+          } catch (ex) { }
+        }
+        return false;
       }
 
       // TODO: move method hasPrivilege to file torque-common-behavior.html

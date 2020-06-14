@@ -41,6 +41,10 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card helpful-tips">
+        [[verses.assignAssistedByEmployee.helpfulMessage]]
+      </div>
+
       <template is="dom-if" if="{{assignedAssistedByEmployee}}">
         <div class="card vertical layout">
           <paper-button raised class="danger" style="margin-top: 10px;" on-tap="clearEmployeeTapped">[[verses.assignAssistedByEmployee.clearEmployeeLabel]]</paper-button>
@@ -71,7 +75,7 @@
             <div class="horizontal layout item center">
 
               <div class="vertical layout flex">
-                <div class="person-name-container">[[verses.general.name]]: [[employee.userDetails.fullName]]</div>
+                <div class="person-name-container">[[employee.userDetails.fullName]]</div>
                 <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
                 <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
                 <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>

@@ -168,7 +168,7 @@
         --app-button-label-danger: #c62828;
         --app-button-neutral: #CFD8DC;
         --app-button-label-neutral: #263238;
-        --app-button-alternative: #FFF59D;
+        --app-button-alternative: #fdff6f;
         --app-button-label-alternative: #067e24;
 
         --app-tab-selected: #0091ea;
@@ -501,8 +501,68 @@
                   </template>
                 </template> -->
 
-                <a name="manage-inventories" href="#/manage-inventories">[[verses.inventory.inventoryTitle]]</a>
+                <a name="manage-inventories" href="#/manage-inventories">[[verses.sidebar.inventoryContainer]]</a>
                 <hr class="custom-sidebar-divider">
+
+                <!-- Essential Records - start -->
+                <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
+
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
+                  </template>
+                </template>
+
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
+                  </template>
+                </template>
+                <hr class="custom-sidebar-divider">
+                <!-- Essential Records - end -->
+
+                <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+                <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                  </template>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+                <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+
+                <!-- Records - start -->
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                    <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
+                    <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                  </template>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
+                </template>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <hr class="custom-sidebar-divider">
+                </template>
+                <!-- Records - end -->
+
+                <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
+                <hr class="custom-sidebar-divider">
+
+                <!-- Reports - start -->
+                <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
+                <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
+                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                  <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
+                </template>
+                <hr class="custom-sidebar-divider">
+                <!-- Reports - end -->
 
                 <!-- Accounting section - start -->
                 <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
@@ -525,52 +585,6 @@
 
                 </template>
                 <!-- Accounting section - end -->
-
-                <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
-                <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
-                  </template>
-                </template>
-                <hr class="custom-sidebar-divider">
-
-                <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
-                <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
-                </template>
-                <hr class="custom-sidebar-divider">
-
-                <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-                <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="report-inventories" href="#/report-inventories">[[verses.sidebar.inventoryReport]]</a>
-                  </template>
-                  <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
-                </template>
-                <hr class="custom-sidebar-divider">
-
-                <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
-                <hr class="custom-sidebar-divider">
-
-                <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-                </template>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_SERVICE')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
-                  </template>
-                </template>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
-                    <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
-                  </template>
-                </template>
-                <hr class="custom-sidebar-divider">
 
                 <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
                 <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
@@ -747,7 +761,7 @@
             </div>
           </paper-dialog-scrollable>
           <div class="buttons">
-            <paper-button raised class="secondary" on-click="categoryDialogCancelTapped">[[verses.general.cancel]]</paper-button>
+            <paper-button raised class="danger" on-click="categoryDialogCancelTapped">[[verses.general.cancel]]</paper-button>
           </div>
         </paper-dialog>
 
@@ -1150,7 +1164,14 @@
         }
       }
 
+      _scrollCurrentPageToTop() {
+        // Scroll to top on every page load
+        let mainWrapper = this.elem('.main-iron-pages-wrapper');
+        if (mainWrapper) mainWrapper.scrollTop = 0;
+      }
+
       _pageNameChanged() {
+        this._scrollCurrentPageToTop();
         this.isFloatingAppDrawerExpanded = false;
         this._preparePageNameForNavigationMenu();
         this.initiateAppDrawerControls();
@@ -1738,6 +1759,7 @@
           this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
+            this._scrollCurrentPageToTop();
           }, 1);
         }
       }
@@ -1748,6 +1770,7 @@
           this._preparePageNameForNavigationMenu();
           setTimeout(() => {
             this.refreshCurrentPage();
+            this._scrollCurrentPageToTop();
           }, 1);
         }
       }

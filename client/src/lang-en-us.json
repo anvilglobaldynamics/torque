@@ -99,7 +99,7 @@
     "noDataFound": "No Data Found",
     "activatedModules": "Activated Modules",
     "moduleDescriptionLineOne": "Different Modules add different features and functionalities to Lipi. Below listed modules are currently activated;",
-    "moduleDescriptionLineTwo": "To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
+    "moduleDescriptionLineTwo": "💡 To add more features to Lipi, contact us at +880 1770 947908 or mail us at care@anvil.live",
     "productModule": "Product Module",
     "serviceModule": "Service Module",
     "sellWarehouseProductModule": "Sell Warehouse Products Module",
@@ -181,6 +181,7 @@
     "lipiName": "Lipi",
     "home": "Home",
     "help": "Help / How To",
+    "inventoryContainer": "Location & Inventory",
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
@@ -266,7 +267,7 @@
     "employees": "Employees",
     "outlets": "Outlets",
     "warehouses": "Warehouses",
-    "promptForDefaultOutlet": "Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
+    "promptForDefaultOutlet": "💡 Regularly Used Outlet; Selecting a regularly used outlet lets you quickly jump to POS after login and use lipi during network outage",
     "promptForDefaultOutletGoButton": "Select Outlet",
     "salesTrendGraphTitle": "This week's Sales Trend",
     "viewActivationHistory": "View Activation History",
@@ -356,7 +357,7 @@
     "locationInvalidDialog": "Please select a valid location on the map.",
     "showingLocationOnMap": "Showing location on Map below",
     "noLocationOnMap": "Location has not been set on Map yet.",
-    "locationRequiredNote": "Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
+    "locationRequiredNote": "💡 Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map."
   },
   "selectGeolocation": {
     "selectGeolocationTitle": "Set Map Location",
@@ -376,18 +377,19 @@
     "noProductBlueprintFound": "No product blueprint found.",
     "parentNameNotifierStart": "The Product Blueprint will be available under blueprint - ",
     "parentNameNotifierEnd": "",
-    "productBlueprintNameInput": "Name of your Product Blueprint",
+    "productBlueprintNameInput": "Name of Product",
     "productBlueprintNameInputError": "Enter a valid name",
-    "productBlueprintUnitInput": "Specify unit (i.e. kg, pcs etc)",
+    "productBlueprintUnitInput": "Unit of Measurement (kg, piece, box etc)",
     "productBlueprintUnitInputError": "Enter a valid name",
-    "identifierCodeNote": "Identifier Code can be used to search for product in POS and Inventory. Identifier Code should be unique for every product. You can enter product's SKU, Barcode or QR code in this field.",
+    "identifierCodeNote": "💡 Identifier Code can be used to search for product in POS and Inventory. Identifier Code should be unique for every product. You can enter product's SKU, Barcode or QR code in this field.",
     "identifierCodeInput": "Identifier Code",
     "identifierCodeInputError": "Enter a valid identifier code.",
-    "defaultPurchasePriceInput": "Default Purchase Price",
+    "priceAndVatNote": "💡 Below prices are Per Unit price. Purchase Price is private information. VAT can be 0 if it is included in the Sale Price. Sale Price can be changed when selling from POS.",
+    "defaultPurchasePriceInput": "Purchase Price",
     "defaultPurchasePriceInputError": "Enter a valid amount",
-    "defaultVatInput": "Default VAT",
+    "defaultVatInput": "VAT",
     "defaultVatInputError": "Enter a valid number",
-    "productBlueprintDefaultSalePriceInput": "Default Sale Price",
+    "productBlueprintDefaultSalePriceInput": "Sale Price",
     "productBlueprintDefaultSalePriceInputError": "Enter a valid number",
     "isProductReturnable": "Customer can return this product",
     "defaultDiscountType": "Default Discount Type",
@@ -409,13 +411,14 @@
     "productCategoryNameInput": "Name of Product Category",
     "productCategoryNotFound": "Category not found",
     "productCategoryNotFoundDetails": "Unable to find product category with that name",
-    "whatIsProductBlueprintMessage": "Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
+    "whatIsProductBlueprintMessage": "💡 Product Blueprint is the planning of a Product. Product Blueprint needs to be added only once for a Product. Information of Product Blueprint will be reused in all Product related tasks. Instead of reusing or editing existing product blueprint, we encourage you to create a new product blueprint incase of slight differnces.",
     "productBlueprintEditConfirmMessage": "Editing Product Blueprint will update coresponding product throughout the organization. Editing prices will cause calculations to change. Do you want to prceed?",
-    "productCategoryCreationPromptmessage": "Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
-    "productCategoryUsageMessage": "Product Category helps you search and organise products. You can add multiple product categories to a product blueprint.",
+    "productCategoryCreationPromptmessage": "💡 Product Category helps you search and organise products. Try to make different product categories based on Brand, Model, Feature and Type of product.",
+    "productCategoryUsageMessage": "💡 Product Category helps you search and organise products. You can add multiple product categories to a product blueprint.",
     "createProductCategory": "Go to Create Product Category Page",
     "addProducts": "Add Products to Inventories",
-    "addProductsNote": "You can add products to the inventory directly from here. This is optional. Leave count 0 if you want to add to inventory later."
+    "addProductsNote": "💡 You can add products to the inventory directly from here. This is optional. Leave count 0 if you want to add to inventory later.",
+    "productCategoriesTitle": "Product Categories (Optional)"
   },
   "serviceBlueprint": {
     "manageServiceBlueprintsTitle": "Manage Service Blueprints",
@@ -444,15 +447,16 @@
     "isEmployeeAssignable": "Should an Employee be assigned?",
     "isRefundable": "Is this Service Refundable?",
     "avtivateInAllOutlets": "Should this service be made available in all Outlets?",
-    "whatIsServiceBlueprintMessage": "Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
+    "whatIsServiceBlueprintMessage": "💡 Service Blueprint is the planning of a Service. Service Blueprint needs to be added only once for a Service. Information of Service Blueprint will be reused in all Service related tasks.",
     "createServiceBlueprint": "Create Service Blueprint",
     "updateServiceBlueprint": "Update Service Blueprint",
     "serviceBlueprintCreated": "Service Blueprint Created",
     "serviceBlueprintEditConfirmMessage": "Editing Service Blueprint will update coresponding service throughout the organization and it's memberships. Editing price and duration will cause calculations to change. Do you want to prceed?"
   },
   "customerSelector": {
-    "customerNameOrPhoneInput": "Customer name or phone.",
-    "customerNameOrPhoneInputError": "Enter a name or phone"
+    "customerNameOrPhoneInput": "Customer name or phone",
+    "customerNameOrPhoneInputError": "Enter a name or phone",
+    "searchOldCustomer": "Search Old Customer"
   },
   "outletSelector": {
     "outlets": "Outlet",
@@ -781,7 +785,7 @@
   "pos": {
     "posPageTitle": "POS",
     "newSalesAdded": "New Sales has been added.",
-    "customerSelectionCardHeader": "Customer Selection",
+    "customerSelectionCardHeader": "Customer Selected",
     "noCustomerSelected": "No customer selected",
     "removeCustomer": "Remove",
     "changeCustomer": "Old",
@@ -857,7 +861,9 @@
     "discardSalesTitle": "Discard Sale",
     "discardSalesText": "Are you sure you want to discard this sale?",
     "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed.",
-    "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints."
+    "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints.",
+    "categoriesTabTitle": "Categories",
+    "searchProductTabTitle": "Search"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -937,12 +943,12 @@
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
-    "vatRuleDetail": "Select which type of VAT rule your organization uses; [1] VAT Before Discount [2] VAT After Discount",
+    "vatRuleDetail": "💡 Select which type of VAT rule your organization uses; [1] VAT Before Discount [2] VAT After Discount",
     "vatRule": "VAT rule",
     "beforeDiscount": "Calculate VAT Before discount",
     "afterDiscount": "Calculate VAT After discount",
     "monetaryUnit": "Monetary Unit (Max. 3 characters, example: USD)",
-    "monetaryUnitDetail": "Note: Changing the monetary unit does not affect your sales.",
+    "monetaryUnitDetail": "💡 Changing the monetary unit does not affect your sales.",
     "moreOptionsForthcoming": "More options are forthcoming.",
     "minimumProductQuantity": "Minimum Product Quantity",
     "minimumProductQuantityDetail": "Product Quantity will be colored Red below this number.",
@@ -1178,7 +1184,8 @@
   "assignAssistedByEmployee": {
     "assignAssistedByEmployeeTitle": "Assisted By Employee",
     "clearEmployeeLabel": "Clear Selected Employee",
-    "searchFieldTips": "Name or phone"
+    "searchFieldTips": "Name or phone",
+    "helpfulMessage": "💡 By selecting the employee here you can track which employee has made this sale. Later this will be included in the employee performance report."
   },
   "productCategory": {
     "productCategories": "Product Categories",
@@ -1198,7 +1205,7 @@
     "createNewProductCategory": "Create New Product Category",
     "searchForProductCategoryInput": "Search by Name",
     "searchForProductCategoryInputError": "Error in Search for Product Category",
-    "whatIsProductCategoryMessage": "Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
+    "whatIsProductCategoryMessage": "💡 Product Category helps you search and organise products. Try to make different product categories based on brand, model, feature and type of product."
   },
   "productCategoryPicker": {
     "pickerTitle": "Select a Category"
@@ -1221,8 +1228,8 @@
     "salesCount": "Sales Count",
     "periodWeek": "Week",
     "periodMonth": "Month",
-    "periodYearMonthly": "Year (monhtly)",
-    "periodYearQUarterly": "Year (quarterly)"
+    "periodYearMonthly": "Year (12 months)",
+    "periodYearQUarterly": "Year (4 quarters)"
   },
   "productAcquisition": {
     "manageProductAcquisitionTitle": "Product Acquisition Records",
@@ -1293,7 +1300,7 @@
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
-    "monetaryAccountPurposeNote": "Note: Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
+    "monetaryAccountPurposeNote": "💡 Collected payment will be stored in this monetary account. And will be shown in it's ledger.",
     "natureOfAccount": "Nature of account",
     "debitAccountNatureText": "Nature of Debit Account",
     "creditAccountNatureText": "Nature of Credit Account",

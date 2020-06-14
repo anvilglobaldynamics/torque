@@ -159,7 +159,12 @@
       }
 
       onNavigateIn() {
-        this.selectedTabIndex = 0;
+        let isComingFromTocPage = this.app.extractFromSession('is-coming-from-toc-page');
+        if (isComingFromTocPage) {
+          this.selectedTabIndex = 1;
+        } else {
+          this.selectedTabIndex = 0;
+        }
 
         // erase all local data
         try {
@@ -284,6 +289,11 @@
 
         if (industryCategory === 'both') {
           activeModuleCodeList = ['MOD_PRODUCT', 'MOD_SERVICE'];
+        }
+
+        // Enabling accounting module for every new Retail/Both user
+        if (industryCategory === 'retail' || industryCategory === 'both') {
+          activeModuleCodeList.push('MOD_VENDOR');
         }
 
         // Enabling accounting module for every new Lipi user

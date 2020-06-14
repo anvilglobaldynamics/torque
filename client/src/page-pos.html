@@ -535,10 +535,10 @@
             <template is="dom-if" if="[[!isInOfflineMode]]">
               <div class="horizontal layout">
                 <div class$="product-subtab flex [[$getProductSubtabClass('categories', selectedProductSubtab)]]" on-tap="productSubtabCategoryTapped" style="margin-right: 1px;;">
-                  Categories
+                  [[verses.pos.categoriesTabTitle]]
                 </div>
                 <div class$="product-subtab flex [[$getProductSubtabClass('search', selectedProductSubtab)]]" on-tap="productSubtabSearchTapped">
-                  Search
+                  [[verses.pos.searchProductTabTitle]]
                 </div>
               </div>
             </template>
@@ -836,7 +836,7 @@
 
           <!-- customer selection - start -->
           <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
-            <elem-customer-selector page="{{self}}"></elem-customer-selector>
+            <elem-customer-selector page="{{self}}" showing-in-pos="true"></elem-customer-selector>
           </template>
           <!-- customer selector - end -->
 
@@ -844,7 +844,7 @@
           <template is="dom-if" if="[[$shouldShowCustomerSelectionOptions(customer, isAnonymousSale)]]">
             <iron-form id="editCustomerForm" on-keypress="genericFormSubmitionKeypress">
               <form>
-                <div class="card vertical layout">
+                <div class="card vertical layout" style="margin-top: 34px;">
 
                   <div class="horizontal layout center pos-card-heading">
                     <div class="flex pos-card-heading-label">[[verses.customer.createNewCustomer]]</div>
@@ -2178,6 +2178,7 @@
             this.isAnonymousSale = false;
             this._customerVariablesChanged();
             this.elem('elem-customer-selector').cancelTapped();
+            this._scrollToNavBar();
           });
         });
       }
@@ -2186,6 +2187,10 @@
         this.isAnonymousSale = true;
         this._customerVariablesChanged();
         this.elem('elem-customer-selector').cancelTapped();
+        this._scrollToNavBar();
+        if (!this.isMultiColumn) {
+          this.customerSelectionDoneTapped(null);
+        }
       }
 
       $shouldShowCustomerSelectionOptions(customer, isAnonymousSale) {

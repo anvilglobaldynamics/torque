@@ -56,6 +56,10 @@
             <paper-input class="editProductBlueprintForm--name" value="{{editProductBlueprintForm.name}}" required minlength="3" error-message=[[verses.productBlueprint.productBlueprintNameInputError]] label=[[verses.productBlueprint.productBlueprintNameInput]]></paper-input>
             <paper-input class="editProductBlueprintForm--unit" value="{{editProductBlueprintForm.unit}}" required minlength="1" error-message=[[verses.productBlueprint.productBlueprintUnitInputError]] label=[[verses.productBlueprint.productBlueprintUnitInput]]></paper-input>
 
+            <div class="note" style="padding-top: 30px;">
+              [[verses.productBlueprint.priceAndVatNote]]
+            </div>
+
             <paper-input class="editProductBlueprintForm--defaultPurchasePrice" step="0.01" value="{{editProductBlueprintForm.defaultPurchasePrice}}" type="number" required min="0" error-message=[[verses.productBlueprint.defaultPurchasePriceInputError]] label=[[verses.productBlueprint.defaultPurchasePriceInput]]>
               <div slot="suffix">[[app.organization.settings.monetaryUnit]]</div>
             </paper-input>
@@ -78,7 +82,7 @@
           <template is="dom-if" if="[[!shouldShowProductCategoryCreationPrompt]]">
             <div class="card vertical layout">
 
-              <div class="mb-4" style="font-weight: bold;">[[verses.productCategory.productCategoriesTitle]]:</div>
+              <div class="mb-4" style="font-weight: bold; font-size: 16px;">[[verses.productBlueprint.productCategoriesTitle]]</div>
 
               <div class="note">
                 [[verses.productBlueprint.productCategoryUsageMessage]]
@@ -128,7 +132,7 @@
           <template is="dom-if" if="[[$shouldShowAddProducts(editMode, inventoryContainerList)]]">
             <div class="card vertical layout list">
 
-              <div class="mb-4" style="font-weight: bold;">[[verses.productBlueprint.addProducts]]:</div>
+              <div class="mb-4" style="font-weight: bold; font-size: 16px;">[[verses.productBlueprint.addProducts]]</div>
               <div class="note" style="padding-bottom: 15px;">
                 [[verses.productBlueprint.addProductsNote]]
               </div>
@@ -209,7 +213,7 @@
               } else {
                 return {
                   name: "",
-                  unit: (this.getFromCache('editProductBlueprintForm--unit') || ''),
+                  unit: (this.getFromCache('editProductBlueprintForm--unit') || 'piece'),
                   identifierCode: '',
                   defaultPurchasePrice: '',
                   defaultVat: (this.getFromCache('editProductBlueprintForm--defaultVat') || ''),
@@ -256,6 +260,14 @@
           if (productCategoryList.length === 0) {
             this.shouldShowProductCategoryCreationPrompt = true;
           }
+
+          // select recently created category
+          let name = this.app.extractFromSession('last-created-product-category-name');
+          if (name) {
+            this.newCategoryInput = name;
+            this._addNewCategory();
+          }
+
           if (this.editMode) {
             this._processGetProductBlueprint(() => {
               this.isReady = true;
@@ -274,7 +286,6 @@
         super.onNavigateOut();
         this.app.popPageTitle();
         this.newCategoryInput = '';
-        this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
         this.removeAutoValidation('#editProductBlueprintForm paper-input');
       }
 
@@ -350,6 +361,7 @@
           if (response.hasError) return this.onApiError(response.error, 'editProductBlueprintForm');
           let message = this.app.verses.productBlueprint.productBlueprintUpdated;
           this.app.showToast(message, _ => {
+            this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
             this.backButtonOnTopBarPressed();
           });
         });
@@ -465,7 +477,7 @@
       }
 
       buttonCreateProductCategoryTapped(e = null) {
-        this.app.navigateTo(`/edit-product-category`);
+        this.app.navigateTo(`/edit-product-category/from:blueprint`);
       }
 
       backButtonOnTopBarPressed(e = null) {
@@ -473,8 +485,7 @@
       }
 
       createProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.storeInCache('editProductBlueprintForm--defaultVat', this.editProductBlueprintForm.defaultVat);
         this.storeInCache('editProductBlueprintForm--unit', this.editProductBlueprintForm.unit);
@@ -490,6 +501,7 @@
           this._processAddProductsToInventory({ productBlueprintId }, () => {
             let message = this.app.verses.productBlueprint.productBlueprintCreated;
             this.app.showToast(message, _ => {
+              this.resetProperties('editProductBlueprintForm', 'inventoryContainerList', 'vendorList');
               this.backButtonOnTopBarPressed();
             });
           });
@@ -497,8 +509,7 @@
       }
 
       updateProductBlueprintTapped(e = null) {
-        this.elemAll('#editProductBlueprintForm paper-input').forEach(el => el.autoValidate = true);
-        if (!this.elem('#editProductBlueprintForm').validate()) return;
+        if (!this.validateFormAndHighlightError('#editProductBlueprintForm')) return;
 
         this.app.showModalConfirmation(
           this.app.verses.general.modalConfirmationPleaseConfirm,
