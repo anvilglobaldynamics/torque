@@ -10,8 +10,8 @@
     "apiErrorHeader": "",
     "usageLimitTitle": "ব্যবহারের সীমা অতিক্রম",
     "usageLimitDetails": "ব্যবহারের সীমা অতিক্রম হয়ে গেছে। আমাদের সাথে যোগাযোগ করুন এই নম্বরে +880 1770 947908.",
-    "sessionExpriredTitle": "লগআউট",
-    "sessionExpriredDetails": "আপনার সেশনটির মেয়াদ শেষ হয়ে গেছে। আপনি স্বয়ংক্রিয়ভাবে লগ আউট হয়ে যাবেন। আবার লগ ইন করুন।",
+    "sessionExpiredTitle": "লগআউট",
+    "sessionExpiredDetails": "আপনার সেশনটির মেয়াদ শেষ হয়ে গেছে। আপনি স্বয়ংক্রিয়ভাবে লগ আউট হয়ে যাবেন। আবার লগ ইন করুন।",
     "subscriptionExpiredTitle": "সাবস্ক্রিপশনের মেয়াদ শেষ হয়েছে",
     "subscriptionExpiredDetails": "\"",
     "subscriptionExpiredDetails2": "\" সংস্থার সাবস্ক্রিপশনের মেয়াদ শেষ হয়েছে. আপনাকে পেমেন্টে নিয়ে যাওয়া হচ্ছে।"
