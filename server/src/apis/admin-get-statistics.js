@@ -121,6 +121,39 @@ exports.AdminGetStatisticsApi = class extends Api {
 
     console.log("STATISTICS END")
 
+    // For 1 time use:
+    // {
+    //   let startDate = new Date('2019-04-01');
+    //   for (let i = 0; i < (16); i++) {
+    //     let endDate = new Date(startDate.getTime());
+    //     endDate.setMonth(startDate.getMonth() + 1);
+    //     endDate.setDate(endDate.getDate() - 1);
+
+    //     let userCount = (await this.database.engine._db.collection('user').aggregate([
+    //       {
+    //         $match: {
+    //           createdDatetimeStamp: {
+    //             $gte: startDate.getTime(),
+    //             $lte: endDate.getTime()
+    //           }
+    //         }
+    //       },
+    //     ]).sort({ count: -1 }).toArray()).length;
+
+    //     // console.log(startDate.toDateString(), endDate.toDateString(), userCount);
+
+    //     let year = startDate.getFullYear();
+    //     let monthName = startDate.toLocaleString('default', { month: 'long' });
+
+    //     console.log(year, monthName + ',', userCount);
+
+    //     startDate.setMonth(startDate.getMonth() + 1);
+
+    //   }
+    // }
+
+    // console.log("QSTART END")
+
     // Daily Statistics
     let dailyStatistics = {
       table: 'Date\t\tDAU\tSales\tRegister\n'
@@ -130,7 +163,7 @@ exports.AdminGetStatisticsApi = class extends Api {
     // let endDate = new Date('2019-11-30');
 
     let endDate = new Date(new Date().toISOString().split('T')[0]); // Get today without time.
-    endDate.setDate(endDate.getDate()-1); // exclude today
+    endDate.setDate(endDate.getDate() - 1); // exclude today
 
     let startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 29); // show stats for 30 days
