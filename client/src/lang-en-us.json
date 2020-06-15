@@ -283,6 +283,8 @@
     "buttonCreateServiceBlueprint": "Create Service Blueprint",
     "shortcutToPos": "POS",
     "shortcutToAddProduct": "Add Products",
+    "shortcutToInventory": "View Inventory",
+    "shortcutToSalesReport": "Sales Report",
     "selfOnboardingTitle": "Use this checklist to setup Lipi",
     "selfOnboardingRegisterTitle": "Your Lipi account is registered",
     "selfOnboardingOrganizationTitle": "Your Organization's details are saved",

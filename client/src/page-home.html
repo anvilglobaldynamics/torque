@@ -37,7 +37,7 @@
       }
 
       .info-panel .title {
-        font-size: 24px;
+        font-size: 18px;
       }
 
       .metrics-box .value {
@@ -280,13 +280,13 @@
 
         <!-- Shortcut card - start -->
         <template is="dom-if" if="[[hasShortcutCardPrivileges(organization)]]">
-          <div class="card">
+          <div class="card" style="padding: 6px;">
             <div class="layout horizontal wrap">
 
               <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
                 <div class="touch-button" on-tap="buttonGoToPosTapped" style="border: 1px solid #d4e7f0; background-color: #e1f5fe;">
                   <div class="icon">
-                    <iron-icon src="../../images/icons/point-of-service.png"></iron-icon>
+                    <iron-icon src="../../images/icons/point-of-service-1.png"></iron-icon>
                   </div>
                   <div class="type title uppercase">[[verses.home.shortcutToPos]]</div>
                   <paper-ripple></paper-ripple>
@@ -314,7 +314,7 @@
                       <div class="icon">
                         <iron-icon src="../../images/icons/package-right.png"></iron-icon>
                       </div>
-                      <div class="type title uppercase">View Inventory</div>
+                      <div class="type title uppercase">[[verses.home.shortcutToInventory]]</div>
                       <paper-ripple></paper-ripple>
                     </div>
                   </template>
@@ -326,7 +326,7 @@
                   <div class="icon">
                     <iron-icon src="../../images/icons/sales-report.png"></iron-icon>
                   </div>
-                  <div class="type title uppercase">Sales Report</div>
+                  <div class="type title uppercase">[[verses.home.shortcutToSalesReport]]</div>
                   <paper-ripple></paper-ripple>
                 </div>
               </template>
