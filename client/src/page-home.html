@@ -298,13 +298,37 @@
                   <template is="dom-if" if="[[hasPrivilege('PRIV_ADD_PRODUCTS_TO_ALL_INVENTORIES', organization)]]">
                     <div class="touch-button" on-tap="buttonCreateProductAcquisitionTapped">
                       <div class="icon">
-                        <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                        <iron-icon src="../../images/icons/package-add.png"></iron-icon>
                       </div>
                       <div class="type title uppercase">[[verses.home.shortcutToAddProduct]]</div>
                       <paper-ripple></paper-ripple>
                     </div>
                   </template>
                 </template>
+              </template>
+
+              <template is="dom-if" if="[[hasModule('MOD_PRODUCT')]]">
+                <template is="dom-if" if="[[!hasModule('MOD_RESTAURANT')]]">
+                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_INVENTORIES', organization)]]">
+                    <div class="touch-button" on-tap="buttonViewInventoryTapped">
+                      <div class="icon">
+                        <iron-icon src="../../images/icons/package-right.png"></iron-icon>
+                      </div>
+                      <div class="type title uppercase">View Inventory</div>
+                      <paper-ripple></paper-ripple>
+                    </div>
+                  </template>
+                </template>
+              </template>
+
+              <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_SALES', organization)]]">
+                <div class="touch-button" on-tap="buttonViewSalesReportTapped">
+                  <div class="icon">
+                    <iron-icon src="../../images/icons/sales-report.png"></iron-icon>
+                  </div>
+                  <div class="type title uppercase">Sales Report</div>
+                  <paper-ripple></paper-ripple>
+                </div>
               </template>
 
             </div>
@@ -1000,6 +1024,13 @@
 
         });
       }
+
+      buttonViewSalesReportTapped(e = null) {
+        return this.app.navigateTo(`/report-sales/`);
+      }
+
+      // TODO: take to default inventory view if one location, show list if multiple
+      buttonViewInventoryTapped(e = null) {}
 
       buttonCreateServiceBlueprintTapped(e = null) {
         this.app.navigateTo(`/edit-service-blueprint`);
