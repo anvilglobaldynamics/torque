@@ -306,7 +306,7 @@ exports.validateGetDashboardSummaryApiSuccessResponse = (doc) => {
     usageFlags: Joi.object().keys({
       hasAnyOutlet: Joi.boolean().required(),
       outletIdList: Joi.array().required(),
-      defaultFirstInventoryId: Joi.boolean().required(),
+      defaultFirstInventoryId: Joi.number().allow(null).required(),
       hasAnyProductBlueprint: Joi.boolean().required(),
       hasAnyVendor: Joi.boolean().required(),
       hasAnyProductAcquisition: Joi.boolean().required(),

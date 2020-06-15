@@ -562,18 +562,11 @@
               'pass'
             }
           }
-          if (this.hasPrivilege('PRIV_VIEW_ORGANIZATION_STATISTICS')) {
-            this._processDashboardSummary(() => {
-              this.isReady = true;
-              this.initGraph();
-              this._scrollToTop();
-            });
-          } else {
-            this._decideWhetherToShowOnboardingCheckList();
+          this._processDashboardSummary(() => {
             this.isReady = true;
             this.initGraph();
             this._scrollToTop();
-          }
+          });
         });
       }
 

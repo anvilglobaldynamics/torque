@@ -55,6 +55,7 @@
           margin: 4px;
         }
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -86,7 +87,7 @@
         <br>
         <div class="button-row">
           <paper-button raised class="primary" on-tap="recheckVerificationStatusTapped">[[verses.payment.recheckVerificationStatus]]</paper-button>
-          <paper-button raised class="optional" on-tap="useDifferentOrganizationTapped">[[verses.payment.useDifferentOrganization]]</paper-button>
+          <paper-button raised class="secondary" on-tap="useDifferentOrganizationTapped">[[verses.payment.useDifferentOrganization]]</paper-button>
         </div>
       </div>
 

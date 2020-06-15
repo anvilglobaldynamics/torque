@@ -22,7 +22,8 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     return [{
       organizationBy: "organizationId",
       privilegeList: [
-        "PRIV_VIEW_ORGANIZATION_STATISTICS"
+        // NOTE: This is commented out to correctly show checklist on page-home
+        // "PRIV_VIEW_ORGANIZATION_STATISTICS"
       ]
     }];
   }
