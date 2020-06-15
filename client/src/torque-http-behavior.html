@@ -122,10 +122,7 @@
             if (path === 'user-logout') {
               return _cbfn(null, { hasError: false });
             }
-            let message = verses.root.sessionExpriredDetails;
-            this.showModalDialog(verses.root.sessionExpriredTitle, message, _ => {
-              this.logoutTapped();
-            });
+            this.logoutTapped();
             return;
           }
           if (response.hasError && (response.error.code === "SUBSCRIPTION_EXPIRED")) {
@@ -673,17 +670,17 @@
         this.callCombinedJsonApi('get-transaction-list', data, cbfn);
       }
 
-      callReportTrialBalanceApi(data, cbfn){
+      callReportTrialBalanceApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('report-trial-balance', data, cbfn);
       }
 
-      callReportIncomeStatementApi(data, cbfn){
+      callReportIncomeStatementApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('report-income-statement', data, cbfn);
       }
 
-      callReportBalanceSheetApi(data, cbfn){
+      callReportBalanceSheetApi(data, cbfn) {
         if (!this._applyApiKey(data)) return;
         this.callCombinedJsonApi('report-balance-sheet', data, cbfn);
       }
