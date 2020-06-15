@@ -1028,8 +1028,18 @@
         return this.app.navigateTo(`/report-sales/`);
       }
 
-      // TODO: take to default inventory view if one location, show list if multiple
-      buttonViewInventoryTapped(e = null) {}
+      buttonViewInventoryTapped(e = null) {
+        this._getOutletAndWarehouseWitDefaultInventoryList(({ outletList, warehouseList }) => {
+
+          this.app.displayInventoryContainerDialog({ outletList, warehouseList }, (selected) => {
+            if (!selected) return;
+            let { inventoryContainer, type } = selected;
+
+            this.app.navigateTo(`/view-inventory/inventory:${inventoryContainer.defaultInventoryId}`);
+          });
+
+        });
+      }
 
       buttonCreateServiceBlueprintTapped(e = null) {
         this.app.navigateTo(`/edit-service-blueprint`);
