@@ -2406,7 +2406,7 @@
         let totalServiceAmount = 0;
 
         this.serviceList.forEach(service => {
-          let { salePrice } = product;
+          let { salePrice } = service;
           totalServiceAmount += parseFloat(salePrice);
         });
 
@@ -2423,7 +2423,7 @@
         });
 
         this.serviceList.forEach(service => {
-          let { salePrice, vatValue } = product;
+          let { salePrice, vatValue } = service;
           vatAmount += parseFloat(salePrice) * (vatValue / 100);
         });
 

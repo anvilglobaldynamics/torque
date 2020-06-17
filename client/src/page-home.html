@@ -738,10 +738,6 @@
       }
 
       addProductToInventoryTapped(e = null) {
-        // if (this.usageFlags.defaultFirstInventoryId !== null) {
-        //   let id = this.usageFlags.defaultFirstInventoryId;
-        //   this.app.navigateTo(`/add-products/inventory:${id}`);
-        // }
         this.buttonCreateProductAcquisitionTapped();
       }
 
@@ -750,10 +746,6 @@
       }
 
       addSalesTapped(e = null) {
-        // if (this.usageFlags.outletIdList.length > 0) {
-        //   let id = this.usageFlags.outletIdList[0];
-        //   this.app.navigateTo(`/pos/outlet:${id}`);
-        // }
         this.buttonGoToPosTapped();
       }
 
@@ -973,6 +965,16 @@
 
       // region: prompt events and logic =================================
 
+      _getOutletList(cbfn) {
+        let data = { organizationId: this.app.organization.id };
+        this.app.callGetOutletListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          let outletList = response.outletList;
+          return cbfn({ outletList });
+        });
+      }
+
       _getOutletAndWarehouseWitDefaultInventoryList(cbfn) {
         let data = { organizationId: this.app.organization.id };
         this.app.callGetInventoryListApi(data, (err, response) => {
@@ -1022,7 +1024,8 @@
       }
 
       buttonGoToPosTapped(e = null) {
-        this._getOutletAndWarehouseWitDefaultInventoryList(({ outletList }) => {
+
+        this._getOutletList(({ outletList }) => {
           let warehouseList = [];
 
           this.app.displayInventoryContainerDialog({ outletList, warehouseList }, (selected) => {
