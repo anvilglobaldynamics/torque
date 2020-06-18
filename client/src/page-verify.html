@@ -22,7 +22,15 @@
 
 <dom-module id="page-verify">
   <template>
-    <style include="shared-styles"></style>
+    <style include="shared-styles">
+      .call-to-verify {
+        text-align: center;
+        margin-top: 12px;
+        margin-bottom: 40px;
+        font-size: 20px;
+      }
+
+    </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
@@ -31,9 +39,20 @@
       <iron-form id="verify-form">
         <form>
           <div class="card vertical layout">
-            
-            <template is="dom-if" if="[[$equals(what, 'phone')]]">
+
+            <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
+
+            <div class="help-text" style="text-align: center; margin-top: 30px; font-size: 16px">[[verses.verify.callUsReason]]</div>
+
+            <div class="call-to-verify">
+              [[verses.verify.callUsToVerifyPart1]]
+              <a class="link primary" href="tel:+8801770947908" style="text-decoration: none;">[[verses.verify.callUsToVerifyPart2]]</a>
+              [[verses.verify.callUsToVerifyPart3]]
+            </div>
+
+            <!-- <template is="dom-if" if="[[$equals(what, 'phone')]]">
               <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
+              <div class="help-text">[[verses.verify.callUsToVerify]]</div>
               <div class="help-text">[[verses.verify.verificationToken]]</div>
               <paper-textarea class="verifyForm--verificationToken" value="{{verifyForm.verificationToken}}" required minlength="6" error-message="[[verses.verify.verificationTokenInputError]]" label="[[verses.verify.verificationTokenInput]]" rows="2"></paper-textarea>
             </template>
@@ -42,8 +61,8 @@
               <paper-button raised class="primary" style="margin: 4px;" on-tap="resendSmsTapped">[[verses.verify.resendSms]]</paper-button>
               <div class="flex"></div>
               <paper-button raised class="primary" style="margin: 4px;" on-tap="verifyTapped">[[verses.verify.verify]]</paper-button>
-            </div>
-            
+            </div> -->
+
             <div class="horizontal layout button-row extended center-center">
               <div class="link primary" on-tap="registerTapped">[[verses.verify.dontHaveAccount]]</div>
             </div>

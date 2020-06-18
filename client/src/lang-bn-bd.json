@@ -969,11 +969,15 @@
     "settingsSaved": "সেটিংস আপডেট করা হয়েছে"
   },
   "verify": {
+    "callUsToVerifyPart1": "আমাদের এই",
+    "callUsToVerifyPart2": " 01770947908 ",
+    "callUsToVerifyPart3": "নম্বর এ ফোন দিয়ে আপনার একাউন্ট কনফার্ম করুন।",
+    "verifyPhoneNumberHeader": "একাউন্ট কনফার্ম করুন",
+    "callUsReason": "আপনি ৭ দিন আগে আপনার একাউন্টটি তৈরি করেছেন।",
     "verificationModalTitle": "যাচাইকরণ এসএমএস পাঠানো হয়েছে",
     "verificationModalBody": "আমরা আপনাকে একটি যাচাইকরণ এসএমএস পাঠিয়েছি।",
     "phoneNowVerified": "আপনার ফোন যাচাই করা হয়েছে।",
     "phoneCouldNotBeVerified": "আপনার ফোন যাচাই করা যায়নি। নিশ্চিতকরণ যাচাই কোডটি সঠিক কিনা দেখুন।",
-    "verifyPhoneNumberHeader": "ফোন নম্বর যাচাইকরণ",
     "verificationToken": "আপনার ফোনে পাঠানো যাচাইকরণ টোকেনটি লিখুন।",
     "verificationTokenInput": "যাচাইকরণ টোকেনটি।",
     "verificationTokenInputError": "সঠিক যাচাইকরণ টোকেনটি।",

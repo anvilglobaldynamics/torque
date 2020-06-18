@@ -968,11 +968,15 @@
     "settingsSaved": "Settings has been updated."
   },
   "verify": {
+    "callUsToVerifyPart1": "Call us at",
+    "callUsToVerifyPart2": " +880 1770 947908 ",
+    "callUsToVerifyPart3": "to confirm your account. ",
+    "verifyPhoneNumberHeader": "Confirm Account",
+    "callUsReason": "It has been 7 days since you created your account.",
     "verificationModalTitle": "Verification SMS Sent",
     "verificationModalBody": "Check your phone. We have sent you a verification SMS.",
     "phoneNowVerified": "Your phone is now verified.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct.",
-    "verifyPhoneNumberHeader": "VERIFY PHONE NUMBER",
     "verificationToken": "Enter the verification token we sent to your phone.",
     "verificationTokenInput": "Verification token.",
     "verificationTokenInputError": "Enter valid verification token.",
