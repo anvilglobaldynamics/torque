@@ -70,22 +70,22 @@
 
           <div class="list">
             <template is="dom-repeat" items="[[vendorList]]" as="vendor">
-              <div class="horizontal layout wrap center">
+              <div class="horizontal layout wrap center" style="margin-bottom: 8px; width: 100%;">
 
-                <div class="vertical layout flex" style="margin-bottom: 8px; min-width: 150px;">
+                <div class="vertical layout flex" style="margin-bottom: 8px; min-width: 200px;">
                   <div class="vendor-name-container">[[vendor.name]]</div>
                   <div class="vendor-detail-container">[[verses.general.contactPerson]]: [[vendor.contactPersonName]]</div>
                   <div class="vendor-detail-container">[[verses.general.phone]]: [[vendor.phone]]</div>
                   <div class="vendor-detail-container-small">[[vendor.physicalAddress]]</div>
                 </div>
-
-                <div class="horizontal layout wrap">
+                
+                <div class="horizontal layout center-end wrap" style="flex-grow: 1;">
+                  <div class="flex"></div>
                   <!-- <paper-button raised class="secondary" on-tap="viewTapped">
                     <iron-icon class="button-icon" icon="icons:visibility"></iron-icon>
                       [[verses.general.view]]
                     </paper-button> -->
                   <!-- <paper-icon-button class="button-icon" icon="icons:create" on-tap="editTapped"></paper-icon-button> -->
-                  <div class="flex"></div>
                   <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
                     <paper-button raised class="secondary" on-tap="viewAccountsPayableTapped">
                       [[verses.accounting.payables]]
