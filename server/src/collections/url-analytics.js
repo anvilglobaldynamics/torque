@@ -10,6 +10,7 @@ exports.UrlAnalyticsCollection = class extends Collection {
     return Joi.object().keys({
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
+      shouldShowInAdminStatistics: Joi.boolean().required(),
       which: Joi.string().valid('only'), // required for the query
       urlHits: Joi.object().required(), // not yet validated in depth as keys are uncertain
     });
