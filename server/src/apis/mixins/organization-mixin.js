@@ -30,7 +30,7 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
 
     // TODO: Collect during signup
     let monetaryUnit = 'BDT';
-    let vatRule = 'vat-before-discount';
+    let vatRule = 'vat-after-discount';
     let decimalFormatPreset = 'XX,XX,XXX.XX';
 
     let logoImageId = null;
