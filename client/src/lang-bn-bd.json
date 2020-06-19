@@ -868,7 +868,8 @@
     "whyCustomerInfo": "ডিজিটাল রিসিট পাঠানোর জন্য এবং বাকির হিসাব রাখার জন্য গ্রাহক যোগ করুন।",
     "noProductCategoryFound": "এই পণ্য তালিকার কোনো পণ্য ধরণ অনুযায়ী গোছানো নেই। পণ্য পরিকল্পনায় ধরণ যোগ করুন।",
     "categoriesTabTitle": "পণ্যের ধরণ",
-    "searchProductTabTitle": "পণ্যের খোঁজ"
+    "searchProductTabTitle": "পণ্যের খোঁজ",
+    "createYourFirstDiscount": "আপনার প্রথম ডিসকাউন্ট তৈরি করুন"
   },
   "salesReport": {
     "salesReportTitle": "বিক্রয় বিবরণ",
