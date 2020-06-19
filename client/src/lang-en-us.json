@@ -134,7 +134,8 @@
     "website": "Website",
     "linkedIn": "LinkedIn",
     "facebook": "Facebook",
-    "back": "Back"
+    "back": "Back",
+    "details": "Details"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -542,7 +543,7 @@
     "aboutUsDescription": "Lipi (লিপিবদ্ধ, স্বরলিপি থেকে লিপি) is a software that brings your business's Products, People and Books in one place. Lipi is localized and easy, yet full-featured.",
     "projectBy": "This project is created and maintained by",
     "logoAndFaviconBy": "logo and favicon icon made by",
-    "sendYourQuestionsTo": "Send your questions, complaints and praises to us;"
+    "sendYourQuestionsTo": "💡 Send your questions, complaints and praises to us"
   },
   "adjustCustomerBalance": {
     "adjustCustomerBalanceTitle": "Adjust Customer Balance",
@@ -865,7 +866,8 @@
     "whyCustomerInfo": "To send Digital Receipts and make Credit Sale, customer information is needed.",
     "noProductCategoryFound": "None of the Products in this inventory are categorised. Add Product Categories to Product Blueprints.",
     "categoriesTabTitle": "Categories",
-    "searchProductTabTitle": "Search"
+    "searchProductTabTitle": "Search",
+    "createYourFirstDiscount": "Create you first Discount"
   },
   "salesReport": {
     "salesReportTitle": "Sales Report",
@@ -968,11 +970,15 @@
     "settingsSaved": "Settings has been updated."
   },
   "verify": {
+    "callUsToVerifyPart1": "Call us at",
+    "callUsToVerifyPart2": " +880 1770 947908 ",
+    "callUsToVerifyPart3": "to confirm your account. ",
+    "verifyPhoneNumberHeader": "Confirm Account",
+    "callUsReason": "It has been 7 days since you created your account.",
     "verificationModalTitle": "Verification SMS Sent",
     "verificationModalBody": "Check your phone. We have sent you a verification SMS.",
     "phoneNowVerified": "Your phone is now verified.",
     "phoneCouldNotBeVerified": "Your phone could not be verified. Make sure the verification code is correct.",
-    "verifyPhoneNumberHeader": "VERIFY PHONE NUMBER",
     "verificationToken": "Enter the verification token we sent to your phone.",
     "verificationTokenInput": "Verification token.",
     "verificationTokenInputError": "Enter valid verification token.",
@@ -1002,7 +1008,8 @@
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer",
     "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically.",
     "addProductsCardTitle": "Add Products",
-    "transferProductsCardTitle": "Transfer Products"
+    "transferProductsCardTitle": "Transfer Products",
+    "shortcutToInventory": "Inventory"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",

@@ -952,31 +952,40 @@
             <div class="card vertical layout">
               <div class="list">
 
+                <!-- discount preset - start -->
+                <template is="dom-if" if="[[discountPresetList.length]]">
+                  <div class="individual-calculation-field-container">
+
+                    <div class="vertical layout m-bottom-18">
+
+                      <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
+                        <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
+                          <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
+                          <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
+                            <paper-item name="[[discountPreset.id]]">
+                              [[getDiscountPresetLabel(discountPreset)]]
+                            </paper-item>
+                          </template>
+                        </paper-listbox>
+                      </paper-dropdown-menu>
+
+                    </div>
+
+                    [[verses.pos.discountedAmount]]:
+                    <b>{{$applyThousandDecimalFormatting(payment.discountedAmount)}} [[app.organization.settings.monetaryUnit]]</b>
+
+                  </div>
+                </template>
+                <template is="dom-if" if="[[!discountPresetList.length]]">
+                  <div class="individual-calculation-field-container" style="text-align: center;">
+                    <div class="link primary" on-tap="buttonGoToDiscountTapped">[[verses.pos.createYourFirstDiscount]]</div>
+                  </div>
+                </template>
+                <!-- discount preset - end -->
+
                 <div class="individual-calculation-field-container">
                   [[verses.pos.vatAmount]]:
                   <b>{{$applyThousandDecimalFormatting(payment.vatAmount)}} [[app.organization.settings.monetaryUnit]]</b>
-                </div>
-
-                <div class="individual-calculation-field-container">
-
-                  <div class="vertical layout m-bottom-18">
-
-                    <paper-dropdown-menu class="full-width-paper-dropdown" label="[[verses.pos.discount]]" class="mr-4">
-                      <paper-listbox slot="dropdown-content" selected="{{selectedDiscountPreset}}" attr-for-selected="name">
-                        <paper-item name="--no-discount">[[verses.pos.noDiscountApplicable]]</paper-item>
-                        <template is="dom-repeat" items="[[discountPresetList]]" as="discountPreset">
-                          <paper-item name="[[discountPreset.id]]">
-                            [[getDiscountPresetLabel(discountPreset)]]
-                          </paper-item>
-                        </template>
-                      </paper-listbox>
-                    </paper-dropdown-menu>
-
-                  </div>
-
-                  [[verses.pos.discountedAmount]]:
-                  <b>{{$applyThousandDecimalFormatting(payment.discountedAmount)}} [[app.organization.settings.monetaryUnit]]</b>
-
                 </div>
 
                 <div class="individual-calculation-field-container horizontal layout center">
@@ -2236,6 +2245,10 @@
         }
       }
 
+      buttonGoToDiscountTapped() {
+        this.app.navigateTo(`/edit-discount-preset/from:pos`);
+      }
+
       selectedDiscountPresetChanged() {
         if (this.selectedDiscountPreset === '--no-discount') {
           this.payment.discountPresetId = null;
@@ -2406,7 +2419,7 @@
         let totalServiceAmount = 0;
 
         this.serviceList.forEach(service => {
-          let { salePrice } = product;
+          let { salePrice } = service;
           totalServiceAmount += parseFloat(salePrice);
         });
 
@@ -2423,7 +2436,7 @@
         });
 
         this.serviceList.forEach(service => {
-          let { salePrice, vatValue } = product;
+          let { salePrice, vatValue } = service;
           vatAmount += parseFloat(salePrice) * (vatValue / 100);
         });
 

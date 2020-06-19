@@ -30,6 +30,14 @@
 
       .contact-option {
         margin-bottom: 4px;
+        font-size: 14px; 
+        text-align: left; 
+      }
+
+      @media (max-width: 480px) {
+        .contact-option {
+          text-align: right;
+        }
       }
 
     </style>
@@ -46,14 +54,15 @@
 
       <template is="dom-if" if="[[$equals(paperTabSelectedViewIndex, 0)]]">
         <div class="card">
-          <div>
-            [[verses.about.sendYourQuestionsTo]]<br><br>
+          
+            <div style="font-size: 14px; font-weight: bold;">[[verses.about.sendYourQuestionsTo]]</div>
+            <br><br>
             <div class="contact-option">[[verses.general.email]] <a href="mailto:[[contactEmail]]">[[contactEmail]]</a></div>
             <div class="contact-option">[[verses.general.phone]] <a href="tel:+8801770947908">+8801770947908</a> </div>
             <div class="contact-option">[[verses.general.website]] <a href="https://www.anvil.live/lipi">anvil.live/lipi</a></div>
             <div class="contact-option"> <a href="https://www.linkedin.com/company/lipiforbusiness/">[[verses.general.linkedIn]]</a></div>
             <div class="contact-option"> <a href="https://www.facebook.com/LipiForBusiness">[[verses.general.facebook]]</a></div>
-          </div>
+          
         </div>
       </template>
 

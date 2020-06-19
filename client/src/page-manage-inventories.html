@@ -40,6 +40,11 @@
         margin-top: 40px;
       }
 
+      .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -76,17 +81,21 @@
 
               <div class="list">
                 <template is="dom-repeat" items="[[outletList]]" as="outlet">
-                  <div class="horizontal layout item center">
-                    <div class="vertical layout flex">
+                  <div class="horizontal layout wrap center item">
+                    <div class="vertical layout flex" style="margin-bottom: 8px;">
                       <div class="place-name-container">[[outlet.name]]</div>
                       <div class="place-phone-container">[[outlet.phone]]</div>
                       <div class="place-detail-container">[[outlet.physicalAddress]]</div>
                     </div>
-                    <div class="horizontal layout wrap">
+                    <div class="horizontal layout center-end wrap" style="flex-grow: 1;">
+                      <div class="flex"></div>
                       <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
                         <paper-button raised class="btn pos" on-tap="outletPosTapped">[[verses.general.pos]]</paper-button>
                       </template>
-                      <paper-button raised class="btn secondary" on-tap="viewOutletTapped">[[verses.general.view]]</paper-button>
+                      <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_INVENTORIES', organization)]]">
+                        <paper-button raised class="btn secondary" on-tap="outletViewDefaultInventoryTapped">[[verses.inventory.shortcutToInventory]]</paper-button>
+                      </template>
+                      <paper-button raised class="btn secondary" on-tap="viewOutletTapped">[[verses.general.details]]</paper-button>
                     </div>
                   </div>
                 </template>
@@ -138,14 +147,18 @@
               <div class="card vertical layout">
                 <div class="list">
                   <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
-                    <div class="horizontal layout item center">
-                      <div class="vertical layout flex">
+                    <div class="horizontal layout wrap center item">
+                      <div class="vertical layout flex" style="margin-bottom: 8px;">
                         <div class="place-name-container">[[warehouse.name]]</div>
                         <div class="place-phone-container">[[warehouse.phone]]</div>
                         <div class="place-detail-container">[[warehouse.physicalAddress]]</div>
                       </div>
-                      <div class="horizontal layout wrap">
-                        <paper-button raised class="btn secondary" on-tap="viewWarehouseTapped">[[verses.general.view]]</paper-button>
+                      <div class="horizontal layout center-end wrap" style="flex-grow: 1;">
+                        <div class="flex"></div>
+                        <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_INVENTORIES', organization)]]">
+                          <paper-button raised class="btn secondary" on-tap="warehouseViewDefaultInventoryTapped">[[verses.inventory.shortcutToInventory]]</paper-button>
+                        </template>
+                        <paper-button raised class="btn secondary" on-tap="viewWarehouseTapped">[[verses.general.details]]</paper-button>
                       </div>
                     </div>
                   </template>
@@ -273,6 +286,38 @@
       outletPosTapped(e) {
         let { outlet } = e.model;
         return this.app.navigateTo(`/pos/outlet:${outlet.id}`);
+      }
+
+      outletViewDefaultInventoryTapped(e) {
+        let { outlet } = e.model;
+        this._fetchOutlet({ outletId: outlet.id }, ({ defaultInventory }) => {
+          return this.app.navigateTo(`/view-inventory/inventory:${defaultInventory.id}`);
+        })
+      }
+
+      _fetchOutlet({ outletId }, cbfn) {
+        let data = { outletId };
+        this.app.callGetOutletApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      warehouseViewDefaultInventoryTapped(e) {
+        let { warehouse } = e.model;
+        this._fetchWarehouse({ warehouseId: warehouse.id }, ({ defaultInventory }) => {
+          return this.app.navigateTo(`/view-inventory/inventory:${defaultInventory.id}`);
+        })
+      }
+
+      _fetchWarehouse({ warehouseId }, cbfn) {
+        let data = { warehouseId };
+        this.app.callGetWarehouseApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
       }
 
       // region: misc =================================

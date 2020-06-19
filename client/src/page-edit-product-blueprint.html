@@ -148,13 +148,15 @@
               </template>
 
               <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
-                <paper-dropdown-menu style="width: 100%;" label=[[verses.general.vendor]] class="mr-4">
-                  <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
-                    <template is="dom-repeat" items="[[vendorList]]" as="vendor">
-                      <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
-                    </template>
-                  </paper-listbox>
-                </paper-dropdown-menu>
+                <template is="dom-if" if="[[totalAccountsPayable]]">
+                  <paper-dropdown-menu style="width: 100%;" label=[[verses.general.vendor]] class="mr-4">
+                    <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
+                      <template is="dom-repeat" items="[[vendorList]]" as="vendor">
+                        <paper-item data-key="[[vendor.id]]">[[vendor.name]]</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                </template>
               </template>
 
               <template is="dom-if" if="[[hasModule('MOD_ACCOUNTING')]]">
@@ -270,11 +272,13 @@
 
           if (this.editMode) {
             this._processGetProductBlueprint(() => {
+              this.calculateTotalProductCountAndAccountsPayable();
               this.isReady = true;
             });
           } else {
             this._processInventoryContainerList(() => {
               this._processVendorList(_ => {
+                this.calculateTotalProductCountAndAccountsPayable();
                 this.isReady = true;
               });
             });
@@ -461,19 +465,22 @@
         });
       }
 
-      calculateAccountsPayable() {
+      calculateTotalProductCountAndAccountsPayable() {
         let sum = 0;
+        let count = 0;
         this.inventoryContainerList.forEach(inventoryContainer => {
           sum += parseFloat(inventoryContainer.count) * parseFloat(this.editProductBlueprintForm.defaultPurchasePrice);
+          count += parseFloat(inventoryContainer.count);
         });
         this.totalAccountsPayable = sum || 0;
+        this.totalProductCount = count || 0;
       }
 
       // region: ui =================================
 
       genericNumericInputChanged(e) {
         this.enforceMinMaxOnPaperInput(e);
-        this.calculateAccountsPayable();
+        this.calculateTotalProductCountAndAccountsPayable();
       }
 
       buttonCreateProductCategoryTapped(e = null) {
