@@ -134,7 +134,8 @@
     "website": "Website",
     "linkedIn": "LinkedIn",
     "facebook": "Facebook",
-    "back": "Back"
+    "back": "Back",
+    "details": "Details"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -1006,7 +1007,8 @@
     "stopSelectingProductsToTransfer": "Stop Selecting Products to Transfer",
     "moveProductConfirmMessage": "Make sure the destination inventory and selected product count are correct. This action can not be reversed automatically.",
     "addProductsCardTitle": "Add Products",
-    "transferProductsCardTitle": "Transfer Products"
+    "transferProductsCardTitle": "Transfer Products",
+    "shortcutToInventory": "Inventory"
   },
   "payment": {
     "packageHasExpired": "Your package has expired.",

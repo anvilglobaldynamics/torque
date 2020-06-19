@@ -134,7 +134,8 @@
     "website": "ওয়েবসাইট",
     "linkedIn": "লিংকডইন",
     "facebook": "ফেসবুক",
-    "back": "ফেরত যান"
+    "back": "ফেরত যান",
+    "details": "বিস্তারিত"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -1007,7 +1008,8 @@
     "stopSelectingProductsToTransfer": "সরানোর জন্য পণ্য বাছাই বন্ধ করুন",
     "moveProductConfirmMessage": "নিশ্চিত হন বাছাইকৃত পণ্য তালিকা এবং পণ্যের গণনা সঠিক। স্থানান্তরিত পণ্য স্বয়ংক্রিয় ভাবে ফেরৎ আনা যায় না।",
     "addProductsCardTitle": "পণ্য যুক্ত করুন",
-    "transferProductsCardTitle": "পণ্য সরান"
+    "transferProductsCardTitle": "পণ্য সরান",
+    "shortcutToInventory": "স্টক দেখুন"
   },
   "payment": {
     "packageHasExpired": "আপনার প্যাকেজের মেয়াদ শেষ হয়ে গেছে।",
