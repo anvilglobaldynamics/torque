@@ -266,11 +266,11 @@
             <div class="vertical layout self-onboarding-task-body">
               <template is="dom-if" if="[[selfOnboardingTasks.isReadyToSell]]">
                 <div class="self-onboarding-task-title link primary" on-click="addSalesTapped">[[verses.home.selfOnboardingSaleTitle]]</div>
+                <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingSaleTitle]]</div>
               </template>
               <template is="dom-if" if="[[!selfOnboardingTasks.isReadyToSell]]">
                 <div class="self-onboarding-task-title">[[verses.home.selfOnboardingSaleTitle]]</div>
               </template>
-              <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingSaleTitle]]</div>
             </div>
           </div>
           <!-- task : addProductsToInventory - end -->
