@@ -62,6 +62,7 @@
           color: white;
         }
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -94,6 +95,12 @@
                 <div class="">Activation Date: [[$mkDate(activatedPackage.createdDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
                 <div class="">Expiration Date: [[$mkDate(activatedPackage.expirationDatetimeStamp, 'dd MMM yyyy hh:mm TT')]]</div>
               </div>
+            </div>
+          </template>
+
+          <template is="dom-if" if="[[!activatedPackage]]">
+            <div class="card vertical layout">
+              No package activation.
             </div>
           </template>
 
@@ -359,19 +366,23 @@
           this._fetchOrganizationPackageActivationHistory(({ packageActivationList }) => {
             this.packageActivationList = packageActivationList;
 
-            let { code, name, limits, duration } = this.packageActivationList[0].packageDetail;
-            let { createdDatetimeStamp, paymentReference } = this.packageActivationList[0];
-            let date = new Date(createdDatetimeStamp);
-            date.setMonth(date.getMonth() + duration.months);
-            date.setDate(date.getDate() + duration.days);
-            let expirationDatetimeStamp = date.getTime();
+            if (packageActivationList.length > 0) {
+              let { code, name, limits, duration } = this.packageActivationList[0].packageDetail;
+              let { createdDatetimeStamp, paymentReference } = this.packageActivationList[0];
+              let date = new Date(createdDatetimeStamp);
+              date.setMonth(date.getMonth() + duration.months);
+              date.setDate(date.getDate() + duration.days);
+              let expirationDatetimeStamp = date.getTime();
 
-            this.activatedPackage = {
-              code, name, limits, duration,
-              createdDatetimeStamp,
-              expirationDatetimeStamp,
-              paymentReference
-            };
+              this.activatedPackage = {
+                code, name, limits, duration,
+                createdDatetimeStamp,
+                expirationDatetimeStamp,
+                paymentReference
+              };
+            } else {
+              this.activatedPackage = null;
+            }
 
             cbfn();
           });
