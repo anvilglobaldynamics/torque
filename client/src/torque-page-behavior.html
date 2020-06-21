@@ -202,7 +202,7 @@
       // ============================================== location - start
 
       _showLocationDialog(cbfn) {
-        return cbfn(); // uncomment to skip completely
+        // return cbfn(); // uncomment to skip completely
         try {
           // attempting the new detection api
           navigator.permissions.query({ name: 'geolocation' }).then((result) => {

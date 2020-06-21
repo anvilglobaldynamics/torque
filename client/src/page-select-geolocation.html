@@ -42,6 +42,7 @@
         margin-left: 6px;
         margin-right: 6px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -59,7 +60,7 @@
           </paper-button>
 
           <paper-button style="width: 50%;" raised class="primary" on-tap="saveButtonPressed">
-            [[verses.selectGeolocation.saveLocation]]  
+            [[verses.selectGeolocation.saveLocation]]
           </paper-button>
         </div>
       </div>
@@ -165,6 +166,8 @@
       _setLocationUsingDevice() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
+            // this._getLocationFromBrowser((position) => {
+
             var pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
@@ -177,7 +180,6 @@
         } else {
           this.app.showModalDialog(this.app.verses.selectGeolocation.noGpsSupport, this.app.verses.selectGeolocation.noGeolocationSupport);
         }
-
       }
 
       _markerLocationUpdated() {
