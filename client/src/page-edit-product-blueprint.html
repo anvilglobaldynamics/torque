@@ -148,7 +148,7 @@
               </template>
 
               <template is="dom-if" if="[[hasModule('MOD_VENDOR')]]">
-                <template is="dom-if" if="[[totalAccountsPayable]]">
+                <template is="dom-if" if="[[totalProductCount]]">
                   <paper-dropdown-menu style="width: 100%;" label=[[verses.general.vendor]] class="mr-4">
                     <paper-listbox slot="dropdown-content" selected="{{vendorSelectedIndex}}">
                       <template is="dom-repeat" items="[[vendorList]]" as="vendor">
