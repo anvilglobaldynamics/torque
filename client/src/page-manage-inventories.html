@@ -82,7 +82,7 @@
               <div class="list">
                 <template is="dom-repeat" items="[[outletList]]" as="outlet">
                   <div class="horizontal layout wrap center item">
-                    <div class="vertical layout flex" style="margin-bottom: 8px;">
+                    <div class="vertical layout flex" style="margin-bottom: 8px; min-width: 200px;">
                       <div class="place-name-container">[[outlet.name]]</div>
                       <div class="place-phone-container">[[outlet.phone]]</div>
                       <div class="place-detail-container">[[outlet.physicalAddress]]</div>
@@ -150,7 +150,7 @@
                 <div class="list">
                   <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
                     <div class="horizontal layout wrap center item">
-                      <div class="vertical layout flex" style="margin-bottom: 8px;">
+                      <div class="vertical layout flex" style="margin-bottom: 8px; min-width: 200px;">
                         <div class="place-name-container">[[warehouse.name]]</div>
                         <div class="place-phone-container">[[warehouse.phone]]</div>
                         <div class="place-detail-container">[[warehouse.physicalAddress]]</div>
