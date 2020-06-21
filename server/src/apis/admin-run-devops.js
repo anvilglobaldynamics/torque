@@ -4,8 +4,9 @@ const Joi = require('joi');
 const { throwOnFalsy, throwOnTruthy, CodedError } = require('./../utils/coded-error');
 const { OrganizationMixin } = require('./mixins/organization-mixin');
 const { AccountingMixin } = require('./mixins/accounting-mixin');
+const { UserMixin } = require('./mixins/user-mixin');
 
-exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, AccountingMixin) {
+exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, AccountingMixin, UserMixin) {
 
   get autoValidates() { return true; }
 
@@ -25,29 +26,31 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
     let affectedList = [];
 
-    let userList = await this.database.user._find({ 'accessibleApplicationList': ['torque-lite'] });
-    // console.log( userList.length)
+    let userList = await this.database.user._find({ 'originApp': 'torque-lite' });
+    // let userList = await this.database.user._find({ 'accessibleApplicationList': ['torque-lite'] });
+    console.log('USERLIST', userList.length)
 
     // === set user.accessibleApplicationList = ['torque']
-    // await this.database.user._updateMany({
-    //   'accessibleApplicationList': ['torque-lite']
-    // }, {
-    //   $set: {
-    //     'accessibleApplicationList': ['torque']
-    //   }
-    // });
+    await this.database.user._updateMany({
+      'accessibleApplicationList': ['torque-lite']
+    }, {
+      $set: {
+        'accessibleApplicationList': ['torque']
+      }
+    });
 
-    /// === create phone verification request
-    // for (let user of userList) {
-    //   let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
-    //   if (!phoneVerificationRequest) {
-    //     let verificationLink = await this._createPhoneVerificationRequest({ phone: user.phone, userId: user.id });
-    //     this._sendPhoneVerificationSms({ phone: user.phone, verificationLink });
-    //   }
-    // }
+    // === create phone verification request
+    for (let user of userList) {
+      console.log("userId", user.id)
+      let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
+      if (!phoneVerificationRequest) {
+        let verificationLink = await this._createPhoneVerificationRequest({ phone: user.phone, userId: user.id });
+        this._sendPhoneVerificationSms({ phone: user.phone, verificationLink });
+      }
+    }
 
     let organizationList = await this.database.organization._find({ 'originApp': 'torque-lite' });
-    console.log(organizationList.length);
+    console.log('ORGANIZATIONLIST', organizationList.length);
 
     let serviceIndustryCategoryCodeList = [
       "CAT_SALON",
@@ -58,10 +61,14 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
       "CAT_BEAUTY"
     ]
 
-    /// === organization package and module
-    for (let organization of organizationList.slice(0, 1)) {
+    // === organization package and module
+    for (let organization of organizationList) {
       let organizationId = organization.id;
-      console.log({ organizationId });
+      console.log('organizationId', organizationId);
+
+      if (organization.activeModuleCodeList.length === 3) {
+        console.log("SKIP")
+      }
 
       // get outlet
       let outlet = await this.database.outlet._findOne({ organizationId });
@@ -80,7 +87,7 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
       let activeModuleCodeList = ['MOD_ACCOUNTING', 'MOD_VENDOR'];
 
-      if (serviceIndustryCategoryCodeList.indexOf(outlet.categoryCode) > -1) {
+      if (serviceIndustryCategoryCodeList.indexOf(outlet.categoryCode) === -1) {
         activeModuleCodeList.push('MOD_PRODUCT');
 
         await this.database.moduleActivation.create({
@@ -129,6 +136,8 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
       let result = await this.database.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
 
     }
+
+    console.log("ALL DONE")
 
     return { status: "success", affectedList };
   }
