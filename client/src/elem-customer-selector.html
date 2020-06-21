@@ -91,6 +91,7 @@
       .item:last-of-type {
         border: none;
       }
+
     </style>
     <div class="card p-0 vertical layout">
 
@@ -218,7 +219,7 @@
           if (response.hasError) return this.page.onApiError(response.error);
           this.customerList = response.customerList;
           this.customerPagination = response.pagination;
-          if (this.customerList.length === 1) {
+          if (this.customerList.length === 1 && this.customerPaginate.offset === 0) {
             this._selectCustomer(0);
           }
         });
@@ -228,6 +229,7 @@
         let customer = this.customerList[customerIndex];
         this.page._customerSelected(customer);
         this.customerList = [];
+        this.resetVariables();
       }
 
       selectTapped(e) {
@@ -252,6 +254,12 @@
           this.searchString = customerId;
           this.searchTapped();
         });
+      }
+
+      resetVariables() {
+        this.set('customerPaginate.offset', 0);
+        this.set('customerPagination.offset', 0);
+        this.customerList = [];
       }
 
     }

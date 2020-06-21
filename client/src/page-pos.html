@@ -1353,6 +1353,7 @@
             this.customer = this.app.getFromSession('last-selected-customer') || null;
             this.isAnonymousSale = this.app.getFromSession('last-selected-customer-is-anonymous') || false;
           }
+          this.elem('elem-customer-selector').resetVariables();
         });
 
         // payment
