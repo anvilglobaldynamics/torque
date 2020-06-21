@@ -28,6 +28,20 @@
     }
   },
   {
+    "code": "RS-F01",
+    "name": "Free Starter Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 2
+    }
+  },
+  {
     "code": "R-U01",
     "name": "Internal Unlimited Retail Package",
     "price": 0,
