@@ -744,6 +744,21 @@
           </div>
         </div>
 
+        <paper-dialog id="geolocation-dialog" modal style="z-index: -999999">
+          <!-- TODO: IMPROVE LANGUAGE AND TRANSLATION -->
+          <h2>[[verses.root.geolocationTitle]]</h2>
+
+          <div>[[verses.root.geolocationLine1]]</div>
+
+          <div>[[verses.root.geolocationLine2]]</div>
+
+          <img class="geolocation-image" src="../images/location-prompt.jpg">
+
+          <div class="buttons" style="margin: 14px;">
+            <paper-button raised class="primary" on-click="geolocationDialogOkayTapped">[[verses.general.okay]]</paper-button>
+          </div>
+        </paper-dialog>
+
         <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
           <template is="dom-if" if="[[_outletList.length]]">
             <h2>[[verses.general.outlets]]</h2>
@@ -842,7 +857,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":330,"datetimeStamp":1592721772664}');
+              return JSON.parse('{"build":335,"datetimeStamp":1592726726882}');
               '%__deploy-end'
             }
           },
@@ -1167,6 +1182,20 @@
         el.text = message;
         el.open();
         this.delay(0, cbfn);
+      }
+
+      // ====================== geolocation dialog =============================
+
+      displayGeolocationDialog(cbfn) {
+        this._geolocationDialogCbfn = cbfn;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#geolocation-dialog').open();
+      }
+
+      geolocationDialogOkayTapped(e) {
+        this.elem('#geolocation-dialog').close();
+        this._geolocationDialogCbfn();
+        this._geolocationDialogCbfn = null;
       }
 
       // ====================== navigation =============================

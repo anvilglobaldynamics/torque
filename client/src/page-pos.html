@@ -1146,6 +1146,7 @@
 
         var success = function () {
           // console.log('Message sent successfully');
+          // alert('message sent')
         };
 
         var error = function (e) {
@@ -2669,11 +2670,13 @@ Powered by Lipi for Business.`;
 
         let phone = data.customer.phone;
 
-        if (window.location.indexOf('iscordova') > -1) {
-          console.log("Using cordova method");
+        if (window.hasOwnProperty("cordova")) {
+          // alert("Using cordova method");
+
           sendSmsUsingCordova(phone, body);
+
         } else {
-          console.log("Using browser method");
+          // alert("Using browser method");
 
           phone = encodeURIComponent(phone);
           body = encodeURIComponent(body);
