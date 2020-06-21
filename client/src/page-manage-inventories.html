@@ -92,8 +92,10 @@
                       <template is="dom-if" if="[[hasPrivilege('PRIV_ACCESS_POS', organization)]]">
                         <paper-button raised class="btn pos" on-tap="outletPosTapped">[[verses.general.pos]]</paper-button>
                       </template>
-                      <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_INVENTORIES', organization)]]">
-                        <paper-button raised class="btn secondary" on-tap="outletViewDefaultInventoryTapped">[[verses.inventory.shortcutToInventory]]</paper-button>
+                      <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                        <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ALL_INVENTORIES', organization)]]">
+                          <paper-button raised class="btn secondary" on-tap="outletViewDefaultInventoryTapped">[[verses.inventory.shortcutToInventory]]</paper-button>
+                        </template>
                       </template>
                       <paper-button raised class="btn secondary" on-tap="viewOutletTapped">[[verses.general.details]]</paper-button>
                     </div>

@@ -28,8 +28,8 @@
     }
   },
   {
-    "code": "RS-F01",
-    "name": "Free Starter Package",
+    "code": "RS-LITE",
+    "name": "Lipi Lite - Free Package",
     "price": 0,
     "duration": {
       "months": 1,
