@@ -1121,6 +1121,45 @@
   </template>
 
   <script>
+
+    let sendSmsUsingCordova = function (number, message) {
+
+      var error = function (e) {
+        // console.log('Something went wrong:' + e);
+        // alert("Message was not delivered. Unable to request SMS permission.");
+      };
+
+      var denied = function (e) {
+        // console.log('Permission Denied:' + e);
+        // alert("Message was not delivered. SMS permission was denied.");
+      };
+
+      var actuallySendSms = function () {
+
+        var options = {
+          replaceLineBreaks: false,
+          android: {
+            intent: 'INTENT'  // send SMS with the native android SMS messaging
+            // intent: '' // send SMS without opening any other app
+          }
+        };
+
+        var success = function () {
+          // console.log('Message sent successfully');
+        };
+
+        var error = function (e) {
+          // console.log('Message Failed:' + e);
+          // alert("Message was not delivered although permission was given.");
+        };
+
+        sms.send(number, message, options, success, error);
+      }
+
+      actuallySendSms();
+
+    }
+
     class PagePos extends FxPage.mixin(TorqueCommonBehavior, TorquePageBehavior, TorqueDbBehavior, FxCommonBehavior, TorqueLanguageBehavior) {
 
       static get is() {
@@ -2630,15 +2669,22 @@ Powered by Lipi for Business.`;
 
         let phone = data.customer.phone;
 
-        phone = encodeURIComponent(phone);
-        body = encodeURIComponent(body);
-        let url = `sms:${phone};?&body=${body}`;
+        if (window.location.indexOf('iscordova') > -1) {
+          console.log("Using cordova method");
+          sendSmsUsingCordova(phone, body);
+        } else {
+          console.log("Using browser method");
 
-        try {
-          window.open(url);
-        } catch (ex) {
-          const message = "Unable to send SMS. Please contact developers with the following messag: " + ex.message;
-          alert(message);
+          phone = encodeURIComponent(phone);
+          body = encodeURIComponent(body);
+          let url = `sms:${phone};?&body=${body}`;
+
+          try {
+            window.open(url);
+          } catch (ex) {
+            const message = "Unable to send SMS. Please contact developers with the following messag: " + ex.message;
+            alert(message);
+          }
         }
       }
 
