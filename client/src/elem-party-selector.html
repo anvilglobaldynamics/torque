@@ -142,7 +142,7 @@
 
       // NOTE: This is necessary to reload the vendors and employess
       // every time the user enters the page
-      refreshVariables() {
+      resetVariables() {
         if (this.$hasVendorModuleAndPrivilege()) {
           this._processVendorList(() => { });
         }
