@@ -28,7 +28,17 @@ exports.AdminGetOutgoingSmsListApi = class extends Api {
 
   async handle({ body }) {
     let { date } = body;
-    let outgoingSmsList = await this._getOutgoingSmsList({ date });
+    let outgoingSmsList = [];
+
+    if (date === 1592697600000) {
+      // June 21, 2020
+      // On this day we upgraded all torque-lite users to torque
+      // We sent out phone verification requests to all 5000 users
+      // So, this date is skipped so that admin client is not overwhelmed
+    } else {
+      outgoingSmsList = await this._getOutgoingSmsList({ date });
+    }
+
     return { outgoingSmsList };
   }
 
