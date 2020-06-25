@@ -142,6 +142,7 @@
     "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
     "dontHaveAccount": "অ্যাকাউন্ট নেই?",
     "login": "লগইন",
+    "register": "ফ্রি রেজিস্ট্রেশন",
     "emailOrPhoneInput": "আপনার ফোন নম্বর/ইমেইল",
     "emailOrPhoneInputError": "আপনার সঠিক ফোন নম্বর অথবা ইমেইল দিন।",
     "passwordInput": "আপনার পাসওয়ার্ড",

@@ -142,6 +142,7 @@
     "forgotPassword": "Forgot your Password?",
     "dontHaveAccount": "Don't have an account?",
     "login": "Login",
+    "register": "Free Registration",
     "emailOrPhoneInput": "Your phone number or email address",
     "emailOrPhoneInputError": "Enter your valid phone number or valid email address.",
     "passwordInput": "Your password",

@@ -52,13 +52,15 @@
             <paper-input class="loginForm--password" value="{{loginForm.password}}" required minlength="8" error-message="[[verses.login.passwordInputError]]" label="[[verses.login.passwordInput]]" type="password"></paper-input>
 
             <div class="horizontal layout button-row end">
-              <div class="link primary" style="margin: 5px;" on-tap="forgotPasswordTapped">[[verses.login.forgotPassword]]</div>
+              <paper-button raised class="secondary" on-tap="registerTapped" style="margin-right: 8px;">[[verses.login.register]]</paper-button>
               <div class="flex"></div>
               <paper-button raised class="primary loginForm--submit" on-tap="loginTapped">[[verses.login.login]]</paper-button>
             </div>
 
             <div class="horizontal layout button-row extended center-center">
-              <div class="link primary" on-tap="registerTapped">[[verses.login.dontHaveAccount]]</div>
+              <div class="link primary" style="margin: 5px;" on-tap="forgotPasswordTapped">[[verses.login.forgotPassword]]</div>
+
+              <!-- <div class="link primary" on-tap="registerTapped">[[verses.login.dontHaveAccount]]</div> -->
             </div>
 
           </div>
