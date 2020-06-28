@@ -44,7 +44,7 @@ exports.OrganizationMixin = (SuperApiClass) => class extends SuperApiClass {
   }
 
   async _setTrialPackage({ organizationId }) {
-    const packageCode = "RS-T01";
+    const packageCode = "RS-LITE";
     let aPackage = await this.database.fixture.findPackageByCode({ packageCode });
     throwOnFalsy(aPackage, "DEV_ERROR", "package is missing");
     let packageActivationId = await this.database.packageActivation.create({ packageCode, organizationId, createdByAdminName: "system", paymentReference: "SERVER_ADD_ORGANIZATION_API" });
