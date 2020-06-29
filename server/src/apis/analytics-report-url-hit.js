@@ -11,7 +11,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      pssk: Joi.string().length(12).required(),
+      pssk: Joi.string().min(8).max(32).required(),
       name: Joi.string().min(8).max(32).required()
     });
   }
@@ -23,7 +23,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
 
   async handle({ body }) {
     let { pssk, name } = body;
-    if (!(pssk === this.pssk || (pssk === 'app-lipi-liv' && (name === 'LipiAppPwa' || name === 'LipiAppPwaLegacy')))) {
+    if (!(pssk === this.pssk || (pssk === 'app-lipi-live-public-key' && (name === 'LipiAppPwa' || name === 'LipiAppPwaLegacy')))) {
       throw new CodedError("PSSK_INVALID", "Preshared Secret Key is Inavlid");
     }
 
