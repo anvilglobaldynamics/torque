@@ -1,5 +1,5 @@
 runtime: nodejs10
-service: lipi-client-pwa
+service: lipi-client-pwa-new
 default_expiration: "1m"
 
 handlers:
