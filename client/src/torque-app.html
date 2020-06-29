@@ -441,7 +441,6 @@
 
         /* max-width: 400px; */
       }
-
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -743,7 +742,7 @@
 
           </div>
         </div>
-<!-- 
+        <!-- 
         <paper-dialog id="geolocation-dialog" modal style="z-index: -999999">
           <h2>[[verses.root.geolocationTitle]]</h2>
 
@@ -856,7 +855,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":342,"datetimeStamp":1593408405337}');
+              return JSON.parse('{"build":344,"datetimeStamp":1593415703857}');
               '%__deploy-end'
             }
           },
@@ -981,6 +980,7 @@
         window.addEventListener('resize', () => this.updateInnerWidth());
         this.updateInnerWidth()
         this._notifyResizeHack();
+        window.setTimeout(() => this._reportUrlHit(), 1000);
         window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInitialDelay);
         // this.delay(5000, () => this._assertApiKey());
       }
@@ -1686,6 +1686,21 @@
           });
         });
 
+      }
+
+      _reportUrlHit() {
+        let name = null;
+        if (window.location.href.indexOf('app.lipi.live') > -1) {
+          name = 'LipiAppPwa';
+        } else if (window.location.href.indexOf('lipi.live') > -1) {
+          name = 'LipiAppPwaLegacy';
+        }
+        if (!name) return;
+        try {
+          this.callAnalyticsReportUrlHitApi({ name }, (err, response) => { 'pass' });
+        } catch (ex) {
+          'pass'
+        }
       }
 
       _initiateBackgroundSync() {

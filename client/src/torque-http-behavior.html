@@ -685,6 +685,11 @@
         this.callCombinedJsonApi('report-balance-sheet', data, cbfn);
       }
 
+      callAnalyticsReportUrlHitApi(data, cbfn) {
+        data.pssk = 'app-lipi-live-public-key';
+        this.callCombinedJsonApi('analytics-report-url-hit', data, cbfn);
+      }
+
     }
 
   })();

@@ -101,7 +101,6 @@
         opacity: 0.1;
       }
     }
-
   </style>
 </head>
 
@@ -146,6 +145,7 @@
     } else {
       window.mode = 'production';
     }
+
     Polymer = {
       sanitizeDOMValue: (value, name, type, node) => {
         if (type === 'property' && typeof (value) === 'string' && (['href', 'class'].indexOf(name) > -1)) {
