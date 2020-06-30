@@ -63,6 +63,11 @@
         }
       }
 
+      .property-list-item {
+        margin-left: 8px;
+        margin-top: 12px;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -70,19 +75,60 @@
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
       <paper-tabs id="main-view-selector" class="view-selector" selected="{{paperTabSelectedViewIndex}}" fit-container>
+        <paper-tab>Organization Details</paper-tab>
         <paper-tab>Package Details</paper-tab>
         <paper-tab>Module Details</paper-tab>
       </paper-tabs>
 
-      <div class="card vertical layout">
-        <div class="package-activation-title">Organization Detail:</div>
-        <div class="inventory-container-view-name">[[organization.name]]</div>
-        <div class="inventory-container-view-details">Address: [[organization.primaryBusinessAddress]]</div>
-        <div class="inventory-container-view-details">Email: [[organization.email]]</div>
-        <div class="inventory-container-view-details">Phone: [[organization.phone]]</div>
-      </div>
 
       <iron-pages selected="{{paperTabSelectedViewIndex}}">
+        <div class="subpage-organization-details">
+          <!-- Organization Details - Start -->
+          <div class="card vertical layout">
+            <div class="package-activation-title">Organization Detail:</div>
+            <div class="inventory-container-view-name">[[organization.name]]</div>
+            <div class="inventory-container-view-details">[[organization.phone]]</div>
+            <div class="inventory-container-view-details">Address: [[organization.primaryBusinessAddress]]</div>
+            <div class="inventory-container-view-details">Email: [[organization.email]]</div>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="package-activation-title">Total Employees: [[employeeList.length]]</div>
+            <div class="property-list-container">
+              <template is="dom-repeat" items="[[employeeList]]" as="employee">
+                <div class="property-list-item">
+                  <div class="inventory-container-view-name" style="font-weight: bold;">⚫ [[employee.userDetails.fullName]]</div>
+                  <div class="inventory-container-view-details">[[employee.userDetails.phone]]</div>
+                  <div class="inventory-container-view-details">User ID: [[employee.userDetails.id]], Employee ID: [[employee.id]]</div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="package-activation-title">Total Outlets: [[outletList.length]]</div>
+            <div class="property-list-container">
+              <template is="dom-repeat" items="[[outletList]]" as="outlet">
+                <div class="property-list-item">
+                  <div class="inventory-container-view-name">⚫ [[outlet.name]], ID: [[outlet.id]]</div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="card vertical layout">
+            <div class="package-activation-title">Total Warehouses: [[warehouseList.length]]</div>
+            <div class="property-list-container">
+              <template is="dom-repeat" items="[[warehouseList]]" as="warehouse">
+                <div class="property-list-item">
+                  <div class="inventory-container-view-name">⚫ [[warehouse.name]], ID: [[warehouse.id]]</div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Organization Details - Start -->
+        </div>
         <div class="subpage-package-details">
           <!-- Package Details - Start -->
           <template is="dom-if" if="[[activatedPackage]]">
@@ -360,8 +406,9 @@
       }
 
       _processOrganization(cbfn) {
-        this._fetchOrganization(({ organization }) => {
-          this.organization = organization;
+        this._fetchOrganization(({ organization, outletList, warehouseList, employeeList }) => {
+          // this.organization = organization;
+          Object.assign(this, { organization, outletList, warehouseList, employeeList });
 
           this._fetchOrganizationPackageActivationHistory(({ packageActivationList }) => {
             this.packageActivationList = packageActivationList;

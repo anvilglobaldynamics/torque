@@ -1003,7 +1003,10 @@ exports.validateAddServiceBlueprintApiSuccessResponse = (doc) => {
 exports.validateAdminFindOrganizationApiSuccessResponse = (doc) => {
   let schema = Joi.object().keys({
     hasError: Joi.boolean().required().equal(false),
-    organization: Joi.object().required()
+    organization: Joi.object().required(),
+    employeeList: Joi.any().required(),
+    outletList: Joi.any().required(),
+    warehouseList: Joi.any().required()
   });
 
   let { error, value } = Joi.validate(doc, schema);
