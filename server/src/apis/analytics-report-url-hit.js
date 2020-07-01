@@ -23,7 +23,14 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
 
   async handle({ body }) {
     let { pssk, name } = body;
-    if (!(pssk === this.pssk || (pssk === 'app-lipi-live-public-key' && (name === 'LipiAppPwa' || name === 'LipiAppPwaLegacy')))) {
+
+    const allowedNamesWithPublicKey = [
+      'LipiAppAndroid',
+      'LipiAppPwa',
+      'LipiAppAndroidLegacy',
+      'LipiAppPwaLegacy'
+    ];
+    if (!(pssk === this.pssk || (pssk === 'app-lipi-live-public-key' && (allowedNamesWithPublicKey.indexOf(allowedNamesWithPublicKey) > -1)))) {
       throw new CodedError("PSSK_INVALID", "Preshared Secret Key is Inavlid");
     }
 
