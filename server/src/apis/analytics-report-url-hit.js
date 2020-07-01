@@ -30,7 +30,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
       'LipiAppAndroidLegacy',
       'LipiAppPwaLegacy'
     ];
-    if (!(pssk === this.pssk || (pssk === 'app-lipi-live-public-key' && (allowedNamesWithPublicKey.indexOf(allowedNamesWithPublicKey) > -1)))) {
+    if (!(pssk === this.pssk || (pssk === 'app-lipi-live-public-key' && (allowedNamesWithPublicKey.indexOf(name) > -1)))) {
       throw new CodedError("PSSK_INVALID", "Preshared Secret Key is Inavlid");
     }
 
