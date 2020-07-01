@@ -83,6 +83,7 @@
           color: #696969;
         }
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -180,7 +181,11 @@
         let data = { date };
         this.app.callAdminGetOutgoingEmailListApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+          if (response.hasError) {
+            this.onApiError(response.error);
+            cbfn([]);
+            return;
+          }
           return cbfn(response.outgoingEmailList);
         });
       }
