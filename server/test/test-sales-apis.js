@@ -607,7 +607,7 @@ describe('Sales', _ => {
 
   let liteProductBlueprintIdList = null;
 
-  it('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
+  it.skip('api/lite-add-sales (Valid, No Customer)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {
@@ -653,7 +653,7 @@ describe('Sales', _ => {
 
   });
 
-  it('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
+  it.skip('api/lite-add-sales (Valid, No Customer, Existing Blueprint)', testDoneFn => {
 
     callApi('api/lite-add-sales', {
       json: {

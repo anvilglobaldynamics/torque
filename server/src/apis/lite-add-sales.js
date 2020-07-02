@@ -13,6 +13,8 @@ exports.LiteAddSalesApi = class extends Api.mixin(InventoryMixin, CustomerMixin,
 
   get requiresAuthentication() { return true; }
 
+  get isEnabled() { return false; }
+
   get requestSchema() {
     return Joi.object().keys({
 

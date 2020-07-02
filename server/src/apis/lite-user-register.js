@@ -17,7 +17,7 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
 
   get requiresAuthentication() { return false; }
 
-  get isEnabled() { return true; }
+  get isEnabled() { return false; }
 
   get requestSchema() {
     return Joi.object().keys({
