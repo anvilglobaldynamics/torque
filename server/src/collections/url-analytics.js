@@ -21,6 +21,8 @@ exports.UrlAnalyticsCollection = class extends Collection {
       which: 'only'
     };
 
+    name = name.replace('.', '_').replace('.', '_').replace('.', '_');
+
     let key1 = `urlHits.${name}.count`;
     let key2 = `urlHits.${name}.lastHitDatetimeStamp`;
     let modifications = {
