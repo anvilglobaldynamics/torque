@@ -1220,6 +1220,43 @@
         if (mainWrapper) mainWrapper.scrollTop = 0;
       }
 
+      // Override default hash processing in polymer - start
+      _onHashChange() {
+        let hash = window.location.hash;
+
+        this.hashQuery = {};
+        if (hash.indexOf('?') > -1) {
+          let parts = hash.split('?');
+          hash = parts.shift();
+
+          try {
+            var vars = parts.join('?').split('&');
+            for (var i = 0; i < vars.length; i++) {
+              var pair = vars[i].split('=');
+              this.hashQuery[String(pair[0])] = String(pair[1]);
+            }
+          } catch (ex) {
+            'pass'
+          }
+        }
+
+        if (hash.length < 2 || hash.indexOf('#/') !== 0) {
+          window.location.hash = '#/';
+          return;
+        }
+
+        hash = hash.replace('#/', '');
+        let [pageName, ...rest] = hash.split('/')
+        if (!pageName) {
+          pageName = this.defaultPageName;
+        }
+        this.paramString = rest.join('/')
+        baselib.delay(0, _ => {
+          this._routePageChanged(pageName);
+        });
+      }
+      // Override default hash processing in polymer - end
+
       _pageNameChanged() {
         this._scrollCurrentPageToTop();
         this.isFloatingAppDrawerExpanded = false;
@@ -1693,17 +1730,28 @@
         let name = null;
         if (window.location.href.indexOf('app.lipi.live') > -1) {
           if (window.hasOwnProperty("cordova")) {
-            name = 'LipiAppAndroid';
+            name = 'app.lipi.live android';
+          } else if (this.pageName === 'register') {
+            let ref = null;
+            if ('ref' in this.hashQuery) {
+              ref = this.hashQuery['ref'];
+            }
+
+            if (ref === 'fb') {
+              name = 'app.lipi.live/register?ref=fb';
+            } else if (ref === 'ln') {
+              name = 'app.lipi.live/register?ref=ln';
+            } else if (ref === 'mail') {
+              name = 'app.lipi.live/register?ref=mail';
+            } else {
+              name = 'app.lipi.live/register';
+            }
+
           } else {
-            name = 'LipiAppPwa';
-          }
-        } else if (window.location.href.indexOf('lipi.live') > -1) {
-          if (window.hasOwnProperty("cordova")) {
-            name = 'LipiAppAndroidLegacy';
-          } else {
-            name = 'LipiAppPwaLegacy';
+            name = 'app.lipi.live';
           }
         }
+        console.log({ name });
         if (!name) return;
         try {
           this.callAnalyticsReportUrlHitApi({ name }, (err, response) => { 'pass' });
