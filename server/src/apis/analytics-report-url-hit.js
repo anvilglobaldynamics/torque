@@ -33,6 +33,7 @@ exports.AnalyticsReportUrlHitApi = class extends Api {
       'app.lipi.live/register?ref=fb',
       'app.lipi.live/register?ref=ln',
       'app.lipi.live/register?ref=mail',
+      'app.lipi.live/register?ref=lipi',
       'app.lipi.live/register',
       'app.lipi.live',
     ];
