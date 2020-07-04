@@ -111,12 +111,19 @@ exports.AdminGetStatisticsApi = class extends Api {
       }
 
       let temp = statistics.urlHits;
+      temp['lipi_live?a'] = temp['lipi_live'];
+      delete temp['lipi_live'];
+
       let newObj = {};
       let keys = Object.keys(temp);
       keys.sort();
       keys.forEach(key => {
         newObj[key] = temp[key];
       });
+
+      newObj['lipi_live'] = newObj['lipi_live?a'];
+      delete newObj['lipi_live?a'];
+
       statistics.urlHits = newObj;
     }
 
