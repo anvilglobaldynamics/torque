@@ -109,6 +109,15 @@ exports.AdminGetStatisticsApi = class extends Api {
         date.setHours(date.getHours() + 6); // timezone
         statistics.urlHits[key].lastHit = date.toISOString();
       }
+
+      let temp = statistics.urlHits;
+      let newObj = {};
+      let keys = Object.keys(temp);
+      keys.sort();
+      keys.forEach(key => {
+        newObj[key] = temp[key];
+      });
+      statistics.urlHits = newObj;
     }
 
     // For 1 time use:
