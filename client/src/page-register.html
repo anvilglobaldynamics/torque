@@ -186,6 +186,10 @@
           this.app.removeSettings();
         } catch (ex) { }
 
+        if ('phone' in this.params){
+          this.set('registerForm.phone', this.params.phone);
+        }
+
         try {
           let db = this.db || this.app.db;
           db.remove('organization', (doc => true));
