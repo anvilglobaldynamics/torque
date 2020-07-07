@@ -164,5 +164,19 @@
       "maximumWarehouses": 1,
       "maximumEmployees": 5
     }
-  }
+  },
+  {
+    "code": "S-SBW-01",
+    "name": "Shaon's Beauty World Service Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 1,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 10
+    }
+  }  
 ]
