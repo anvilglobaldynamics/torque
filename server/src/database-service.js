@@ -39,6 +39,7 @@ const { OrganizationSettingsCollection } = require('./collections/organization-s
 const { ReceiptCollection } = require('./collections/receipt');
 const { UrlAnalyticsCollection } = require('./collections/url-analytics');
 const { UserLocationCollection } = require('./collections/user-location');
+const { PotentialUserCollection } = require('./collections/potential-user');
 
 const { AccountCollection } = require('./collections/account');
 const { TransactionCollection } = require('./collections/transaction');
@@ -87,6 +88,7 @@ class DatabaseService {
     this.receipt = new ReceiptCollection(this.engine, this);
     this.urlAnalytics = new UrlAnalyticsCollection(this.engine, this);
     this.userLocation = new UserLocationCollection(this.engine, this);
+    this.potentialUser = new PotentialUserCollection(this.engine, this);
 
     this.account = new AccountCollection(this.engine, this);
     this.transaction = new TransactionCollection(this.engine, this);

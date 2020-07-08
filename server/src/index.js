@@ -171,6 +171,7 @@ const { LiteUserEditProfileApi } = require('./apis/lite-user-edit-profile');
 
 const { AnalyticsReportUrlHitApi } = require('./apis/analytics-report-url-hit');
 const { AnalyticsReportUserLocationApi } = require('./apis/analytics-report-user-location');
+const { AnalyticsReportPotentialUserApi } = require('./apis/analytics-report-potential-user');
 
 let { FixtureCollection } = require('./legacy-collections/fixture');
 let { UserCollection } = require('./legacy-collections/user');
@@ -460,6 +461,8 @@ class Program {
 
     server.registerPostApi('/api/analytics-report-url-hit', AnalyticsReportUrlHitApi);
     server.registerPostApi('/api/analytics-report-user-location', AnalyticsReportUserLocationApi);
+    server.registerPostApi('/api/analytics-report-potential-user', AnalyticsReportPotentialUserApi);
+
   }
 
 }

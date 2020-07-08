@@ -186,8 +186,16 @@
           this.app.removeSettings();
         } catch (ex) { }
 
-        if ('phone' in this.params){
+        if ('phone' in this.params) {
           this.set('registerForm.phone', this.params.phone);
+
+          this.app.callAnalyticsReportPotentialUserApi({
+            phone: this.params.phone,
+            source: 'torque-live-register-page',
+            shouldBlockUi: false
+          }, (err, response) => {
+            if (err) return;
+          });
         }
 
         try {
