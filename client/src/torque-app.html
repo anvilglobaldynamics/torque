@@ -364,7 +364,7 @@
       .custom-app-drawer {
         display: block;
         height: calc(100vh - 64px);
-        overflow-y: auto;
+        overflow-y: scroll;
         background-color: #262838;
         min-width: 280px;
         max-width: 280px;
@@ -547,6 +547,7 @@
                 <!-- FIXME: Remove offline toggle switch after testing -->
                 <!-- <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item> -->
                 <paper-item on-tap="logoutTapped">[[verses.topMenu.logout]]</paper-item>
+
               </paper-listbox>
             </paper-menu-button>
             <template is="dom-if" if="[[shouldShowSaveButton]]">
@@ -700,6 +701,10 @@
                 <div class="sidebar-padded-divider"></div>
 
                 <a name="about" href="#/about">[[verses.sidebar.about]]</a>
+
+                <div style="margin-bottom: 60px; height: 1px; width: 1px">
+                </div>
+
 
               </iron-selector>
             </div>
@@ -946,7 +951,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":349,"datetimeStamp":1594185423993}');
+              return JSON.parse('{"build":353,"datetimeStamp":1594294340726}');
               '%__deploy-end'
             }
           },
