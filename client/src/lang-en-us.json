@@ -213,7 +213,12 @@
     "manageProductAcquisition": "Product Acquisition Records",
     "manageDiscountPresets": "Discounts",
     "managePaymentMethods": "Payment Methods",
-    "productSalesReport": "Product Sales Report"
+    "productSalesReport": "Product Sales Report",
+    "people":"People",
+    "presets":"Presets",
+    "reportsAndGraphs":"Reports and Graphs",
+    "records":"Records",
+    "accounting":"Accounting"
   },
   "titleBar": {
     "home": "Home",

@@ -336,8 +336,9 @@
       .expansion-icon-collapsed {}
 
       .expansion-title {
-        color: white;
+        color: #dedede;
         cursor: pointer;
+        margin-left: 8px;
       }
 
       .expansion-content-collapsed {
@@ -345,7 +346,8 @@
       }
 
       .expansion-content {
-        margin-left: 12px;
+        margin-left: 20px;
+        margin-top: 8px;
       }
 
       /* ---- expansion ---- */
@@ -391,6 +393,10 @@
         white-space: nowrap;
         overflow: hidden;
         text-decoration: none;
+      }
+
+      .sidebar-padded-divider {
+        margin-top: 20px;
       }
 
       .custom-sidebar-divider {
@@ -452,6 +458,10 @@
           margin-left: 0%;
           width: 100%;
         }
+      }
+
+      .top-right-dropdown {
+        background-color: var(--app-primary-color-light);
       }
 
       #inventory-container-dialog .list {
@@ -523,9 +533,16 @@
 
             <paper-menu-button horizontal-align="right" style="padding: 0px;">
               <paper-icon-button icon="icons:apps" slot="dropdown-trigger"></paper-icon-button>
-              <paper-listbox slot="dropdown-content" selected="-1">
+              <paper-listbox slot="dropdown-content" selected="-1" class="top-right-dropdown">
+
                 <paper-item on-tap="homeTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.home]]</paper-item>
                 <paper-item on-tap="switchOrganizationTapped" hidden="[[isInOfflineMode]]">[[verses.topMenu.switchOrganization]]</paper-item>
+
+                <paper-item on-tap="profileTapped" hidden="[[isInOfflineMode]]">[[verses.sidebar.profile]]</paper-item>
+                <paper-item on-tap="settingsTapped" hidden="[[isInOfflineMode]]">[[verses.sidebar.settings]]</paper-item>
+
+                <div class="sidebar-padded-divider"></div>
+
                 <paper-item on-tap="reloadTapped">[[verses.topMenu.reload]]</paper-item>
                 <!-- FIXME: Remove offline toggle switch after testing -->
                 <!-- <paper-item on-tap="toggleOfflineMode">Toggle Offline Mode (Debug Only)</paper-item> -->
@@ -571,7 +588,6 @@
                 </template> -->
 
                 <a name="manage-inventories" href="#/manage-inventories">[[verses.sidebar.inventoryContainer]]</a>
-                <hr class="custom-sidebar-divider">
 
                 <!-- Essential Records - start -->
                 <a name="manage-sales" href="#/manage-sales">[[verses.sidebar.sales]]</a>
@@ -587,12 +603,13 @@
                     <a name="manage-service-membership" href="#/manage-service-membership">[[verses.sidebar.serviceMembership]]</a>
                   </template>
                 </template>
-                <hr class="custom-sidebar-divider">
+
+                <div class="sidebar-padded-divider"></div>
                 <!-- Essential Records - end -->
 
                 <div class="expansion-title" on-click="expansionTitleTapped" data-key="people">
                   <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
-                  People
+                  [[verses.sidebar.people]]                  
                 </div>
                 <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.people)]]">
                   <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
@@ -604,12 +621,12 @@
                   </template>
                 </div>
 
-                <hr class="custom-sidebar-divider">
+                <div class="sidebar-padded-divider"></div>
 
                 <div class="expansion-title" on-click="expansionTitleTapped" data-key="presets">
                   <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
-                  Presets
-                </div>
+                  [[verses.sidebar.presets]]
+                                </div>
                 <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.presets)]]">
                   <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
                   <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
@@ -617,11 +634,12 @@
                     <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
                   </template>
                 </div>
-                <hr class="custom-sidebar-divider">
+
+                <div class="sidebar-padded-divider"></div>
 
                 <div class="expansion-title" on-click="expansionTitleTapped" data-key="reportsAndGraphs">
                   <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
-                  Reports and Graphs
+                  [[verses.sidebar.reportsAndGraphs]]
                 </div>
                 <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.reportsAndGraphs)]]">
                   <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
@@ -631,14 +649,14 @@
                   <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                     <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
                   </template>
-                  <hr class="custom-sidebar-divider">
                   <!-- Reports - end -->
                 </div>
-                <hr class="custom-sidebar-divider">
+
+                <div class="sidebar-padded-divider"></div>
 
                 <div class="expansion-title" on-click="expansionTitleTapped" data-key="records">
                   <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
-                  Records
+                  [[verses.sidebar.records]]
                 </div>
                 <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.records)]]">
                   <!-- Records - start -->
@@ -656,14 +674,16 @@
                   </template> -->
                   <!-- Records - end -->
                 </div>
-                <hr class="custom-sidebar-divider">
 
+                <div class="sidebar-padded-divider"></div>
+
+
+                  <!-- Accounting section - start -->
                 <div class="expansion-title" on-click="expansionTitleTapped" data-key="accounting">
                   <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
-                  Accounting
+                  [[verses.sidebar.accounting]]
                 </div>
                 <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.accounting)]]">
-                  <!-- Accounting section - start -->
                   <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
 
                     <template is="dom-if" if="[[hasPrivilege('PRIV_MANAGE_ACCOUNTING', organization)]]">
@@ -683,12 +703,12 @@
                   </template> -->
 
                   </template>
-                  <!-- Accounting section - end -->
+                  
                 </div>
-                <hr class="custom-sidebar-divider">
+                <!-- Accounting section - end -->
 
-                <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
-                <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
+                <div class="sidebar-padded-divider"></div>
+
                 <a name="about" href="#/about">[[verses.sidebar.about]]</a>
 
               </iron-selector>
@@ -1015,12 +1035,17 @@
           expansionStatus: {
             type: Object,
             value: () => {
-              return {
-                people: false,
-                presets: false,
-                reportsAndGraphs: false,
-                records: false,
-                accounting: false
+              let expansionStatus = localStorage.getItem('last-expansion-status');
+              if (expansionStatus) {
+                return JSON.parse(expansionStatus);
+              } else {
+                return {
+                  people: false,
+                  presets: false,
+                  reportsAndGraphs: false,
+                  records: false,
+                  accounting: false
+                };
               }
             }
           }
@@ -1403,6 +1428,7 @@
             this.showAlertMessage("No Network", "Unable to connect to the internet.");
           }
         }
+        this.highlightSelectedItemInLeftSidebar();
         Polymer.importHref(resolvedPageUrl, successFn, failureFn, true);
       }
 
@@ -1666,6 +1692,14 @@
 
       homeTapped(e = null) {
         this.navigateTo('/home');
+      }
+
+      profileTapped(e = null) {
+        this.navigateTo('/edit-profile');
+      }
+
+      settingsTapped(e = null) {
+        this.navigateTo('/settings');
       }
 
       reloadTapped(e = null) {
@@ -1975,6 +2009,7 @@
           setTimeout(() => {
             this.refreshCurrentPage();
             this._scrollCurrentPageToTop();
+            this.highlightSelectedItemInLeftSidebar();
           }, 1);
         }
       }
@@ -1986,19 +2021,37 @@
           setTimeout(() => {
             this.refreshCurrentPage();
             this._scrollCurrentPageToTop();
+            this.highlightSelectedItemInLeftSidebar();
           }, 1);
         }
       }
 
       // =================================
 
+      highlightSelectedItemInLeftSidebar() {
+        this.elemAll('.custom-app-drawer a').forEach(el => {
+          try {
+            el.classList.remove('iron-selected');
+          } catch (ex) { }
+        });
+
+        try {
+          let el = this.elem(`.custom-app-drawer a[name="${this.pageNameForNavigationMenu}"]`);
+          el.classList.add('iron-selected');
+        } catch (ex) { }
+      }
+
       expansionTitleTapped(e) {
         let el = e.target;
         if (el.nodeName === 'IRON-ICON') {
           el = el.parentNode;
         }
+
         let key = el.getAttribute('data-key');
         this.set(`expansionStatus.${key}`, !this.expansionStatus[key]);
+
+        localStorage.setItem('last-expansion-status', JSON.stringify(this.expansionStatus));
+
         el.querySelector('iron-icon').classList.remove('rotate-f');
         el.querySelector('iron-icon').classList.remove('rotate-b');
         if (this.expansionStatus[key]) {
@@ -2007,14 +2060,6 @@
           el.querySelector('iron-icon').classList.add('rotate-b');
         }
       }
-
-      // $getExpansionAnimationClass(key) {
-      //   if (key) {
-      //     return 'rotate-f';
-      //   } else {
-      //     return '';
-      //   }
-      // }
 
       $getExpansionContentClass(key) {
         if (key) {

@@ -213,7 +213,12 @@
     "manageProductAcquisition": "পণ্য ক্রয় রেকর্ড",
     "manageDiscountPresets": "ডিসকাউন্ট / ছাড়",
     "managePaymentMethods": "মূল্যপরিশোধ পদ্ধতি",
-    "productSalesReport": "পণ্য বিক্রয় রিপোর্ট"
+    "productSalesReport": "পণ্য বিক্রয় রিপোর্ট",
+    "people":"ব্যক্তি সমূহ",
+    "presets":"পূর্বনির্ধারণ যোগ্য",
+    "reportsAndGraphs":"রিপোর্ট এবং গ্রাফ",
+    "records":"রেকর্ডস",
+    "accounting":"একাউন্টিং"
   },
   "titleBar": {
     "home": "হোম",
