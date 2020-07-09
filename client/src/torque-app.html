@@ -345,7 +345,7 @@
       }
 
       .expansion-content {
-        margin-left: 20px;
+        margin-left: 12px;
       }
 
       /* ---- expansion ---- */
@@ -619,54 +619,73 @@
                 </div>
                 <hr class="custom-sidebar-divider">
 
-                <!-- Records - start -->
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
-                    <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                <div class="expansion-title" on-click="expansionTitleTapped" data-key="reportsAndGraphs">
+                  <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
+                  Reports and Graphs
+                </div>
+                <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.reportsAndGraphs)]]">
+                  <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
+                  <!-- Reports - start -->
+                  <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
+                  <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                    <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
                   </template>
-                </template>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
-                </template>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                   <hr class="custom-sidebar-divider">
-                </template>
-                <!-- Records - end -->
-
-                <a name="graph-sales" href="#/graph-sales">[[verses.sidebar.salesGraph]]</a>
+                  <!-- Reports - end -->
+                </div>
                 <hr class="custom-sidebar-divider">
 
-                <!-- Reports - start -->
-                <a name="report-sales" href="#/report-sales">[[verses.sidebar.salesReport]]</a>
-                <a name="report-collections" href="#/report-collections">[[verses.sidebar.collectionReport]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="report-product-sales" href="#/report-product-sales">[[verses.sidebar.productSalesReport]]</a>
-                </template>
-                <hr class="custom-sidebar-divider">
-                <!-- Reports - end -->
-
-                <!-- Accounting section - start -->
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
-
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_MANAGE_ACCOUNTING', organization)]]">
-                    <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
-                    <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
-                    <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
+                <div class="expansion-title" on-click="expansionTitleTapped" data-key="records">
+                  <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
+                  Records
+                </div>
+                <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.records)]]">
+                  <!-- Records - start -->
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                    <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                      <a name="manage-product-acquisitions" href="#/manage-product-acquisitions">[[verses.sidebar.manageProductAcquisition]]</a>
+                      <a name="manage-product-transfers" href="#/manage-product-transfers">[[verses.sidebar.manageProductTransfer]]</a>
+                    </template>
                   </template>
-
-                  <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
-                    <a name="accounts-payable" on-click="accountsPayableTapped" style="cursor: pointer;">[[verses.sidebar.accountsPayable]]</a>
-                    <a name="accounts-receivable" on-click="accountsReceivableTapped" style="cursor: pointer;">[[verses.sidebar.accountsReceivable]]</a>
-                    <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                    <a name="manage-sales-return" href="#/manage-sales-return">[[verses.sidebar.salesReturn]]</a>
                   </template>
-
-                  <template is="dom-if" if="[[$hasEitherPrivilege('PRIV_MANAGE_ACCOUNTING', 'PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
+                  <!-- <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
                     <hr class="custom-sidebar-divider">
-                  </template>
+                  </template> -->
+                  <!-- Records - end -->
+                </div>
+                <hr class="custom-sidebar-divider">
 
-                </template>
-                <!-- Accounting section - end -->
+                <div class="expansion-title" on-click="expansionTitleTapped" data-key="accounting">
+                  <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
+                  Accounting
+                </div>
+                <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.accounting)]]">
+                  <!-- Accounting section - start -->
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_ACCOUNTING')]]">
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_MANAGE_ACCOUNTING', organization)]]">
+                      <a name="manage-monetary-accounts" href="#/manage-monetary-accounts">[[verses.sidebar.manageMonetaryAccounts]]</a>
+                      <a name="manage-accounts" href="#/manage-accounts">[[verses.sidebar.manageAccounts]]</a>
+                      <a name="manage-transactions" href="#/manage-transactions">[[verses.sidebar.manageTransactions]]</a>
+                    </template>
+
+                    <template is="dom-if" if="[[hasPrivilege('PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
+                      <a name="accounts-payable" on-click="accountsPayableTapped" style="cursor: pointer;">[[verses.sidebar.accountsPayable]]</a>
+                      <a name="accounts-receivable" on-click="accountsReceivableTapped" style="cursor: pointer;">[[verses.sidebar.accountsReceivable]]</a>
+                      <a name="accounting-reports" href="#/accounting-reports">[[verses.sidebar.accountingReports]]</a>
+                    </template>
+
+                    <!-- <template is="dom-if" if="[[$hasEitherPrivilege('PRIV_MANAGE_ACCOUNTING', 'PRIV_VIEW_ACCOUNTING_REPORTS', organization)]]">
+                    <hr class="custom-sidebar-divider">
+                  </template> -->
+
+                  </template>
+                  <!-- Accounting section - end -->
+                </div>
+                <hr class="custom-sidebar-divider">
 
                 <a name="edit-profile" href="#/edit-profile">[[verses.sidebar.profile]]</a>
                 <a name="settings" href="#/settings">[[verses.sidebar.settings]]</a>
@@ -1000,7 +1019,8 @@
                 people: false,
                 presets: false,
                 reportsAndGraphs: false,
-                records: false
+                records: false,
+                accounting: false
               }
             }
           }
