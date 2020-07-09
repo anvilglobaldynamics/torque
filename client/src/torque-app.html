@@ -228,7 +228,7 @@
       }
 
       .logout-link,
-      .custom-drawer-list>a {
+      .custom-drawer-list a {
         display: block;
         padding: 2px 16px;
         text-decoration: none;
@@ -236,7 +236,7 @@
         line-height: 40px;
       }
 
-      .custom-drawer-list>a.iron-selected {
+      .custom-drawer-list a.iron-selected {
         color: var(--app-primary-color-light);
         font-weight: bold;
       }
@@ -301,6 +301,54 @@
       .language-name {
         font-size: 14px;
       }
+
+      /* ---- expansion ---- */
+      @keyframes rotate-forward {
+        from {
+          transform: rotate(0deg);
+        }
+
+        to {
+          transform: rotate(90deg);
+        }
+      }
+
+      @keyframes rotate-back {
+        from {
+          transform: rotate(90deg);
+        }
+
+        to {
+          transform: rotate(0deg);
+        }
+      }
+
+      .rotate-f {
+        animation: rotate-forward 0.5s;
+        animation-fill-mode: forwards;
+      }
+
+      .rotate-b {
+        animation: rotate-back 0.5s;
+        animation-fill-mode: forwards;
+      }
+
+      .expansion-icon-collapsed {}
+
+      .expansion-title {
+        color: white;
+        cursor: pointer;
+      }
+
+      .expansion-content-collapsed {
+        display: none;
+      }
+
+      .expansion-content {
+        margin-left: 20px;
+      }
+
+      /* ---- expansion ---- */
 
       .custom-app-drawer-wrapper {
         display: block;
@@ -542,20 +590,33 @@
                 <hr class="custom-sidebar-divider">
                 <!-- Essential Records - end -->
 
-                <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
-                <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
-                  <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
-                    <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                <div class="expansion-title" on-click="expansionTitleTapped" data-key="people">
+                  <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
+                  People
+                </div>
+                <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.people)]]">
+                  <a name="manage-customers" href="#/manage-customers">[[verses.sidebar.customers]]</a>
+                  <a name="manage-employees" href="#/manage-employees">[[verses.sidebar.employees]]</a>
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_VENDOR')]]">
+                    <template is="dom-if" if="[[!hasModuleWithOrganization(organization, 'MOD_RESTAURANT')]]">
+                      <a name="manage-vendors" href="#/manage-vendors">[[verses.sidebar.vendors]]</a>
+                    </template>
                   </template>
-                </template>
+                </div>
+
                 <hr class="custom-sidebar-divider">
 
-                <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
-                <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
-                <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
-                  <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
-                </template>
+                <div class="expansion-title" on-click="expansionTitleTapped" data-key="presets">
+                  <iron-icon class="expansion-icon-collapsed" icon="chevron-right"></iron-icon>
+                  Presets
+                </div>
+                <div class$="expansion-content [[$getExpansionContentClass(expansionStatus.presets)]]">
+                  <a name="manage-discount-presets" href="#/manage-discount-presets">[[verses.sidebar.manageDiscountPresets]]</a>
+                  <a name="manage-payment-methods" href="#/manage-payment-methods">[[verses.sidebar.managePaymentMethods]]</a>
+                  <template is="dom-if" if="[[hasModuleWithOrganization(organization, 'MOD_PRODUCT')]]">
+                    <a name="manage-product-categories" href="#/manage-product-categories">[[verses.sidebar.manageProductCategories]]</a>
+                  </template>
+                </div>
                 <hr class="custom-sidebar-divider">
 
                 <!-- Records - start -->
@@ -931,6 +992,17 @@
             type: String,
             value: '',
             notify: true
+          },
+          expansionStatus: {
+            type: Object,
+            value: () => {
+              return {
+                people: false,
+                presets: false,
+                reportsAndGraphs: false,
+                records: false
+              }
+            }
           }
         };
       }
@@ -1895,6 +1967,40 @@
             this.refreshCurrentPage();
             this._scrollCurrentPageToTop();
           }, 1);
+        }
+      }
+
+      // =================================
+
+      expansionTitleTapped(e) {
+        let el = e.target;
+        if (el.nodeName === 'IRON-ICON') {
+          el = el.parentNode;
+        }
+        let key = el.getAttribute('data-key');
+        this.set(`expansionStatus.${key}`, !this.expansionStatus[key]);
+        el.querySelector('iron-icon').classList.remove('rotate-f');
+        el.querySelector('iron-icon').classList.remove('rotate-b');
+        if (this.expansionStatus[key]) {
+          el.querySelector('iron-icon').classList.add('rotate-f');
+        } else {
+          el.querySelector('iron-icon').classList.add('rotate-b');
+        }
+      }
+
+      // $getExpansionAnimationClass(key) {
+      //   if (key) {
+      //     return 'rotate-f';
+      //   } else {
+      //     return '';
+      //   }
+      // }
+
+      $getExpansionContentClass(key) {
+        if (key) {
+          return '';
+        } else {
+          return ' expansion-content-collapsed';
         }
       }
 
