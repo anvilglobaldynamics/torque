@@ -26,6 +26,9 @@ exports.AdminGetStatisticsApi = class extends Api {
       users: {
         total: 0,
       },
+      organizations: {
+        total: 0,
+      },
       customers: {
         total: 0
       },
@@ -46,6 +49,10 @@ exports.AdminGetStatisticsApi = class extends Api {
     // users
     let userList = await this.database.user._find({});
     statistics.users.total = userList.length;
+
+    // organizations
+    let organizationList = await this.database.organization._find({});
+    statistics.organizations.total = organizationList.length;
 
     // // NOTE: Uncomment to show hasAtLeast1Sale and hasAtLeast5Sales
     // for (let user of userList) {
