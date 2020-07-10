@@ -14,7 +14,8 @@ exports.AdminGetOutgoingSmsListApi = class extends Api {
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
-      date: Joi.number().max(999999999999999).required()
+      date: Joi.number().max(999999999999999).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
     });
   }
 
@@ -27,16 +28,21 @@ exports.AdminGetOutgoingSmsListApi = class extends Api {
   }
 
   async handle({ body }) {
-    let { date } = body;
+    let { date, phone } = body;
     let outgoingSmsList = [];
 
-    if (date === 1592697600000) {
-      // June 21, 2020
-      // On this day we upgraded all torque-lite users to torque
-      // We sent out phone verification requests to all 5000 users
-      // So, this date is skipped so that admin client is not overwhelmed
+    if (phone) {
+      // If phone is provided, date parameter is ignored
+      outgoingSmsList = await this.database.outgoingSms._find({ to: phone });
     } else {
-      outgoingSmsList = await this._getOutgoingSmsList({ date });
+      if (date === 1592697600000) {
+        // June 21, 2020
+        // On this day we upgraded all torque-lite users to torque
+        // We sent out phone verification requests to all 5000 users
+        // So, this date is skipped so that admin client is not overwhelmed
+      } else {
+        outgoingSmsList = await this._getOutgoingSmsList({ date });
+      }
     }
 
     return { outgoingSmsList };

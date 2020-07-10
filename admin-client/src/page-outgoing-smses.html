@@ -92,6 +92,7 @@
 
       <div class="card horizontal layout center">
         <paper-input type="date" class="flex" value="{{date}}" label="From Date"></paper-input>
+        <paper-input type="text" class="flex" value="{{phone}}" label="Phone (Optional but Overrides Date)" style="margin-left: 4px;"></paper-input>
         <paper-button raised class="primary" on-tap="searchTapped">Search</paper-button>
       </div>
 
@@ -107,7 +108,7 @@
                     <span class="phone-number">[[outgoingSms.to]]</span>
                     <span class$="status-[[outgoingSms.status]]">[[outgoingSms.status]]</span>
                   </div>
-                  <div class="sms-date">[[$mkDate(outgoingSms.createdDatetimeStamp, 'hh:mm:ss TT')]]</div>
+                  <div class="sms-date">[[$mkDate(outgoingSms.createdDatetimeStamp, 'MMM dd yyyy hh:mm:ss TT')]]</div>
                 </div>
                 <code class="sms-body">[[outgoingSms.content]]</code>
                 <div class="horizontal layout right-side">
@@ -138,6 +139,10 @@
           date: {
             type: String,
             value: () => new XDate().toString('yyyy-MM-dd')
+          },
+          phone: {
+            type: String,
+            value: () => ''
           }
         };
       }
@@ -173,9 +178,10 @@
       }
 
       _fetchOutgoingSmsList(cbfn) {
-        let { date } = this;
+        let { date, phone } = this;
         date = Date.parse(date);
-        let data = { date };
+        if (!phone) { phone = null; }
+        let data = { date, phone };
         this.app.callAdminGetOutgoingSmsListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
