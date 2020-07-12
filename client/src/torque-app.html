@@ -1096,6 +1096,7 @@
         window.setTimeout(() => this._reportUrlHit(), 1000);
         window.setTimeout(() => this._initiateBackgroundSync(), backgroundSyncInitialDelay);
         // this.delay(5000, () => this._assertApiKey());
+        this.delay(0, () => this.setDefaultExpansionIcons());
       }
 
       _assertApiKey() {
@@ -2034,6 +2035,22 @@
           let el = this.elem(`.custom-app-drawer a[name="${this.pageNameForNavigationMenu}"]`);
           el.classList.add('iron-selected');
         } catch (ex) { }
+      }
+
+      setDefaultExpansionIcons() {
+
+        let list = this.elemAll('.expansion-title').forEach(el => {
+          let key = el.getAttribute('data-key');
+
+          el.querySelector('iron-icon').classList.remove('rotate-f');
+          el.querySelector('iron-icon').classList.remove('rotate-b');
+          if (this.expansionStatus[key]) {
+            el.querySelector('iron-icon').classList.add('rotate-f');
+          } else {
+            el.querySelector('iron-icon').classList.add('rotate-b');
+          }
+        });
+
       }
 
       expansionTitleTapped(e) {
