@@ -214,11 +214,11 @@
     "manageDiscountPresets": "Discounts",
     "managePaymentMethods": "Payment Methods",
     "productSalesReport": "Product Sales Report",
-    "people":"People",
-    "presets":"Presets",
-    "reportsAndGraphs":"Reports and Graphs",
-    "records":"Records",
-    "accounting":"Accounting"
+    "people": "People",
+    "presets": "Presets",
+    "reportsAndGraphs": "Reports and Graphs",
+    "records": "Records",
+    "accounting": "Accounting"
   },
   "titleBar": {
     "home": "Home",
@@ -1298,7 +1298,7 @@
     "viewExpense": "View Expense",
     "addExpense": "Add Expense",
     "viewAssetPurchase": "View Asset Transactions",
-    "addAssetPurchase": "Add Asset Purchase",
+    "addAssetPurchase": "Add Asset Transaction",
     "addManualTransactionPageTitle": "Add Manual Transaction",
     "editManualTransactionPageTitle": "Edit Manual Transaction",
     "noAccountFound": "No account found",
@@ -1315,7 +1315,7 @@
     "transactionDate": "Transaction Date",
     "addEditIncomeTransactionPageTitle": "Income Transaction",
     "addEditExpenseTransactionPageTitle": "Expense Transaction",
-    "addEditAssetPurchasePageTitle": "Asset Purchase",
+    "addEditAssetPurchasePageTitle": "Asset Transaction",
     "monetaryAccount": "Monetary Account",
     "createNewTransaction": "Create Transaction",
     "updateOldTransaction": "Update Transaction",
@@ -1378,6 +1378,12 @@
     "incomeStatementDescription": "Income Statement (also called Profit and Loss Statement) shows your business's Revenues, Expenses and Net Profit over a certain period of time.",
     "balanceSheetDescription": "Balance sheet shows you the financial position of your business. It lists the total value of your Fixed and Current Assets, your Liabilities, your Investments and any Retained Profits.",
     "trialBalanceDescription": "Trial Balance is a list of all your account heads and their total balance. Trial Balance is specially useful to your accountant.",
-    "chartOfAccountsDescription": "The chart of accounts is a listing of all accounts used in the general ledger of your organization."
+    "chartOfAccountsDescription": "The chart of accounts is a listing of all accounts used in the general ledger of your organization.",
+    "manageAccountsHelpfulNote": "💡 Transactions are recorded under accounts. Accounts in Lipi help group the same type of transactions. Such as - product sales revenue, cost of goods sold, electricity bill expense etc.",
+    "manageMonetaryAccountsHelpfulNote": "💡 Transactions are recorded under accounts. Monetary accounts in Lipi represent your real-life accounts. Such as - bank account, cash drawer, petty cash etc.",
+    "manageTransactionsIncomeTransactionsNote": "All transactions that generate revenue for your business count as income transactions. For example - product sales revenue, additional payment on sales etc.",
+    "manageTransactionsExpenseTransactionsNote": "All of your business's expenditures count as expense transactions. For example - cost of goods sold, electricity bill etc.",
+    "manageTransactionsAssetTransactionsNote": "All transactions that increase or reduce your business's assets are asset transaction. For example - property purchase, furniture purchase etc.",
+    "manageTransactionsManualTransactionsNote": "The transactions that can not be categorised by above categories, are manual transaction. (for expert use only)"
   }
 }

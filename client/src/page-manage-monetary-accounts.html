@@ -28,6 +28,10 @@
 
     <div class$="page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="card helpful-tips">
+        [[verses.accounting.manageMonetaryAccountsHelpfulNote]]
+      </div>
+
       <template is="dom-if" if="{{!accountList.length}}">
         <div class="card">
           [[verses.accounting.noAccountFound]]
