@@ -584,6 +584,14 @@
         return str;
       }
 
+      getPasswordType(passVisible) {
+        return passVisible ? 'text' : 'password';
+      }
+
+      getVisibilityIcon(isVisible) {
+        return isVisible ? 'visibility' : 'visibility-off';
+      }
+
     }
 
   })();
