@@ -60,9 +60,7 @@
           <form>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
             <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="4" minlength="14" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
-            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="6" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="[[getPasswordType(passVisible)]]" style="margin-top: 0px;">
-              <paper-icon-button slot="suffix" toggles active="{{passVisible}}" icon$="[[getVisibilityIcon(passVisible)]]">
-              </paper-icon-button>
+            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="6" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 0px;">
             </paper-input>
 
             <div class="horizontal layout button-row end">
