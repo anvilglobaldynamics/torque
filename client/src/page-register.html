@@ -60,8 +60,7 @@
           <form>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
             <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="4" minlength="14" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
-            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="8" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 16px;"></paper-input>
-            <paper-input class="registerForm--retypedPassword" value="{{registerForm.retypedPassword}}" required minlength="8" error-message="[[verses.register.retypedPasswordInputError]]" label="[[verses.register.retypedPasswordInput]]" type="password"></paper-input>
+            <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="6" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 16px;"></paper-input>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -142,8 +141,7 @@
               return {
                 fullName: '',
                 phone: '',
-                password: '',
-                retypedPassword: ''
+                password: ''
               };
             }
           }
@@ -378,14 +376,7 @@
         this.elemAll('#registerForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#registerForm').validate()) return;
 
-        let { password, retypedPassword } = this.registerForm;
-
-        if (password !== retypedPassword) {
-          let el = this.elem('.registerForm--retypedPassword');
-          el.invalid = true;
-          el.errorMessage = this.verses.register.retypedPasswordMismatchError;
-          return;
-        }
+        let { password } = this.registerForm;
 
         this.delay(140, () => {
           this.selectedTabIndex = 1;
