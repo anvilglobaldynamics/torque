@@ -124,7 +124,8 @@ describe('Admin', _ => {
     callApi('api/admin-get-outgoing-sms-list', {
       json: {
         apiKey,
-        date
+        date,
+        phone: null
       }
     }, (err, response, body) => {
       expect(response.statusCode).to.equal(200);
