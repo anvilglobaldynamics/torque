@@ -16,8 +16,8 @@ exports.UserChangePasswordApi = class extends Api.mixin(SecurityMixin, UserMixin
   get requestSchema() {
     return Joi.object().keys({
       apiKey: Joi.string().length(64).required(),
-      oldPassword: Joi.string().min(8).max(30).required(),
-      newPassword: Joi.string().min(8).max(30).required()
+      oldPassword: Joi.string().min(6).max(30).required(),
+      newPassword: Joi.string().min(6).max(30).required()
     });
   }
 
