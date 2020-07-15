@@ -60,6 +60,11 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
         });
       }
     });
+    // Send a copy of the message to admin by email
+    let adminEmail = 'care@anvil.live';
+    let subject = `Forwarded Lipi password reset request`;
+    let html = `<pre>` + JSON.stringify(model, null, 2) + `</pre>`;
+    this.server.emailService.sendMail({ to: adminEmail, subject, html });
   }
 
   _createPasswordResetRequest({ userId, email, phone }, cbfn) {
