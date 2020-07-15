@@ -111,7 +111,47 @@ exports.AccountingMixin = (SuperApiClass) => class extends SuperApiClass {
         displayName: "Service Sales Return",
         isMonetaryAccount: false,
         note: "Revenue Lost due to Service Sales Return"
-      }
+      },
+
+      // non-essential - start
+      {
+        nature: 'expense',
+        codeName: "NE_LOCATION_RENT",
+        displayName: "Location Rent",
+        isMonetaryAccount: false,
+        note: "Rent for outlets, warehouses, offices"
+      },
+      {
+        nature: 'expense',
+        codeName: "NE_FURNITURE_AND_APPLICANCE_RENT",
+        displayName: "Furniture & Appliance Rent",
+        isMonetaryAccount: false,
+        note: "Rented furnitures and appliances"
+      },
+      {
+        nature: 'expense',
+        codeName: "NE_CHARITY",
+        displayName: "Charity",
+        isMonetaryAccount: false,
+        note: "Charity & Donations"
+      },
+      {
+        nature: 'expense',
+        codeName: "NE_BILLS_AND_UTILITIES",
+        displayName: "Bills and Utilities Expense",
+        isMonetaryAccount: false,
+        note: "Electricity, water and other utility bills"
+      },
+      {
+        nature: 'expense',
+        codeName: "NE_DAILY_EXPENSE",
+        displayName: "Daily/Petty Expense",
+        isMonetaryAccount: false,
+        note: "Cost of all the goods sold from Inventory"
+      },
+      // non essential - end
+
+
     ];
 
     for (let i = 0; i < defaultAccountList.length; i++) {
