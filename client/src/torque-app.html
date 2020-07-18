@@ -492,6 +492,15 @@
         /* max-width: 400px; */
       }
 
+      .navbar-logo-image {
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 60px;
+        width: 60px;
+        margin-top: 4px;
+      }
+
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -515,7 +524,12 @@
             </template>
 
             <div main-title class="flex vertical layout" style="text-align: center;">
-              <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
+              <template is="dom-if" if="[[$equals(pageName, 'home')]]">
+                <img class="navbar-logo-image" src="../images/logo-on-titlebar-slightly-different-color.png">
+              </template>
+              <template is="dom-if" if="[[!$equals(pageName, 'home')]]">
+                <div style$="[[$computePageTitleFontSize(pageTitleList.length)]]">[[$getPageTitle(pageTitleList.length)]]</div>
+              </template>
             </div>
 
             <template is="dom-if" if="[[shouldShowPrintButton]]">
@@ -1080,7 +1094,6 @@
         this._manageProductionVariables();
         this.useLanguageServices();
         this.initiateLanguageServices();
-        this.pushPageTitle(this.brandName);
         window.addEventListener('resize', () => this.updateInnerWidth());
         this.updateInnerWidth()
         this._notifyResizeHack();
@@ -1960,11 +1973,11 @@
 
       $computePageTitleFontSize(length) {
         let title = this.$getPageTitle(length) || "Lipi";
-        let size = 22;
+        let size = 18;
         let windowWidth = window.document.body.clientWidth;
         if (windowWidth <= 496) {
           if (title.length < 20) size = 18;
-          else if (title.length < 30) size = 14;
+          else if (title.length < 30) size = 16;
           else size = 12;
         }
         return `font-size: ${size}px`;
