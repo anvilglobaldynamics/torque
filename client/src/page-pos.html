@@ -68,8 +68,14 @@
         font-weight: bold;
       }
 
+      .monetary-unit {
+        font-size: 10px;
+        margin-left: 4px;
+      }
+
       .product-discount-vat-detail {
-        font-size: 11px;
+        font-size: 10px;
+        margin-left: 12px;
       }
 
       .service-info {
@@ -82,8 +88,9 @@
       }
 
       .service-vat-detail {
-        font-size: 11px;
-        margin-left: 6px;
+        font-size: 10px;
+        margin-left: 12px;
+        margin-right: 10px;
       }
 
       .service-customer-required {
@@ -146,6 +153,7 @@
         height: 16px;
         max-width: 16px;
         min-width: 16px;
+        margin-left: 4px;
       }
 
       .multi-column-header-row {
@@ -685,11 +693,11 @@
                         </paper-input>
 
                         <div>&nbsp;@&nbsp;[[product.salePrice]]</div>
-                        <div class="description">[[app.organization.settings.monetaryUnit]]</div>
+                        <div class="monetary-unit">[[app.organization.settings.monetaryUnit]]</div>
                         <template is="dom-if" if="[[hasPrivilege('PRIV_ALLOW_FLEXIBLE_PRICE', organization)]]">
                           <paper-icon-button on-tap="editProductSalePriceTapped" icon="create" class="edit-product-price-icon"></paper-icon-button>
                         </template>
-                        <span class="product-discount-vat-detail"> (+ [[verses.pos.vat]]: {{product.vatValue}}%)</span>
+                        <span class="product-discount-vat-detail">+[[verses.pos.vat]] {{product.vatValue}}%</span>
                       </div>
                     </div>
                     <paper-icon-button class="negative" on-tap="discardProductTapped" icon="remove-circle"></paper-icon-button>
@@ -813,8 +821,8 @@
 
                       <div class="horizontal layout center">
                         <div>[[service.salePrice]]</div>
-                        <div class="description">[[app.organization.settings.monetaryUnit]]</div>
-                        <span class="service-vat-detail">(+ [[verses.pos.vat]]: {{service.vatValue}}%)</span>
+                        <div class="monetary-unit">[[app.organization.settings.monetaryUnit]]</div>
+                        <span class="service-vat-detail">+[[verses.pos.vat]] {{service.vatValue}}%</span>
                         <paper-icon-button class="negative" on-tap="discardServiceTapped" icon="remove-circle"></paper-icon-button>
                       </div>
 
