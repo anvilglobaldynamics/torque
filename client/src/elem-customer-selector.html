@@ -132,11 +132,10 @@
           </template>
 
           <div class="pagination">
-            [[verses.general.loaded]]
-            <span class="limit">[[customerPagination.limit]]</span>
-            [[verses.general.itemsOutOf]]
-            <span class="total-count">[[customerPagination.totalCount]]</span> [[verses.general.startingFrom]]
-            <span class="offset">#[[$inc(customerPagination.offset)]]</span>.
+            <span class="offset">[[$paginationStartText(customerPagination.offset, customerPagination.limit)]]</span> -
+            <span class="limit">[[$paginationEndText(customerPagination.offset, customerPagination.limit)]]</span>
+            [[verses.general.paginationSeparator]]
+            <span class="total-count">[[customerPagination.totalCount]]</span>
           </div>
 
           <div class="horizontal layout center">
