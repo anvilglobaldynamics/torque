@@ -129,12 +129,12 @@
           </template>
 
           <div class="pagination">
-            [[verses.general.loaded]]
-            <span class="limit">[[pagination.limit]]</span>
-            [[verses.general.itemsOutOf]]
-            <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-            <span class="offset">#[[$inc(pagination.offset)]]</span>.
+            <span class="offset">[[$paginationStartText(pagination.offset, pagination.limit)]]</span> -
+            <span class="limit">[[$paginationEndText(pagination.offset, pagination.limit)]]</span>
+            [[verses.general.paginationSeparator]]
+            <span class="total-count">[[pagination.totalCount]]</span>
           </div>
+          
           <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
             <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
           </template>
