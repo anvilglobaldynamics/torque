@@ -135,7 +135,8 @@
     "linkedIn": "LinkedIn",
     "facebook": "Facebook",
     "back": "Back",
-    "details": "Details"
+    "details": "Details",
+    "paginationSeparator": "of"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

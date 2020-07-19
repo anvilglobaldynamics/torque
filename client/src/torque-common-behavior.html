@@ -584,6 +584,14 @@
         return str;
       }
 
+      $paginationStartText(offset, limit) {
+        return offset  + 1;
+      }
+
+      $paginationEndText(offset, limit) {
+        return offset + limit;
+      }
+
     }
 
   })();

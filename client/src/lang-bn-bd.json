@@ -135,7 +135,8 @@
     "linkedIn": "লিংকডইন",
     "facebook": "ফেসবুক",
     "back": "ফেরত যান",
-    "details": "বিস্তারিত"
+    "details": "বিস্তারিত",
+    "paginationSeparator": ", মোট"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
