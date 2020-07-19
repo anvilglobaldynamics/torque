@@ -23,12 +23,10 @@
 <dom-module id="page-manage-employees">
   <template>
     <style include="shared-styles">
-
       .hire-button-group paper-button {
         width: 100%;
         margin: 5px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -57,12 +55,12 @@
         </div>
 
         <div class="pagination">
-          [[verses.general.showing]]
-          <span class="limit">[[pagination.limit]]</span>
-          [[verses.general.itemsOutOf]]
-          <span class="total-count">[[pagination.totalCount]]</span> [[verses.general.startingFrom]]
-          <span class="offset">#[[$inc(pagination.offset)]]</span>.
+          <span class="offset">[[$paginationStartText(pagination.offset, pagination.limit)]]</span> -
+          <span class="limit">[[$paginationEndText(pagination.offset, pagination.limit)]]</span>
+          [[verses.general.paginationSeparator]]
+          <span class="total-count">[[pagination.totalCount]]</span>
         </div>
+
         <template is="dom-if" if="[[$hasMorePagination(pagination.totalCount, paginate.offset, paginate.limit)]]">
           <paper-button raised class="neutral pagination-show-more" on-tap="showMoreTapped">[[verses.general.showMore]]</paper-button>
         </template>
@@ -78,7 +76,7 @@
         <div class="card action-button-container">
           <div class="mb-4">[[verses.employee.addUserAsEmployeeDetail]]</div>
           <paper-button raised class="btn primary" on-tap="addNewEmployeeTapped">
-            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>  
+            <iron-icon class="button-icon" icon="icons:add-box"></iron-icon>
             [[verses.employee.addUserAsEmployee]]
           </paper-button>
         </div>
@@ -119,7 +117,7 @@
         super.onNavigateOut();
         this.app.popPageTitle();
       }
-      
+
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'organization-selected',
