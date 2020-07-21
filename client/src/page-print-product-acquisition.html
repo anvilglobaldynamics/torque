@@ -369,7 +369,7 @@
 
           const threshold = 2000;
           let then = Date.now();
-          window.print();
+          this.printWindow();
           let now = Date.now();
           if (now - then > threshold) {
             window.history.back();
@@ -423,7 +423,7 @@
       // region: ui  ===========================
 
       printButtonOnTopBarPressed(e = null) {
-        window.print();
+        this.printWindow();
       }
 
 

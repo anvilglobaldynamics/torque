@@ -513,6 +513,14 @@
         return false;
       }
 
+      printWindow() {
+        if (window.hasOwnProperty("cordova")) {
+          cordova.plugins.printer.print();
+        } else {
+          window.print();
+        }
+      }
+
       // ====================== Accounting Module =============================
 
       $getAccount(accountId) {
@@ -585,7 +593,7 @@
       }
 
       $paginationStartText(offset, limit) {
-        return offset  + 1;
+        return offset + 1;
       }
 
       $paginationEndText(offset, limit) {
