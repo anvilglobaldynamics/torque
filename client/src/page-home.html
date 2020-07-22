@@ -773,7 +773,13 @@
       }
 
       addVendorTapped(e = null) {
-        this.app.navigateTo(`/edit-vendor`);
+
+        this.app.displayProductFlowContainerDialog(() => {
+
+          this.app.navigateTo(`/edit-vendor`);
+        });
+
+        // this.app.navigateTo(`/edit-vendor`);
       }
 
       addProductBlueprintTapped(e = null) {
@@ -1117,7 +1123,7 @@
       shortcutToYoutubeTapped(e = null) {
         // let url = 'https://www.youtube.com/channel/UCoHD2HTSQlU884oKQE7HB2Q';
         let url = 'https://www.youtube.com/playlist?list=PLDGYCqSQ7GwqSXwOp_g8EiJ72GXFOgiTe';
-        window.open(url,  '_blank');
+        window.open(url, '_blank');
       }
 
       // region: misc =================================
