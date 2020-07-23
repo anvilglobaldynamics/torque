@@ -759,9 +759,15 @@
             && selfOnboardingTasks.createSale
             && selfOnboardingTasks.verifyPhone;
 
-          // if (selfOnboardingTasks.showProduct){
-          //   if (selfOnboardingTasks.createVendor)
-          // }
+          if (selfOnboardingTasks.showProduct) {
+            if (selfOnboardingTasks.createVendor && !selfOnboardingTasks.createProductBlueprint) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+
+            if (selfOnboardingTasks.createProductBlueprint && !selfOnboardingTasks.addProductsToInventory) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+          }
 
           return selfOnboardingTasks;
         })();
@@ -777,13 +783,12 @@
       }
 
       addVendorTapped(e = null) {
+        // TODO: Remove
+        // this.app.displayProductFlowContainerDialog(() => {
+        //   this.app.navigateTo(`/edit-vendor`);
+        // });
 
-        this.app.displayProductFlowContainerDialog(() => {
-
-          this.app.navigateTo(`/edit-vendor`);
-        });
-
-        // this.app.navigateTo(`/edit-vendor`);
+        this.app.navigateTo(`/edit-vendor`);
       }
 
       addProductBlueprintTapped(e = null) {

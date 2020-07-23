@@ -51,7 +51,7 @@
       }
 
       .product-list-card {
-        background-color:#e1f5fe;
+        background-color: #e1f5fe;
       }
 
     </style>
@@ -242,6 +242,9 @@
             return product;
           });
           this.productList = productList;
+          if (this.pagination.offset === 0 && productList.length === 0) {
+            this.app.displayProductFlowContainerDialog(() => { });
+          }
           cbfn();
         });
       }
