@@ -36,6 +36,7 @@
         padding: 3px;
         color: darkgreen;
       }
+
     </style>
 
     <div class="layout vertical" id="wrapper">
@@ -252,6 +253,9 @@
 
       _processProductBlueprintList(cbfn) {
         this._fetchProductBlueprintList(productBlueprintList => {
+          if (this.pagination.offset === 0 && productBlueprintList.length === 0) {
+            this.app.displayProductFlowContainerDialog(() => { });
+          }
           this.productBlueprintList = productBlueprintList;
           return cbfn();
         });

@@ -501,6 +501,13 @@
         margin-top: 4px;
       }
 
+      .product-flow-dialog-image {
+        height: 70vh;
+        max-height: 700px;
+        padding: 0px !important;
+        margin: 0px !important;
+      }
+
     </style>
 
     <app-drawer-layout responsive-width="4000px" fullbleed narrow="{{narrow}}">
@@ -843,20 +850,21 @@
 
           </div>
         </div>
-        <!-- 
-        <paper-dialog id="geolocation-dialog" modal style="z-index: -999999">
-          <h2>[[verses.root.geolocationTitle]]</h2>
 
-          <div>[[verses.root.geolocationLine1]]</div>
+        <paper-dialog id="product-flow-dialog" modal style="z-index: -999999; background: white; padding: 0px;">
 
-          <div>[[verses.root.geolocationLine2]]</div>
+          <template is="dom-if" if="[[$equals(selectedLanguageIdentifier, 'en-us')]]">
+            <img class="product-flow-dialog-image" src="../images/product-flow-en.png">
+          </template>
 
-          <img class="geolocation-image" src="../images/location-prompt.jpg">
+          <template is="dom-if" if="[[$equals(selectedLanguageIdentifier, 'bn-bd')]]">
+            <img class="product-flow-dialog-image" src="../images/product-flow-bn.png">
+          </template>
 
-          <div class="buttons" style="margin: 14px;">
-            <paper-button raised class="primary" on-click="geolocationDialogOkayTapped">[[verses.general.okay]]</paper-button>
+          <div class="buttons" style="margin: 14px; margin-top: -12px;">
+            <paper-button raised class="secondary" on-click="productFlowDialogOkayTapped">[[verses.general.okay]]</paper-button>
           </div>
-        </paper-dialog> -->
+        </paper-dialog>
 
         <paper-dialog id="inventory-container-dialog" modal style="z-index: -999999">
           <template is="dom-if" if="[[_outletList.length]]">
@@ -1577,6 +1585,24 @@
         //     unsyncedSalesList: []
         //   }
         // }
+      }
+
+      // ====================== product flow dialog =============================
+
+      displayProductFlowContainerDialog(cbfn) {
+        this._productFlowDialogCbfn = cbfn;
+        this._patchForPolymerModalDialogIssue();
+        this.elem('#product-flow-dialog').open();
+      }
+
+      __callProductFlowCbfn(data) {
+        this._productFlowDialogCbfn(data);
+        this._productFlowDialogCbfn = null;
+      }
+
+      productFlowDialogOkayTapped(e = null) {
+        this.elem('#product-flow-dialog').close();
+        this._productFlowDialogCbfn(null);
       }
 
       // ====================== inventory container dialog =============================

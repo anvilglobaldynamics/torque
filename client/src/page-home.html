@@ -766,6 +766,16 @@
             && selfOnboardingTasks.createSale
             && selfOnboardingTasks.verifyPhone;
 
+          if (selfOnboardingTasks.showProduct) {
+            if (selfOnboardingTasks.createVendor && !selfOnboardingTasks.createProductBlueprint) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+
+            if (selfOnboardingTasks.createProductBlueprint && !selfOnboardingTasks.addProductsToInventory) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+          }
+
           return selfOnboardingTasks;
         })();
       }
@@ -780,6 +790,11 @@
       }
 
       addVendorTapped(e = null) {
+        // TODO: Remove
+        // this.app.displayProductFlowContainerDialog(() => {
+        //   this.app.navigateTo(`/edit-vendor`);
+        // });
+
         this.app.navigateTo(`/edit-vendor`);
       }
 
@@ -1124,7 +1139,7 @@
       shortcutToYoutubeTapped(e = null) {
         // let url = 'https://www.youtube.com/channel/UCoHD2HTSQlU884oKQE7HB2Q';
         let url = 'https://www.youtube.com/playlist?list=PLDGYCqSQ7GwqSXwOp_g8EiJ72GXFOgiTe';
-        window.open(url,  '_blank');
+        window.open(url, '_blank');
       }
 
       // region: misc =================================

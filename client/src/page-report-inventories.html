@@ -424,6 +424,13 @@
             if (err) return;
             if (response.hasError) return this.onApiError(response.error);
             this.aggregatedInventoryDetailsList = response.aggregatedInventoryDetailsList;
+
+            // show product flow dialog only if all inventories are empty
+            let empty = response.aggregatedInventoryDetailsList.every(i => i.aggregatedProductList.length === 0);
+            if (productCategoryIdList.length === 0 && productBlueprintIdList.length === 0 && this.rawInventoryList.length === inventoryIdList.length && empty) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+
             return cbfn();
           });
         } else {
@@ -442,20 +449,21 @@
 
       _processInventoriesReport(cbfn) {
         let savedInventoryList = this.app.getFromSession('report-selected-inventory-list');
-
-        if (!savedInventoryList) {
-          this._fetchInventoryList((inventoryList) => {
+        this._fetchInventoryList((inventoryList) => {
+          this.rawInventoryList = inventoryList;
+          if (!savedInventoryList) {
             this.inventoriesToBeFetched = inventoryList;
             this._fetchInventoriesData(() => {
               cbfn();
             });
-          });
-        } else {
-          this.inventoriesToBeFetched = savedInventoryList;
-          this._fetchInventoriesData(() => {
-            cbfn();
-          });
-        }
+
+          } else {
+            this.inventoriesToBeFetched = savedInventoryList;
+            this._fetchInventoriesData(() => {
+              cbfn();
+            });
+          }
+        });
       }
 
       // region: ui  ===========================
