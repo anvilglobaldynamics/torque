@@ -851,7 +851,7 @@
           </div>
         </div>
 
-        <paper-dialog id="product-flow-dialog" modal style="z-index: -999999; background: #e1f5fe; padding: 0px;">
+        <paper-dialog id="product-flow-dialog" modal style="z-index: -999999; background: white; padding: 0px;">
 
           <template is="dom-if" if="[[$equals(selectedLanguageIdentifier, 'en-us')]]">
             <img class="product-flow-dialog-image" src="../images/product-flow-en.png">
@@ -861,7 +861,7 @@
             <img class="product-flow-dialog-image" src="../images/product-flow-bn.png">
           </template>
 
-          <div class="buttons" style="margin: 14px;">
+          <div class="buttons" style="margin: 14px; margin-top: -12px;">
             <paper-button raised class="secondary" on-click="productFlowDialogOkayTapped">[[verses.general.okay]]</paper-button>
           </div>
         </paper-dialog>
