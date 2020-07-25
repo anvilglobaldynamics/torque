@@ -102,14 +102,14 @@ const polymerJsonBuildConfig = {
   "custom-es6-service-worker": {
     "name": "custom-es6-service-worker",
     "js": {
-      "minify": true,
+      "minify": false,
       "compile": false
     },
     "css": {
-      "minify": true
+      "minify": false
     },
     "html": {
-      "minify": true
+      "minify": false
     },
     "addServiceWorker": true,
     "addPushManifest": true,
@@ -139,7 +139,7 @@ const rootElementPath = 'src/torque-app.html'
 const originalPolymerJson = readPolymerJson(polymerJsonPath);
 let polymerJson = JSON.parse(JSON.stringify(originalPolymerJson));
 
-updateBuildNumber(srcDir, rootElementPath);
+let newBuildNumber = updateBuildNumber(srcDir, rootElementPath);
 
 if (cmdArgs.android) {
   polymerJson.builds.push(polymerJsonBuildConfig["custom-es5-android"]);
@@ -154,6 +154,15 @@ console.log(JSON.stringify(polymerJson, null, 2));
 writePolymerJson(polymerJsonPath, polymerJson);
 runPolymerBuild();
 writePolymerJson(polymerJsonPath, originalPolymerJson);
+
+// Update service worker console log
+{
+  let p = '/home/larson/Documents/Github/torque/client/build/custom-es6-service-worker/service-worker.js';
+  let c = fslib.readFileSync(p, 'utf-8');
+  c = c.replace("self.addEventListener('install', function (event) {", `self.addEventListener('install', function (event) { \n console.debug('install ${newBuildNumber}');`);
+  c = c.replace("self.addEventListener('activate', function (event) {", `self.addEventListener('activate', function (event) { \n console.debug('activate ${newBuildNumber}');`);
+  fslib.writeFileSync(p, c);
+}
 
 if (!cmdArgs.pwa && !cmdArgs.android) {
   hashLinks(traditionalBuildDir);
