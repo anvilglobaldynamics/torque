@@ -502,8 +502,10 @@
       }
 
       .product-flow-dialog-image {
-        height: 70vh;
-        max-height: 700px;
+        /* height: 70vh; */
+        /* max-height: 700px; */
+        max-height: 70vh;
+        max-width: calc(100vw - 100px);
         padding: 0px !important;
         margin: 0px !important;
       }
@@ -964,7 +966,7 @@
             type: Object,
             value: () => {
               '%__deploy-start'
-              return JSON.parse('{"build":363,"datetimeStamp":1595505940961}');
+              return JSON.parse('{"build":382,"datetimeStamp":1595667333056}');
               '%__deploy-end'
             }
           },
@@ -1729,7 +1731,9 @@
       }
 
       reloadTapped(e = null) {
-        window.location.reload();
+        window.updateAllServiceWorkers(() => {
+          window.location.reload();
+        });
       }
 
       switchOrganizationTapped(e = null) {

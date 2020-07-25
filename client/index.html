@@ -101,6 +101,7 @@
         opacity: 0.1;
       }
     }
+
   </style>
 </head>
 
@@ -116,14 +117,56 @@
     };
   </script>
   <script>
-    const tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
+    window.updateAllServiceWorkers = (cbfn) => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          let promiseList = [];
+
+          if (registrations.length) {
+            for (let registration of registrations) {
+              promiseList.push(registration.unregister());
+            }
+          }
+
+          Promise.all(promiseList).then(() => {
+            console.log(`${promiseList.length} Service worker(s) checked for update`);
+            cbfn(promiseList.length);
+          });
+
+        });
+      } else {
+        cbfn(0);
+      }
+    }
+
+    let tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
       (window.location.href.indexOf('fallback.lipi.live') === -1) &&
       (!(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'));
+    tryInstallingServiceWorker = true;
+
     if (tryInstallingServiceWorker) {
       window.addEventListener('load', function () {
+
         navigator.serviceWorker.register('service-worker.js', {
           scope: Polymer.rootPath,
+        }).then(reg => {
+          console.log("REG", reg);
+          
+
+
         });
+
+        // console.log("Registering and updating service workers");
+        // window.updateAllServiceWorkers((count) => {
+
+        //   if (count === 0) {
+        //     navigator.serviceWorker.register('service-worker.js', {
+        //       scope: Polymer.rootPath,
+        //     });
+        //   }
+
+        // });
+
       });
     } else {
       if ('serviceWorker' in navigator) {
