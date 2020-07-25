@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-autocomplete/paper-autocomplete.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
@@ -41,6 +42,15 @@
         margin-top: 12px;
         /* color: rgb(255, 145, 0); */
         color: var(--app-button-label-alternative);
+      }
+
+      .category-box {
+        font-size: 14px;
+        padding: 6px;
+        margin: 2px;
+        border-radius: 4px;
+        cursor: pointer;
+        padding-left: 14px;
       }
 
     </style>
@@ -97,7 +107,24 @@
                 </template>
               </div>
 
-              <div class="horizontal layout center">
+
+              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="Product Category" id="input-local-placeholder" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected">
+                <template slot="autocomplete-custom-template">
+                  <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}">
+                    <style>
+                      :host {
+                        display: block;
+                      }
+
+                    </style>
+                    [[item.name]]
+                    <script></script>
+                    <paper-ripple></paper-ripple>
+                  </paper-item>
+                </template>
+              </paper-autocomplete>
+
+              <!-- <div class="horizontal layout center">
                 <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
                 <template is="dom-if" if="[[newCategoryInput.length]]">
                   <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
@@ -109,7 +136,7 @@
                     <iron-icon icon="search"></iron-icon>
                   </paper-button>
                 </template>
-              </div>
+              </div> -->
             </div>
           </template>
           <!-- select/deselect product category - end -->
@@ -232,7 +259,71 @@
           vendorList: {
             type: Array,
             value: []
-          }
+          },
+          sourceProductCategoryList: {
+            type: Array,
+            value: [
+              { "text": "Alabama", "value": "AL" },
+              { "text": "Alaska", "value": "AK" },
+              { "text": "American Samoa", "value": "AS" },
+              { "text": "Arizona", "value": "AZ" },
+              { "text": "Arkansas", "value": "AR" },
+              { "text": "California", "value": "CA" },
+              { "text": "Colorado", "value": "CO" },
+              { "text": "Connecticut", "value": "CT" },
+              { "text": "Delaware", "value": "DE" },
+              { "text": "District Of Columbia", "value": "DC" },
+              { "text": "Federated States Of Micronesia", "value": "FM" },
+              { "text": "Florida", "value": "FL" },
+              { "text": "Georgia", "value": "GA" },
+              { "text": "Guam", "value": "GU" },
+              { "text": "Hawaii", "value": "HI" },
+              { "text": "Idaho", "value": "ID" },
+              { "text": "Illinois", "value": "IL" },
+              { "text": "Indiana", "value": "IN" },
+              { "text": "Iowa", "value": "IA" },
+              { "text": "Kansas", "value": "KS" },
+              { "text": "Kentucky", "value": "KY" },
+              { "text": "Louisiana", "value": "LA" },
+              { "text": "Maine", "value": "ME" },
+              { "text": "Marshall Islands", "value": "MH" },
+              { "text": "Maryland", "value": "MD" },
+              { "text": "Massachusetts", "value": "MA" },
+              { "text": "Michigan", "value": "MI" },
+              { "text": "Minnesota", "value": "MN" },
+              { "text": "Mississippi", "value": "MS" },
+              { "text": "Missouri", "value": "MO" },
+              { "text": "Montana", "value": "MT" },
+              { "text": "Nebraska", "value": "NE" },
+              { "text": "Nevada", "value": "NV" },
+              { "text": "New Hampshire", "value": "NH" },
+              { "text": "New Jersey", "value": "NJ" },
+              { "text": "New Mexico", "value": "NM" },
+              { "text": "New York", "value": "NY" },
+              { "text": "North Carolina", "value": "NC" },
+              { "text": "North Dakota", "value": "ND" },
+              { "text": "Northern Mariana Islands", "value": "MP" },
+              { "text": "Ohio", "value": "OH" },
+              { "text": "Oklahoma", "value": "OK" },
+              { "text": "Oregon", "value": "OR" },
+              { "text": "Palau", "value": "PW" },
+              { "text": "Pennsylvania", "value": "PA" },
+              { "text": "Puerto Rico", "value": "PR" },
+              { "text": "Rhode Island", "value": "RI" },
+              { "text": "South Carolina", "value": "SC" },
+              { "text": "South Dakota", "value": "SD" },
+              { "text": "Tennessee", "value": "TN" },
+              { "text": "Texas", "value": "TX" },
+              { "text": "Utah", "value": "UT" },
+              { "text": "Vermont", "value": "VT" },
+              { "text": "Virgin Islands", "value": "VI" },
+              { "text": "Virginia", "value": "VA" },
+              { "text": "Washington", "value": "WA" },
+              { "text": "West Virginia", "value": "WV" },
+              { "text": "Wisconsin", "value": "WI" },
+              { "text": "Wyoming", "value": "WY" }
+            ]
+          },
         };
       }
 
@@ -270,19 +361,22 @@
             this._addNewCategory();
           }
 
-          if (this.editMode) {
-            this._processGetProductBlueprint(() => {
-              this.calculateTotalProductCountAndAccountsPayable();
-              this.isReady = true;
-            });
-          } else {
-            this._processInventoryContainerList(() => {
-              this._processVendorList(_ => {
+          this._processGetSourceProductCategoryList(() => {
+            if (this.editMode) {
+              this._processGetProductBlueprint(() => {
                 this.calculateTotalProductCountAndAccountsPayable();
                 this.isReady = true;
               });
-            });
-          }
+            } else {
+              this._processInventoryContainerList(() => {
+                this._processVendorList(_ => {
+                  this.calculateTotalProductCountAndAccountsPayable();
+                  this.isReady = true;
+                });
+              });
+            }
+          });
+
         });
       }
 
@@ -577,14 +671,14 @@
           } else if (productCategoryList.length === 1) {
             this.push('productCategoryList', productCategoryList[0]);
             this.newCategoryInput = '';
-            this.elem('.new-category-input').focus();
+            // this.elem('.new-category-input').focus();
 
           } else {
             this.app.displayCategoryDialog(productCategoryList, (selectedCategory) => {
               if (!selectedCategory) return;
               this.push('productCategoryList', selectedCategory);
               this.newCategoryInput = '';
-              this.elem('.new-category-input').focus();
+              // this.elem('.new-category-input').focus();
             });
           }
         });
@@ -605,6 +699,38 @@
       }
 
       // region: misc =================================
+
+      _queryFn(datasource, query) {
+        return datasource.filter(function (item) {
+          return (
+            item.name.toLowerCase().indexOf(query) != -1
+          );
+        });
+      }
+
+      _processGetSourceProductCategoryList(cbfn) {
+        let data = {
+          searchString: '',
+          productCategoryIdList: [],
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          response.productCategoryList.forEach(productCategory => {
+            productCategory.fontColorCode = this.$guessCategoryFontColorCode(productCategory.colorCode);
+          })
+          this.sourceProductCategoryList = response.productCategoryList;
+          cbfn();
+        });
+      }
+
+      productCategorySelected(event) {
+        let selected = event.detail.text;
+        console.log({ selected });
+        this.newCategoryInput = selected;
+        this._addNewCategory();
+      }
 
     }
 
