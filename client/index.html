@@ -142,7 +142,7 @@
     let tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
       (window.location.href.indexOf('fallback.lipi.live') === -1) &&
       (!(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'));
-    tryInstallingServiceWorker = true;
+    // tryInstallingServiceWorker = true;
 
     if (tryInstallingServiceWorker) {
       window.addEventListener('load', function () {
