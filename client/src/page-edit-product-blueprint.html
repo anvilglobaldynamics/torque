@@ -116,20 +116,29 @@
                         display: block;
                       }
 
+                      paper-item {
+                        padding: 0px !important;
+                      }
+
                       /* paper-item.active {} */
 
                       .category-ball {
+                        display: inline-block;
                         height: 16px;
                         width: 16px;
                         border-radius: 50%;
+                        margin-left: 12px;
                         margin-right: 12px;
-                        display: inline-block;
+                      }
+
+                      .category-text {
+                        font-size: 14px;
+
                       }
 
                     </style>
-                    <span class="category-ball" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}; ">
-
-                    </span>[[item.name]]
+                    <span class="category-ball" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}; "></span>
+                    <span class="category-text">[[item.name]]</span>
                     <script></script>
                     <paper-ripple></paper-ripple>
                   </paper-item>
@@ -645,13 +654,17 @@
 
       _initiateProductCategory() {
         this.elem('#product-category-autocomplete').showResultsOnFocus = true;
+        let el = this.elem('#product-category-autocomplete').shadowRoot.querySelector('paper-autocomplete-suggestions')
+        el.maxViewableItems = 4;
+        el.showResultsOnFocus = true;
+        el._itemHeight = 24;
+
         // this.elem('#product-category-autocomplete').onfocus = () => {
         //   this.elem('#product-category-autocomplete').suggestions(this.sourceProductCategoryList);
-        // }
+        // }        
       }
 
       _queryFn(datasource, query) {
-        console.log({ query })
         return datasource.filter((item) => {
           if (query.length === 0) return true;
           if (this.productCategoryList.find(_productCategory => item.id === _productCategory.id)) {
