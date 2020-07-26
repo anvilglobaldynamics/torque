@@ -695,7 +695,6 @@
 
       productCategorySelected(event) {
         let selected = event.detail.text;
-        console.log(this.elem('#product-category-autocomplete'));
         this.delay(100, () => {
           this.elem('#product-category-autocomplete').clear();
         })
