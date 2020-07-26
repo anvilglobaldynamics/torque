@@ -108,7 +108,7 @@
               </div>
 
               <!-- product category autocomplete - start -->
-              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="Product Category" id="product-category-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected" show-results-on-focus highlight-first>
+              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="Product Category" id="product-category-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected" show-results-on-focus="true" highlight-first>
                 <template slot="autocomplete-custom-template">
                   <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
                     <style>
@@ -116,7 +116,7 @@
                         display: block;
                       }
 
-                      paper-item.active {}
+                      /* paper-item.active {} */
 
                       .category-ball {
                         height: 16px;
@@ -127,9 +127,9 @@
                       }
 
                     </style>
-                    <spna class="category-ball" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}; ">
+                    <span class="category-ball" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}; ">
 
-                    </spna>[[item.name]]
+                    </span>[[item.name]]
                     <script></script>
                     <paper-ripple></paper-ripple>
                   </paper-item>
@@ -137,19 +137,6 @@
               </paper-autocomplete>
               <!-- product category autocomplete - end -->
 
-              <!-- <div class="horizontal layout center">
-                <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
-                <template is="dom-if" if="[[newCategoryInput.length]]">
-                  <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
-                    <iron-icon icon="search"></iron-icon>
-                  </paper-button>
-                </template>
-                <template is="dom-if" if="[[!newCategoryInput.length]]">
-                  <paper-button class="neutral" disabled raised icon="search">
-                    <iron-icon icon="search"></iron-icon>
-                  </paper-button>
-                </template>
-              </div> -->
             </div>
           </template>
           <!-- select/deselect product category - end -->
@@ -320,12 +307,14 @@
               this._processGetProductBlueprint(() => {
                 this.calculateTotalProductCountAndAccountsPayable();
                 this.isReady = true;
+                this._initiateProductCategory();
               });
             } else {
               this._processInventoryContainerList(() => {
                 this._processVendorList(_ => {
                   this.calculateTotalProductCountAndAccountsPayable();
                   this.isReady = true;
+                  this._initiateProductCategory();
                 });
               });
             }
@@ -652,9 +641,17 @@
         return (!editMode && inventoryContainerList.length > 0);
       }
 
-      // region: misc =================================
+      // region: product category autocomplete =================================
+
+      _initiateProductCategory() {
+        this.elem('#product-category-autocomplete').showResultsOnFocus = true;
+        // this.elem('#product-category-autocomplete').onfocus = () => {
+        //   this.elem('#product-category-autocomplete').suggestions(this.sourceProductCategoryList);
+        // }
+      }
 
       _queryFn(datasource, query) {
+        console.log({ query })
         return datasource.filter((item) => {
           if (query.length === 0) return true;
           if (this.productCategoryList.find(_productCategory => item.id === _productCategory.id)) {
@@ -692,6 +689,8 @@
         this.newCategoryInput = selected;
         this._addNewCategory();
       }
+
+      // region: misc =================================
 
     }
 
