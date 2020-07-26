@@ -69,7 +69,7 @@
       <!-- <div class="create-organization-container">
         <paper-button raised class="primary" on-tap="createTapped">[[verses.organization.createOrganization]]</paper-button>
       </div> -->
-      
+
 
     </div>
 
@@ -141,7 +141,10 @@
           organization = this.organizationList.find(organization => organization.id === this.app.organization.id);
           this.app.removeSettings();
           this.app.removePreviousOrganization();
-          this.app.saveOrganization(organization);
+          if (organization) {
+            // not a different organization
+            this.app.saveOrganization(organization);
+          }
         }
         cbfn();
       }
