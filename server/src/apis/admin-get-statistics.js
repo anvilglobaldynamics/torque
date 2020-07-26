@@ -188,12 +188,13 @@ exports.AdminGetStatisticsApi = class extends Api {
       date.setDate(date.getDate() + i);
 
       let dateString = date.toISOString().replace('T00:00:00.000Z', '');
-      let dateWithEndTime = new Date(date.toISOString().replace('T00:00:00.000Z', 'T23:59:59.000Z'));
+      let dateWithEndTime = new Date(this.__getExtendedToDate(date.getTime()));
 
       let collectionName = 'sales';
       let dauCount = (await this.database.engine._db.collection(collectionName).aggregate([
         {
           $match: {
+            isDiscarded: false,
             createdDatetimeStamp: {
               $gte: date.getTime(),
               $lte: dateWithEndTime.getTime()
@@ -207,6 +208,7 @@ exports.AdminGetStatisticsApi = class extends Api {
       let salesCount = (await this.database.engine._db.collection(collectionName).aggregate([
         {
           $match: {
+            isDiscarded: false,
             createdDatetimeStamp: {
               $gte: date.getTime(),
               $lte: dateWithEndTime.getTime()
@@ -232,6 +234,14 @@ exports.AdminGetStatisticsApi = class extends Api {
     }
 
     return { statistics, dailyStatistics };
+  }
+
+  __getExtendedToDate(toDate) {
+    toDate = new Date(toDate);
+    toDate.setHours(23);
+    toDate.setMinutes(59);
+    toDate = toDate.getTime();
+    return toDate;
   }
 
 }
