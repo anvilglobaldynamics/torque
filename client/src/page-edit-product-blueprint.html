@@ -108,7 +108,7 @@
               </div>
 
               <!-- product category autocomplete - start -->
-              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="Product Category" id="product-category-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected" show-results-on-focus="true" highlight-first>
+              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="[[verses.productCategory.productCategory]]" id="product-category-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected" show-results-on-focus="true" highlight-first>
                 <template slot="autocomplete-custom-template">
                   <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
                     <style>
