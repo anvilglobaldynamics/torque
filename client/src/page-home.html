@@ -400,10 +400,9 @@
         </template>
         <!-- Shortcut card - end -->
 
-
-
         <!-- default outlet selection prompt - start -->
-        <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
+        <!-- TODO: Remove when completely certain -->
+        <!-- <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
           <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
             <div class="card prompt-card">
               [[verses.home.promptForDefaultOutlet]]
@@ -414,7 +413,7 @@
               </div>
             </div>
           </template>
-        </template>
+        </template> -->
         <!-- default outlet selection prompt - end -->
       </template>
 
