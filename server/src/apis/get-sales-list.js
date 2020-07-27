@@ -24,6 +24,7 @@ exports.GetSalesListApi = class extends Api {
       fromDate: Joi.number().max(999999999999999).required(),
       toDate: Joi.number().max(999999999999999).required(),
 
+      showOnlyCreditSales: Joi.boolean().optional().default(false),
       includeExtendedInformation: Joi.boolean().optional(),
       searchString: Joi.string().min(0).max(64).allow('').optional()
     });
@@ -119,12 +120,22 @@ exports.GetSalesListApi = class extends Api {
     map.forEach((discountPreset, sales) => sales.payment.discountPresetName = discountPreset.name);
   }
 
+  async __includeOnylCreditSales({ salesList }) {
+    salesList = salesList.filter((sales) => {
+      return sales.payment.totalBilled > sales.payment.totalPaidAmount;
+    });
+    return salesList;
+  }
+
   async handle({ body }) {
-    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, includeExtendedInformation, searchString } = body;
+    let { organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, showOnlyCreditSales, includeExtendedInformation, searchString } = body;
     toDate = this.__getExtendedToDate(toDate);
     await this.__verifyOutletIfNeeded({ outletId, shouldFilterByOutlet });
     await this.__verifyCustomerIfNeeded({ customerId, shouldFilterByCustomer });
     let salesList = await this.__getSalesList({ organizationId, outletId, customerId, shouldFilterByOutlet, shouldFilterByCustomer, fromDate, toDate, searchString });
+    if (showOnlyCreditSales) {
+      salesList = await this.__includeOnylCreditSales({ salesList });
+    }
     await this.__includeExtendedInformationIfNeeded({ salesList, includeExtendedInformation });
     await this.__includeDiscountPresetName({ salesList });
     return { salesList };

@@ -54,9 +54,10 @@
         color: darkred;
       }
 
-      .min-input {
+      /* .min-input {
         min-width: 200px;
-      }
+      } */
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -72,7 +73,7 @@
 
         <div class="card vertical layout">
           <div class="horizontal layout center">
-            <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]"></paper-input>
+            <paper-input class="flex min-input" value="{{fromDate}}" type="date" label="[[verses.general.fromDate]]" style="margin-right: 4px;"></paper-input>
             <paper-input class="flex min-input" value="{{toDate}}" type="date" label="[[verses.general.toDate]]"></paper-input>
           </div>
 
@@ -131,7 +132,12 @@
 
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
-        <div class="lone-controls">
+        <div class="lone-controls horizontal layout center-center wrap" style="margin-top: 10px;">
+          <paper-checkbox checked="{{showOnlyCreditSales}}">
+            <span class="privilege-name">[[verses.sales.showOnlyCreditSales]]</span>
+          </paper-checkbox>
+          <div class="flex"></div>
+
           <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
 
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
@@ -220,6 +226,10 @@
       static get properties() {
         return {
           shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
+          showOnlyCreditSales: {
             type: Boolean,
             value: false
           },
@@ -359,6 +369,7 @@
           shouldFilterByCustomer: this.shouldFilterByCustomer,
           fromDate,
           toDate,
+          showOnlyCreditSales: this.showOnlyCreditSales,
           paginate: this.paginate
         };
 
@@ -445,6 +456,7 @@
           'salesNumberToSearch',
           'shouldFilterByOutlet',
           'shouldFilterByCustomer',
+          'showOnlyCreditSales',
           'outletId',
           'fromDate',
           'toDate',
