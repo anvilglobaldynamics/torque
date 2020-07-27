@@ -751,7 +751,8 @@
     "editSalePriceDetails": "বিক্রয় মূল্য এখানে আপডেট করতে পারবেন। আসল মূল্য এবং নতুন মূল্য দুটোই সংরক্ষন করা হবে।",
     "totalBillBeforeRounding": "লেস ব্যাতিত মোট পরিশোধনীয়",
     "roundedByAmount": "লেস",
-    "discountPreset": "ডিসকাউন্ট প্রিসেট"
+    "discountPreset": "ডিসকাউন্ট প্রিসেট",
+    "showOnlyCreditSales": "শুধু বাকি বিক্রয় দেখুন"
   },
   "warehouse": {
     "editPageTitle": "গুদাম আপডেট করুন",
@@ -1212,6 +1213,7 @@
   },
   "productCategory": {
     "productCategories": "পণ্যের ধরণ",
+    "productCategory": "পণ্যের ধরণ",
     "productCategoriesTitle": "পণ্যের ধরণ",
     "manageProductCategoriesTitle": "পণ্যের ধরণ পরিচালনা",
     "editProductCategoryTitle": "পণ্যের ধরণ সম্পাদনা করুন",

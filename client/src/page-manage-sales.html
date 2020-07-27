@@ -57,6 +57,7 @@
       .min-input {
         min-width: 200px;
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -132,6 +133,10 @@
         <elem-outlet-selector page="{{self}}" class$="[[$if(isSearchingOutlet, '', 'hidden')]]"></elem-outlet-selector>
 
         <div class="lone-controls">
+          <paper-checkbox checked="{{showOnlyCreditSales}}">
+            <span class="privilege-name">[[verses.sales.showOnlyCreditSales]]</span>
+          </paper-checkbox>
+
           <paper-button raised class="btn danger clear-filter-button" on-tap="clearFiltersTapped">[[verses.general.clearFilters]]</paper-button>
 
           <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
@@ -220,6 +225,10 @@
       static get properties() {
         return {
           shouldShowFilters: {
+            type: Boolean,
+            value: false
+          },
+          showOnlyCreditSales: {
             type: Boolean,
             value: false
           },
@@ -359,6 +368,7 @@
           shouldFilterByCustomer: this.shouldFilterByCustomer,
           fromDate,
           toDate,
+          showOnlyCreditSales: this.showOnlyCreditSales,
           paginate: this.paginate
         };
 
@@ -445,6 +455,7 @@
           'salesNumberToSearch',
           'shouldFilterByOutlet',
           'shouldFilterByCustomer',
+          'showOnlyCreditSales',
           'outletId',
           'fromDate',
           'toDate',
