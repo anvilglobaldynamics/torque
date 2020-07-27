@@ -327,6 +327,7 @@
         overflow-y: auto;
         /* padding: 2px; */
       }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -1745,6 +1746,11 @@
 
       _processEntireInventory(cbfn) {
         this._fetchEntireInventoryDetails(({ aggregatedProductList, inventoryContainerDetails, inventoryDetails }) => {
+
+console.log("_processEntireInventory")
+          if (aggregatedProductList.length === 0 && this.app.pageName === 'pos') {
+            this.app.displayProductFlowContainerDialog(() => { });
+          }
 
           let productList = aggregatedProductList.map(product => {
             let { purchasePrice, salePrice } = product.product;

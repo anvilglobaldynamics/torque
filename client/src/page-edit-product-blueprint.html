@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-autocomplete/paper-autocomplete.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 
@@ -41,6 +42,15 @@
         margin-top: 12px;
         /* color: rgb(255, 145, 0); */
         color: var(--app-button-label-alternative);
+      }
+
+      .category-box {
+        font-size: 14px;
+        padding: 6px;
+        margin: 2px;
+        border-radius: 4px;
+        cursor: pointer;
+        padding-left: 14px;
       }
 
     </style>
@@ -97,19 +107,45 @@
                 </template>
               </div>
 
-              <div class="horizontal layout center">
-                <paper-input class="new-category-input flex" value="{{newCategoryInput}}" minlength="3" on-keypress="newCategoryInputChanged" label="[[verses.productCategory.searchForProductCategoryInput]]"></paper-input>
-                <template is="dom-if" if="[[newCategoryInput.length]]">
-                  <paper-button class="secondary" raised icon="search" on-tap="newCategoryAddTapped">
-                    <iron-icon icon="search"></iron-icon>
-                  </paper-button>
+              <!-- product category autocomplete - start -->
+              <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[sourceProductCategoryList]]" label="[[verses.productCategory.productCategory]]" id="product-category-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="productCategorySelected" show-results-on-focus="true" highlight-first>
+                <template slot="autocomplete-custom-template">
+                  <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
+                    <style>
+                      :host {
+                        display: block;
+                      }
+
+                      paper-item {
+                        padding: 0px !important;
+                      }
+
+                      /* paper-item.active {} */
+
+                      .category-ball {
+                        display: inline-block;
+                        height: 16px;
+                        width: 16px;
+                        border-radius: 50%;
+                        margin-left: 12px;
+                        margin-right: 12px;
+                      }
+
+                      .category-text {
+                        font-size: 14px;
+
+                      }
+
+                    </style>
+                    <span class="category-ball" style$="background-color: #{{item.colorCode}}; color: #{{item.fontColorCode}}; border-color: #{{item.fontColorCode}}; "></span>
+                    <span class="category-text">[[item.name]]</span>
+                    <script></script>
+                    <paper-ripple></paper-ripple>
+                  </paper-item>
                 </template>
-                <template is="dom-if" if="[[!newCategoryInput.length]]">
-                  <paper-button class="neutral" disabled raised icon="search">
-                    <iron-icon icon="search"></iron-icon>
-                  </paper-button>
-                </template>
-              </div>
+              </paper-autocomplete>
+              <!-- product category autocomplete - end -->
+
             </div>
           </template>
           <!-- select/deselect product category - end -->
@@ -232,7 +268,11 @@
           vendorList: {
             type: Array,
             value: []
-          }
+          },
+          sourceProductCategoryList: {
+            type: Array,
+            value: []
+          },
         };
       }
 
@@ -244,6 +284,7 @@
       }
 
       onNavigateIn() {
+        this._queryFn = this._queryFn.bind(this);
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = true;
         this.useLanguageServices();
@@ -270,19 +311,24 @@
             this._addNewCategory();
           }
 
-          if (this.editMode) {
-            this._processGetProductBlueprint(() => {
-              this.calculateTotalProductCountAndAccountsPayable();
-              this.isReady = true;
-            });
-          } else {
-            this._processInventoryContainerList(() => {
-              this._processVendorList(_ => {
+          this._processGetSourceProductCategoryList(() => {
+            if (this.editMode) {
+              this._processGetProductBlueprint(() => {
                 this.calculateTotalProductCountAndAccountsPayable();
                 this.isReady = true;
+                this._initiateProductCategory();
               });
-            });
-          }
+            } else {
+              this._processInventoryContainerList(() => {
+                this._processVendorList(_ => {
+                  this.calculateTotalProductCountAndAccountsPayable();
+                  this.isReady = true;
+                  this._initiateProductCategory();
+                });
+              });
+            }
+          });
+
         });
       }
 
@@ -577,14 +623,14 @@
           } else if (productCategoryList.length === 1) {
             this.push('productCategoryList', productCategoryList[0]);
             this.newCategoryInput = '';
-            this.elem('.new-category-input').focus();
+            this.elem('#product-category-autocomplete').focus();
 
           } else {
             this.app.displayCategoryDialog(productCategoryList, (selectedCategory) => {
               if (!selectedCategory) return;
               this.push('productCategoryList', selectedCategory);
               this.newCategoryInput = '';
-              this.elem('.new-category-input').focus();
+              this.elem('#product-category-autocomplete').focus();
             });
           }
         });
@@ -602,6 +648,58 @@
 
       $shouldShowAddProducts(editMode, inventoryContainerList) {
         return (!editMode && inventoryContainerList.length > 0);
+      }
+
+      // region: product category autocomplete =================================
+
+      _initiateProductCategory() {
+        this.elem('#product-category-autocomplete').showResultsOnFocus = true;
+        let el = this.elem('#product-category-autocomplete').shadowRoot.querySelector('paper-autocomplete-suggestions')
+        el.maxViewableItems = 4;
+        el.showResultsOnFocus = true;
+        el._itemHeight = 24;
+
+        // this.elem('#product-category-autocomplete').onfocus = () => {
+        //   this.elem('#product-category-autocomplete').suggestions(this.sourceProductCategoryList);
+        // }        
+      }
+
+      _queryFn(datasource, query) {
+        return datasource.filter((item) => {
+          if (query.length === 0) return true;
+          if (this.productCategoryList.find(_productCategory => item.id === _productCategory.id)) {
+            return false;
+          }
+          return (
+            item.name.toLowerCase().indexOf(query) != -1
+          );
+        });
+      }
+
+      _processGetSourceProductCategoryList(cbfn) {
+        let data = {
+          searchString: '',
+          productCategoryIdList: [],
+          organizationId: this.app.organization.id
+        };
+        this.app.callGetProductCategoryListApi(data, (err, response) => {
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          response.productCategoryList.forEach(productCategory => {
+            productCategory.fontColorCode = this.$guessCategoryFontColorCode(productCategory.colorCode);
+          })
+          this.sourceProductCategoryList = response.productCategoryList;
+          cbfn();
+        });
+      }
+
+      productCategorySelected(event) {
+        let selected = event.detail.text;
+        this.delay(100, () => {
+          this.elem('#product-category-autocomplete').clear();
+        })
+        this.newCategoryInput = selected;
+        this._addNewCategory();
       }
 
       // region: misc =================================

@@ -74,11 +74,16 @@
       .self-onboarding-card-title {
         font-size: 18px;
         font-weight: bold;
-        margin-bottom: 6px;
+        margin-top: 4px;
+        margin-bottom: 8px;
+      }
+
+      .self-onboarding-card-sub-title {
+        font-size: 10px;
       }
 
       .self-onboarding-task-container {
-        margin-top: 18px;
+        margin-top: 20px;
         /* border: 1px red solid; */
       }
 
@@ -170,6 +175,8 @@
 
         <div class="card self-onboarding-card">
           <div class="self-onboarding-card-title">[[verses.home.selfOnboardingTitle]]</div>
+
+          <div class="self-onboarding-card-sub-title">[[verses.home.selfOnboardingSubtitle]]</div>
 
           <!-- task : register - start -->
           <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.register)]]">
@@ -393,10 +400,9 @@
         </template>
         <!-- Shortcut card - end -->
 
-
-
         <!-- default outlet selection prompt - start -->
-        <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
+        <!-- TODO: Remove when completely certain -->
+        <!-- <template is="dom-if" if="[[shouldPromptForDefaultOutlet]]">
           <template is="dom-if" if="[[!settings.ui.pageHome.hideDefaultOutletPrompt]]">
             <div class="card prompt-card">
               [[verses.home.promptForDefaultOutlet]]
@@ -407,7 +413,7 @@
               </div>
             </div>
           </template>
-        </template>
+        </template> -->
         <!-- default outlet selection prompt - end -->
       </template>
 
@@ -759,6 +765,16 @@
             && selfOnboardingTasks.createSale
             && selfOnboardingTasks.verifyPhone;
 
+          if (selfOnboardingTasks.showProduct) {
+            if (selfOnboardingTasks.createVendor && !selfOnboardingTasks.createProductBlueprint) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+
+            if (selfOnboardingTasks.createProductBlueprint && !selfOnboardingTasks.addProductsToInventory) {
+              this.app.displayProductFlowContainerDialog(() => { });
+            }
+          }
+
           return selfOnboardingTasks;
         })();
       }
@@ -773,6 +789,11 @@
       }
 
       addVendorTapped(e = null) {
+        // TODO: Remove
+        // this.app.displayProductFlowContainerDialog(() => {
+        //   this.app.navigateTo(`/edit-vendor`);
+        // });
+
         this.app.navigateTo(`/edit-vendor`);
       }
 
@@ -1117,7 +1138,7 @@
       shortcutToYoutubeTapped(e = null) {
         // let url = 'https://www.youtube.com/channel/UCoHD2HTSQlU884oKQE7HB2Q';
         let url = 'https://www.youtube.com/playlist?list=PLDGYCqSQ7GwqSXwOp_g8EiJ72GXFOgiTe';
-        window.open(url,  '_blank');
+        window.open(url, '_blank');
       }
 
       // region: misc =================================

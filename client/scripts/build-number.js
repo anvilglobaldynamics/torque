@@ -34,4 +34,6 @@ exports.updateBuildNumber = (rootDir, filePath) => {
   let modifiedContents = left + JSON.stringify(object) + right;
 
   fs.writeFileSync(absolutePath, modifiedContents);
+
+  return newNumber;
 }

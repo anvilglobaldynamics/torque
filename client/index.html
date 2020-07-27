@@ -101,6 +101,7 @@
         opacity: 0.1;
       }
     }
+
   </style>
 </head>
 
@@ -116,14 +117,61 @@
     };
   </script>
   <script>
-    const tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
+    window.unregisterAllServiceWorkers = (cbfn) => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          let promiseList = [];
+
+          if (registrations.length) {
+            for (let registration of registrations) {
+              promiseList.push(registration.unregister());
+            }
+          }
+
+          Promise.all(promiseList).then(() => {
+            console.log(`${promiseList.length} Service worker(s) unregistered.`);
+            cbfn(promiseList.length);
+          });
+
+        });
+      } else {
+        cbfn(0);
+      }
+    }
+
+    let tryInstallingServiceWorker = ('serviceWorker' in navigator) &&
       (window.location.href.indexOf('fallback.lipi.live') === -1) &&
       (!(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'));
+    // tryInstallingServiceWorker = true;
+
     if (tryInstallingServiceWorker) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('service-worker.js', {
-          scope: Polymer.rootPath,
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+
+          navigator.serviceWorker.register('service-worker.js', {
+            scope: Polymer.rootPath,
+          }).then(reg => {
+            if (registrations.length === 0){
+              console.debug("Added new registration", reg);
+            } else {
+              console.debug("Found registration. Requesting check for update", reg);
+              reg.update();
+            }
+          });
+
         });
+
+        // console.log("Registering and updating service workers");
+        // window.unregisterAllServiceWorkers((count) => {
+
+        //   if (count === 0) {
+        //     navigator.serviceWorker.register('service-worker.js', {
+        //       scope: Polymer.rootPath,
+        //     });
+        //   }
+
+        // });
+
       });
     } else {
       if ('serviceWorker' in navigator) {

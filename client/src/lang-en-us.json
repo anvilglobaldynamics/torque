@@ -136,7 +136,8 @@
     "facebook": "Facebook",
     "back": "Back",
     "details": "Details",
-    "paginationSeparator": "of"
+    "paginationSeparator": "of",
+    "okay":"Okay"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",
@@ -298,6 +299,7 @@
     "shortcutToAccountingReports": "Accounting Reports",
     "shortcutToYoutube": "How to use Lipi?",
     "selfOnboardingTitle": "Use this checklist to setup Lipi",
+    "selfOnboardingSubtitle": "💡 Let's finish setting up your account by doing essential tasks one by one. Click the link beside the empty box to go to the task. Completed tasks will have a green tick beside it.",
     "selfOnboardingRegisterTitle": "Your Lipi account is registered",
     "selfOnboardingOrganizationTitle": "Your Organization's details are saved",
     "selfOnboardingReviewOutletTitle": "Check your Outlet's (shop) details",
@@ -747,7 +749,8 @@
     "editSalePriceDetails": "You can adjust the sale price here. Both adjusted and original amount will be saved.",
     "totalBillBeforeRounding": "Total Payable (without Less)",
     "roundedByAmount": "Less",
-    "discountPreset": "Discount Preset"
+    "discountPreset": "Discount Preset",
+    "showOnlyCreditSales": "Show only credit sales"
   },
   "warehouse": {
     "editPageTitle": "Edit Warehouse",
@@ -1209,6 +1212,7 @@
   },
   "productCategory": {
     "productCategories": "Product Categories",
+    "productCategory": "Product Category",
     "productCategoriesTitle": "Product Categories",
     "manageProductCategoriesTitle": "Manage Product Categories",
     "editProductCategoryTitle": "Edit Product Category",
