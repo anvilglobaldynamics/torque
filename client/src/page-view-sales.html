@@ -369,8 +369,9 @@
       // region: misc =================================
 
       $shouldShowDiscardButton(isDiscarded, paymentListLength) {
-        if (!isDiscarded && paymentListLength < 2) return true;
-        return false;
+        if (isDiscarded) return false;
+        if (this.hasModule('MOD_ACCOUNTING') && paymentListLength >= 2) return false;
+        return true;
       }
 
       $shouldTakeAdditionalPayment(totalBilled, totalPaidAmount) {
