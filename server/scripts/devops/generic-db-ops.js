@@ -20,7 +20,7 @@ const config = (mode) => {
 
 const connect = async ({ path, name }) => {
   const client = await MongoClient.connect(path);
-  db = client.db(name);
+  db = client.db(name + '-imported');
 }
 
 const find = async (collectionName, query) => {
@@ -94,22 +94,55 @@ const runCode = async () => {
 
   // REGION: ================================= Use case: Add organization-settings
 
-  let organizationList = await find('organization', {});
+  // let organizationList = await find('organization', {});
 
-  for (let organization of organizationList) {
-    await insert('organization-settings', {
-      createdDatetimeStamp: Date.now(),
-      lastModifiedDatetimeStamp: Date.now(),
-      isDeleted: false,
-      organizationId: organization.id,
-      monetaryUnit: 'BDT',
-      decimalFormatPreset: 'XX,XX,XXX.XX',
-      receiptText1: '',
-      receiptText2: '',
-      logoImageId: null
-    })
-    console.log('add organization-settings')
+  // for (let organization of organizationList) {
+  //   await insert('organization-settings', {
+  //     createdDatetimeStamp: Date.now(),
+  //     lastModifiedDatetimeStamp: Date.now(),
+  //     isDeleted: false,
+  //     organizationId: organization.id,
+  //     monetaryUnit: 'BDT',
+  //     decimalFormatPreset: 'XX,XX,XXX.XX',
+  //     receiptText1: '',
+  //     receiptText2: '',
+  //     logoImageId: null
+  //   })
+  //   console.log('add organization-settings')
+  // }
+
+  // REGION: ================================= Use case: Total Inventory Value Calc
+
+  let totalProductCount = 0;
+  let totalInventoryValue = 0;
+
+  let inventoryList = await find('inventory', {});
+  for (let inventory of inventoryList) {
+    // console.log(inventory.productList.length);
+    for (let product of inventory.productList) {
+      totalProductCount += product.count;
+
+      let list = await find('product', {id: product.productId});
+      if (list.length === 0) continue;
+      let _product = list[0];
+
+      value = _product.purchasePrice * product.count;
+      totalInventoryValue += value;
+
+
+      list = await find('product-blueprint', {id: _product.productBlueprintId});
+      if (list.length === 0) continue;
+      let blueprint = list[0];
+
+      console.log(blueprint.name, _product.purchasePrice , product.count, value)
+      // return;
+    }
   }
+
+  console.log('inventoryList Length', inventoryList.length)
+  console.log('totalProductCount', totalProductCount)
+  console.log('totalInventoryValue', totalInventoryValue)
+
 
 }
 
