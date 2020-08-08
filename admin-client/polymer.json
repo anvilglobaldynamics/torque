@@ -16,6 +16,7 @@
   ],
   "extraDependencies": [
     "manifest.json",
+    "robots.txt",
     "bower_components/webcomponentsjs/*.js"
   ],
   "lint": {

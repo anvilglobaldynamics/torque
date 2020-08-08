@@ -40,6 +40,14 @@ handlers:
   http_headers:
     Cache-Control: private
 
+- url: /robots.txt
+  static_files: build/custom-es5-bundled/robots.txt
+  upload: build/custom-es5-bundled/robots.txt
+  secure: always
+  expiration: "1m"
+  http_headers:
+    Cache-Control: private
+
 - url: /.*
   static_files: build/custom-es5-bundled/index.html
   upload: build/custom-es5-bundled/index.html
