@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-autocomplete/paper-autocomplete.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -303,6 +304,36 @@
 
       <template is="dom-if" if="[[selfOnboardingTasks.all]]">
 
+        <!-- app-wide search - start -->
+        <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[searchActionList]]" label="What do you want to do?" id="app-wide-search-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="searchActionSelected" show-results-on-focus="true" highlight-first style="margin-left: 10px; margin-right: 10px;">
+          <template slot="autocomplete-custom-template">
+            <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
+              <style>
+                :host {
+                  display: block;
+                }
+
+                paper-item {
+                  padding: 0px !important;
+                }
+
+                /* paper-item.active {} */
+
+                .category-text {
+                  font-size: 14px;
+                  padding-left: 10px;
+
+                }
+
+              </style>
+              <span class="category-text">[[item.textList.0]]</span>
+              <script></script>
+              <paper-ripple></paper-ripple>
+            </paper-item>
+          </template>
+        </paper-autocomplete>
+        <!-- app-wide search - end -->
+
         <!-- Shortcut card - start -->
         <template is="dom-if" if="[[hasShortcutCardPrivileges(organization)]]">
           <div class="card" style="padding: 6px;">
@@ -566,7 +597,41 @@
           packageActivationList: {
             type: Array,
             value: () => []
+          },
+          // app-wide search - start
+          searchActionList: {
+            type: Array,
+            value: () => {
+              let list = [
+                {
+                  textList: ['Inventories Report', 'Inventory Report'],
+                  action: '/report-inventories'
+                },
+                {
+                  textList: ['View Vendors', 'Manage Vendors'],
+                  action: '/manage-vendors'
+                },
+                {
+                  textList: ['Add a Vendor'],
+                  action: '/edit-vendor'
+                },
+                {
+                  textList: ['Inventories Report', 'Inventory Report'],
+                  action: '/report-inventories'
+                },
+                {
+                  textList: ['Add Products', 'Add Products to Inventory'],
+                  action: function () { this.buttonCreateProductAcquisitionTapped() }
+                }
+              ];
+
+              list.forEach((item, index) => {
+                item.id = index;
+              });
+              return list;
+            }
           }
+          // app-wide search - end
         };
       }
 
@@ -588,6 +653,7 @@
       }
 
       onNavigateIn() {
+        this._queryFn = this._queryFn.bind(this);
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle(this.app.verses.titleBar.home);
@@ -1139,6 +1205,30 @@
         // let url = 'https://www.youtube.com/channel/UCoHD2HTSQlU884oKQE7HB2Q';
         let url = 'https://www.youtube.com/playlist?list=PLDGYCqSQ7GwqSXwOp_g8EiJ72GXFOgiTe';
         window.open(url, '_blank');
+      }
+
+      // region: app-wide search =================================
+
+      _queryFn(datasource, query) {
+        console.log({ datasource, query })
+        return datasource.filter((item) => {
+          if (query.length === 0) return true;
+          return item.textList.some(text => {
+            return text.toLowerCase().indexOf(query) != -1
+          });
+        });
+      }
+
+      searchActionSelected(event) {
+        let selected = event.detail.option;
+        this.delay(100, () => {
+          this.elem('#app-wide-search-autocomplete').clear();
+        });
+        if ((typeof selected.action) === 'string') {
+          this.app.navigateTo(selected.action);
+        } else {
+          selected.action.call(this);
+        }
       }
 
       // region: misc =================================
