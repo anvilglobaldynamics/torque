@@ -9,6 +9,8 @@ exports.AnalyticsReportPotentialUserApi = class extends Api {
 
   get requiresAuthentication() { return false; }
 
+  get isEnabled() { return false; }
+
   get requestSchema() {
     return Joi.object().keys({
       phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
