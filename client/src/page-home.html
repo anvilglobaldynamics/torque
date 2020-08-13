@@ -731,7 +731,6 @@
           let selfOnboardingTasks = {
             register: true,
             createOrganization: true,
-            // reviewOutlet: hasUpdatedFirstOutlet,
             showVendor: (this.hasModule('MOD_VENDOR')),
             createVendor: hasAnyVendor,
             showProduct: (this.hasModule('MOD_PRODUCT')),
@@ -746,7 +745,6 @@
 
           selfOnboardingTasks.all = selfOnboardingTasks.register
             && selfOnboardingTasks.createOrganization
-            // && selfOnboardingTasks.reviewOutlet
             && (selfOnboardingTasks.showVendor === false || selfOnboardingTasks.createVendor)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.createProductBlueprint)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.addProductsToInventory)
@@ -768,21 +766,7 @@
         })();
       }
 
-      reviewOutletDetailsTapped(e = null) {
-        if (this.usageFlags.outletIdList.length > 0) {
-          let id = this.usageFlags.outletIdList[0];
-          this.app.navigateTo(`/edit-outlet/outlet:${id}`);
-        } else {
-          this.app.navigateTo(`/edit-outlet`);
-        }
-      }
-
       addVendorTapped(e = null) {
-        // TODO: Remove
-        // this.app.displayProductFlowContainerDialog(() => {
-        //   this.app.navigateTo(`/edit-vendor`);
-        // });
-
         this.app.navigateTo(`/edit-vendor`);
       }
 
