@@ -6,7 +6,6 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../bower_components/good-map/good-map.html">
 
 <link rel="import" href="../bower_components/baselib/baselib.html">
 
@@ -25,12 +24,6 @@
     <style include="shared-styles">
       .location-msg {
         padding: 6px;
-      }
-
-      good-map {
-        display: block;
-        height: 300px;
-        margin-bottom: 8px;
       }
 
       .note {
@@ -60,29 +53,7 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
-            <div class="note">
-              [[verses.outlet.locationRequiredNote]]
-            </div>
-
             <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
-
-            <!-- map location section - start -->
-            <template is="dom-if" if="[[editOutletForm.location]]">
-              <div class="location-msg">[[verses.outlet.showingLocationOnMap]]:</div>
-              <good-map on-google-map-ready="mapReady" api-key="AIzaSyBHyZPlDJnRD9dOXcSbCm6O7sAT0ph6_pg" latitude="[[editOutletForm.location.lat]]" longitude="[[editOutletForm.location.lng]]" zoom="16" map-options='{"mapTypeId": "roadmap", "disableDefaultUI": true, "gestureHandling": "none"}'></good-map>
-            </template>
-
-            <template is="dom-if" if="[[!editOutletForm.location]]">
-              <div class="location-msg">[[verses.outlet.noLocationOnMap]]</div>
-            </template>
-
-            <template is="dom-if" if="[[$shouldShowMapSelection(editOutletForm.physicalAddress)]]">
-              <paper-button raised class="secondary" on-tap="selectLocationTapped">[[verses.outlet.selectLocationButton]]</paper-button>
-            </template>
-            <template is="dom-if" if="[[!$shouldShowMapSelection(editOutletForm.physicalAddress)]]">
-              <paper-button raised class="neutral" disabled>[[verses.outlet.selectLocationButton]]</paper-button>
-            </template>
-            <!-- map location section - end -->
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -171,7 +142,6 @@
         if (this.editMode) {
           this._processGetOutlet(() => {
             this.fetchOutletCategoryList(() => {
-              this._loadLocation();
               this.isReady = true;
             });
           });
@@ -181,7 +151,6 @@
               this.shouldSkipFetchingOutletOnce = false;
             }
             this.fetchOutletCategoryList(() => {
-              this._loadLocation();
               this.isReady = true;
             });
           });
@@ -211,52 +180,6 @@
 
         let organization = this.app.organization;
         this.set('editOutletForm.physicalAddress', organization.primaryBusinessAddress);
-      }
-
-      // region: map =================================
-
-      _loadLocation() {
-        let location = sessionStorage.getItem('page-select-geolocation:location');
-        try {
-          location = JSON.parse(location);
-        } catch (ex) {
-          'pass'
-        }
-        if (location) {
-          this.set('editOutletForm.location', location);
-          sessionStorage.setItem('page-select-geolocation:location', null);
-        }
-
-        const fn = () => {
-          if (this.isGoogleReady) {
-            this._initiateMap();
-          } else {
-            this.delay(100, fn);
-          }
-        }
-        fn();
-      }
-
-      mapReady(e = null) {
-        // NOTE: this callback is completely unreliable. This isn't called
-        // everytime good-map is initialized. It's only called when google
-        // maps is initialized. (i.e. only once in the app's lifecycle)
-        this.isGoogleReady = true;
-      }
-
-      _initiateMap() {
-        if (this.editOutletForm.location) {
-          if (!this.marker) {
-            this.marker = new google.maps.Marker({
-              position: this.editOutletForm.location,
-              map: this.elem('good-map').map,
-              draggable: false
-            });
-          } else {
-            this.marker.setPosition(this.editOutletForm.location);
-          }
-          this.elem('good-map').map.setCenter(this.editOutletForm.location);
-        }
       }
 
       // region: editOutlet =================================
@@ -330,17 +253,6 @@
 
       // region: ui =================================
 
-      selectLocationTapped(e = null) {
-        this.doNotAutoFillKnownFormFields = true;
-
-        sessionStorage.setItem('page-select-geolocation:address', this.editOutletForm.physicalAddress || '');
-        if (this.editOutletForm.location) {
-          sessionStorage.setItem('page-select-geolocation:location', JSON.stringify(this.editOutletForm.location));
-        }
-        this.shouldSkipFetchingOutletOnce = true;
-        this.app.navigateTo('/select-geolocation');
-      }
-
       backButtonOnTopBarPressed(e = null) {
         this.app.navigateToPreviousUrl('/manage-inventories');
       }
@@ -350,10 +262,6 @@
         if (!this.elem('#editOutletForm').validate()) return;
 
         let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
-        if (!location) {
-          this.app.showModalDialog(this.app.verses.outlet.locationInvalidDialogHeader, this.app.verses.outlet.locationInvalidDialog);
-          return;
-        }
         this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
       }
 
@@ -362,15 +270,7 @@
         if (!this.elem('#editOutletForm').validate()) return;
 
         let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
-        if (!location) {
-          this.app.showModalDialog(this.app.verses.outlet.locationInvalidDialogHeader, this.app.verses.outlet.locationInvalidDialog);
-          return;
-        }
         this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
-      }
-
-      $shouldShowMapSelection(physicalAddress) {
-        return physicalAddress && physicalAddress.length > 5;
       }
 
       // region: misc =================================
