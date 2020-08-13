@@ -112,7 +112,6 @@
               <template is="dom-repeat" items="[[outletList]]" as="outlet">
                 <div class="property-list-item">
                   <div class="inventory-container-view-name">⚫ [[outlet.name]], ID: [[outlet.id]]
-                    <span style="font-size: 10px;"> [[$getLocationUpdateStatus(outlet)]]</span>
                   </div>
                 </div>
               </template>
@@ -465,13 +464,6 @@
       }
 
       // region: ui  ===========================
-
-      $getLocationUpdateStatus(outlet) {
-        if (outlet.lastModifiedDatetimeStamp > outlet.createdDatetimeStamp) {
-          return '(Location updated)';
-        }
-        return '(Location not updated)';
-      }
 
       deactivateModuleTapped(e) {
         this._activateModule(parseInt(this.params.organization), e.model.moduleActivation.moduleCode, 'NOT PROVIDED', 'deactivate', () => {
