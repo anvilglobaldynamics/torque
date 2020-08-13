@@ -137,7 +137,8 @@
     "back": "ফেরত যান",
     "details": "বিস্তারিত",
     "paginationSeparator": ", মোট",
-    "okay":"ঠিক আছে"
+    "okay":"ঠিক আছে",
+    "appWideSearchQuestion":"আপনি কি করতে চান?"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",

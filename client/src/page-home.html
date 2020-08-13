@@ -23,6 +23,8 @@
 <link rel="import" href="torque-verification-behavior.html">
 <link rel="import" href="torque-language-behavior.html">
 
+<link rel="import" href="elem-app-wide-search.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="page-home">
@@ -305,33 +307,7 @@
       <template is="dom-if" if="[[selfOnboardingTasks.all]]">
 
         <!-- app-wide search - start -->
-        <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[searchActionList]]" label="What do you want to do?" id="app-wide-search-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="searchActionSelected" show-results-on-focus="true" highlight-first style="margin-left: 10px; margin-right: 10px;">
-          <template slot="autocomplete-custom-template">
-            <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
-              <style>
-                :host {
-                  display: block;
-                }
-
-                paper-item {
-                  padding: 0px !important;
-                }
-
-                /* paper-item.active {} */
-
-                .category-text {
-                  font-size: 14px;
-                  padding-left: 10px;
-
-                }
-
-              </style>
-              <span class="category-text">[[item.textList.0]]</span>
-              <script></script>
-              <paper-ripple></paper-ripple>
-            </paper-item>
-          </template>
-        </paper-autocomplete>
+        <elem-app-wide-search page="[[self]]"></elem-app-wide-search>
         <!-- app-wide search - end -->
 
         <!-- Shortcut card - start -->
@@ -597,41 +573,7 @@
           packageActivationList: {
             type: Array,
             value: () => []
-          },
-          // app-wide search - start
-          searchActionList: {
-            type: Array,
-            value: () => {
-              let list = [
-                {
-                  textList: ['Inventories Report', 'Inventory Report'],
-                  action: '/report-inventories'
-                },
-                {
-                  textList: ['View Vendors', 'Manage Vendors'],
-                  action: '/manage-vendors'
-                },
-                {
-                  textList: ['সরবরাহকারী যুক্ত করুন'],
-                  action: '/edit-vendor'
-                },
-                {
-                  textList: ['Inventories Report', 'Inventory Report'],
-                  action: '/report-inventories'
-                },
-                {
-                  textList: ['Add Products', 'Add Products to Inventory'],
-                  action: function () { this.buttonCreateProductAcquisitionTapped() }
-                }
-              ];
-
-              list.forEach((item, index) => {
-                item.id = index;
-              });
-              return list;
-            }
           }
-          // app-wide search - end
         };
       }
 
@@ -653,7 +595,7 @@
       }
 
       onNavigateIn() {
-        this._queryFn = this._queryFn.bind(this);
+        this.self=this;
         this.app.shouldShowSaveButton = false;
         this.app.currentPageIsModal = false;
         this.app.pushPageTitle(this.app.verses.titleBar.home);
@@ -1205,30 +1147,6 @@
         // let url = 'https://www.youtube.com/channel/UCoHD2HTSQlU884oKQE7HB2Q';
         let url = 'https://www.youtube.com/playlist?list=PLDGYCqSQ7GwqSXwOp_g8EiJ72GXFOgiTe';
         window.open(url, '_blank');
-      }
-
-      // region: app-wide search =================================
-
-      _queryFn(datasource, query) {
-        console.log({ datasource, query })
-        return datasource.filter((item) => {
-          if (query.length === 0) return true;
-          return item.textList.some(text => {
-            return text.toLowerCase().indexOf(query) != -1
-          });
-        });
-      }
-
-      searchActionSelected(event) {
-        let selected = event.detail.option;
-        this.delay(100, () => {
-          this.elem('#app-wide-search-autocomplete').clear();
-        });
-        if ((typeof selected.action) === 'string') {
-          this.app.navigateTo(selected.action);
-        } else {
-          selected.action.call(this);
-        }
       }
 
       // region: misc =================================

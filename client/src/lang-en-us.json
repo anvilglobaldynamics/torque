@@ -137,7 +137,8 @@
     "back": "Back",
     "details": "Details",
     "paginationSeparator": "of",
-    "okay":"Okay"
+    "okay":"Okay",
+    "appWideSearchQuestion":"What do you want to do?"
   },
   "login": {
     "learnMoreAboutLipi": "Learn more about Lipi",

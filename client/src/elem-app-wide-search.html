@@ -1,0 +1,187 @@
+<!-- 
+  ========================================
+  =====     elem-app-wide-search     =====
+  ========================================
+
+  Parameters :=
+
+  Host Configuratio Details:=
+
+    required assign in construction/navigatedIn:= 
+
+      this.page = this;
+
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/paper-autocomplete/paper-autocomplete.html">
+
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+<link rel="import" href="torque-language-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="elem-app-wide-search">
+  <template>
+    <style include="shared-styles">
+      .item {
+        margin-bottom: 4px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed rgb(192, 198, 214);
+      }
+
+      .item:first-of-type {
+        margin-top: 4px;
+      }
+
+      .item:last-of-type {
+        border: none;
+      }
+
+    </style>
+    <!-- <div class="horizontal layout center"> -->
+
+    <paper-autocomplete class="autocomplete-states" query-fn="[[_queryFn]]" source="[[searchActionSeedList]]" label="[[verses.general.appWideSearchQuestion]]" id="app-wide-search-autocomplete" always-float-label text-property="name" value-property="id" on-autocomplete-selected="searchActionSelected" highlight-first style="margin-left: 10px; margin-right: 10px;">
+      <template slot="autocomplete-custom-template">
+        <paper-item class="category-box" on-tap="_onSelect" id$="[[_getSuggestionId(index)]]" role="option" aria-selected="false">
+          <style>
+            :host {
+              display: block;
+            }
+
+            paper-item {
+              padding: 0px !important;
+            }
+
+            /* paper-item.active {} */
+
+            .category-text {
+              font-size: 14px;
+              padding-left: 10px;
+
+            }
+
+          </style>
+          <span class="category-text">[[item.matchingText]]</span>
+          <script></script>
+          <paper-ripple></paper-ripple>
+        </paper-item>
+      </template>
+    </paper-autocomplete>
+
+    <!-- </div> -->
+  </template>
+  <script>
+    class ElemAppWideSearch extends FxElement.mixin(TorqueLanguageBehavior, TorqueCommonBehavior) {
+
+      static get is() { return 'elem-app-wide-search'; }
+
+      static get properties() {
+        return {
+
+          page: {
+            type: Object,
+            value: null,
+            observer: 'pageChanged',
+            notify: true
+          },
+          searchActionSeedList: { // modify as needed.
+            type: Array,
+            value: () => [
+              {
+                verseList: ['sidebar.inventoryReport'],
+                navigateTo: '/report-inventories'
+              },
+              {
+                verseList: ['vendor.manageVendorPageTitle'],
+                navigateTo: '/manage-vendors'
+              },
+              {
+                verseList: ['vendor.createVendor'],
+                navigateTo: '/edit-vendor'
+              },
+              {
+                verseList: ['home.buttonCreateProductAcquisition', 'home.shortcutToAddProduct'],
+                callMethod: function () { this.buttonCreateProductAcquisitionTapped() }
+              }
+            ]
+          }
+        };
+      }
+
+      pageChanged() {
+        if (!this.page) return;
+        this._queryFn = this._queryFn.bind(this.page);
+        this.useLanguageServices();
+        this._prepareSearch();
+      }
+
+      _prepareSearch() {
+        this.searchActionSeedList.forEach((seed, index) => {
+          seed.id = index;
+        });
+      }
+
+      _queryFn(datasource, query) {
+        console.log({ datasource, query })
+        return datasource.filter((item) => {
+          if (query.length === 0) return true;
+
+          let matchingText = null;
+          item.verseList.forEach(verse => {
+            let [key1, key2] = verse.split('.');
+            let text = this.verses[key1][key2];
+            if (text.toLowerCase().indexOf(query) != -1 && matchingText === null) {
+              matchingText = text;
+            }
+          });
+
+          if (matchingText) {
+            item.matchingText = matchingText;
+          }
+
+          return !!matchingText;
+        });
+      }
+
+      searchActionSelected(event) {
+        let selected = event.detail.option;
+
+        this.delay(100, () => {
+          this.elem('#app-wide-search-autocomplete').clear();
+        });
+
+        console.log({selected})
+        if ((typeof selected.navigateTo) === 'string') {
+          this.page.app.navigateTo(selected.navigateTo);
+        } else {
+          selected.callMethod.call(this.page);
+        }
+      }
+
+
+    }
+    window.customElements.define(ElemAppWideSearch.is, ElemAppWideSearch);
+  </script>
+</dom-module>
