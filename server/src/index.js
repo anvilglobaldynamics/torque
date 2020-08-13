@@ -160,6 +160,7 @@ const { AdminListOrganizationModulesApi } = require('./apis/admin-list-organizat
 const { AdminSetModuleActivationStatusApi } = require('./apis/admin-set-module-activation-status');
 const { AdminGetStatisticsApi } = require('./apis/admin-get-statistics');
 const { AdminRunDevopsApi } = require('./apis/admin-run-devops');
+const { AdminGetActiveOrganizationApi } = require('./apis/admin-get-active-organization-list');
 
 const { LiteSendVerificationSmsApi } = require('./apis/lite-send-verification-sms');
 const { LiteCheckVerificationTokenApi } = require('./apis/lite-check-verification-token');
@@ -438,6 +439,7 @@ class Program {
     server.registerPostApi('/api/admin-list-organization-packages', AdminListOrganizationPackagesApi);
     server.registerPostApi('/api/admin-get-statistics', AdminGetStatisticsApi);
     server.registerPostApi('/api/admin-run-devops', AdminRunDevopsApi);
+    server.registerPostApi('/api/admin-get-active-organization-list', AdminGetActiveOrganizationApi);
 
     server.registerPostApi('/api/add-service-blueprint', AddServiceBlueprintApi);
     server.registerPostApi('/api/get-service-blueprint-list', GetServiceBlueprintListApi);
