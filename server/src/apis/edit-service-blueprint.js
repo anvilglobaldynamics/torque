@@ -17,13 +17,13 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
       name: Joi.string().min(1).max(64).required(),
       defaultVat: Joi.number().min(0).max(999999999999999).required(),
       defaultSalePrice: Joi.number().min(0).max(999999999999999).required(),
-      
+
       isLongstanding: Joi.boolean().required(),
       serviceDuration: Joi.object().allow(null).required().keys({
         months: Joi.number().min(0).max(999999999999999).required(),
         days: Joi.number().min(0).max(999999999999999).required(),
       }),
-    
+
       isEmployeeAssignable: Joi.boolean().required(),
       isCustomerRequired: Joi.boolean().required(),
       isRefundable: Joi.boolean().required()
@@ -53,11 +53,23 @@ exports.EditServiceBlueprintApi = class extends Api.mixin(ServiceBlueprintMixin)
     return;
   }
 
+  async _updateExistingService({ serviceBlueprintId, salePrice }) {
+    let service = await this.database.service._findOne({ serviceBlueprintId });
+    if (service) {
+      let result = await this.database.service.setDetails({ id: service.id }, {
+        salePrice,
+        isAvailable: service.isAvailable
+      })
+      this.ensureUpdate(result, 'service');
+    }
+  }
+
   async handle({ body }) {
     let { serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable } = body;
     this.__isLongstandingServiceSetupValid({ isLongstanding, serviceDuration, isCustomerRequired });
     this.__isVatPercentageValid({ vat: defaultVat });
     await this._updateServiceBlueprint({ serviceBlueprintId, name, defaultVat, defaultSalePrice, isLongstanding, serviceDuration, isEmployeeAssignable, isCustomerRequired, isRefundable });
+    await this._updateExistingService({ serviceBlueprintId, salePrice: defaultSalePrice });
     return { status: "success" };
   }
 
