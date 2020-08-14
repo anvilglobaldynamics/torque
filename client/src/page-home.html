@@ -198,17 +198,6 @@
           </div>
           <!-- task : createOrganization - end -->
 
-          <!-- task : reviewOutlet - start -->
-          <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.reviewOutlet)]]">
-            <iron-icon class="self-onboarding-icon pending-icon" icon="check-box-outline-blank"></iron-icon>
-            <iron-icon class="self-onboarding-icon done-icon" icon="check-box"></iron-icon>
-            <div class="vertical layout self-onboarding-task-body">
-              <div class="self-onboarding-task-title link primary" on-click="reviewOutletDetailsTapped">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
-              <div class="self-onboarding-task-title done-title">[[verses.home.selfOnboardingReviewOutletTitle]]</div>
-            </div>
-          </div>
-          <!-- task : reviewOutlet - end -->
-
           <!-- task : createVendor - start -->
           <template is="dom-if" if="[[selfOnboardingTasks.showVendor]]">
             <div class$="horizontal layout center self-onboarding-task-container [[$getSelfOnboardingTaskClass(selfOnboardingTasks.createVendor)]]">
@@ -742,7 +731,6 @@
           let selfOnboardingTasks = {
             register: true,
             createOrganization: true,
-            reviewOutlet: hasUpdatedFirstOutlet,
             showVendor: (this.hasModule('MOD_VENDOR')),
             createVendor: hasAnyVendor,
             showProduct: (this.hasModule('MOD_PRODUCT')),
@@ -757,7 +745,6 @@
 
           selfOnboardingTasks.all = selfOnboardingTasks.register
             && selfOnboardingTasks.createOrganization
-            && selfOnboardingTasks.reviewOutlet
             && (selfOnboardingTasks.showVendor === false || selfOnboardingTasks.createVendor)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.createProductBlueprint)
             && (selfOnboardingTasks.showProduct === false || selfOnboardingTasks.addProductsToInventory)
@@ -779,21 +766,7 @@
         })();
       }
 
-      reviewOutletDetailsTapped(e = null) {
-        if (this.usageFlags.outletIdList.length > 0) {
-          let id = this.usageFlags.outletIdList[0];
-          this.app.navigateTo(`/edit-outlet/outlet:${id}`);
-        } else {
-          this.app.navigateTo(`/edit-outlet`);
-        }
-      }
-
       addVendorTapped(e = null) {
-        // TODO: Remove
-        // this.app.displayProductFlowContainerDialog(() => {
-        //   this.app.navigateTo(`/edit-vendor`);
-        // });
-
         this.app.navigateTo(`/edit-vendor`);
       }
 
