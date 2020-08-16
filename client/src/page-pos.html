@@ -1387,6 +1387,7 @@
         if (this.salesType === 'services') {
           this.serviceList = this.app.getFromSession('pos-selected-service-list') || [];
           this._focusServiceSearchField();
+          this.matchingServiceList = [];
         }
 
         // customer
