@@ -1391,5 +1391,22 @@
     "manageTransactionsExpenseTransactionsNote": "All of your business's expenditures count as expense transactions. For example - cost of goods sold, electricity bill etc.",
     "manageTransactionsAssetTransactionsNote": "All transactions that increase or reduce your business's assets are asset transaction. For example - property purchase, furniture purchase etc.",
     "manageTransactionsManualTransactionsNote": "The transactions that can not be categorised by above categories, are manual transaction. (for expert use only)"
+  },
+  "search": {
+    "addProductToInventory": "add product to inventory | add stock",
+    "viewInventory": "view product list view | view stock",
+    "createNewProductBlueprint": "Add new product blueprint | Add product blueprint | Add blueprint",
+    "viewSalesReturnOutput": "View all Sales Return Records",
+    "viewSalesReturnInput": "View all Sales Return records | view product returns | return sales",
+    "viewAllSalesRecordOutput": "View all Sales Record",
+    "viewAllSalesRecordInput": "View all Sales Record | Sales Records | sales history | sale record | sale history",
+    "viewAllSalesReportOutput": "View Sales Report",
+    "viewAllSalesReportInput": "View Sales Report | Sales Reports | sales history | sale report | sale history",
+    "makeASellFromPosOutput": "Make a Sell from POS",
+    "makeASellFromPosInput": "Make a Sell from POS | product sell | service sell",
+    "addANewVendorInput": "Add a new Vendor | create vendor | supplier",
+    "addANewVendorOutput": "Add a new Vendor",
+    "viewAllVendorsInput": "View all Vendors | manage vendors | see vendor | supplier",
+    "viewAllVendorsOutput": "View all Vendors"
   }
 }

@@ -110,24 +110,55 @@
             type: Array,
             value: () => [
               {
-                verseList: ['sidebar.inventoryReport'],
+                verseList: ['home.buttonCreateProductAcquisition', 'home.shortcutToAddProduct', 'search.addProductToInventory'],
+                outputVerse: 'home.selfOnboardingAddProductsTitle',
+                callMethod: function () { this.buttonCreateProductAcquisitionTapped() }
+              },
+              {
+                verseList: ['sidebar.inventoryReport', 'search.viewInventory'],
                 outputVerse: 'sidebar.inventoryReport',
                 navigateTo: '/report-inventories'
               },
               {
-                verseList: ['vendor.manageVendorPageTitle'],
-                outputVerse: 'vendor.manageVendorPageTitle',
+                verseList: ['home.shortcutToInventory', 'search.viewInventory'],
+                outputVerse: 'home.shortcutToInventory',
+                callMethod: function () { this.buttonViewInventoryTapped() }
+              },
+              {
+                verseList: ['productBlueprint.createNewProductBlueprint', 'search.createNewProductBlueprint'],
+                outputVerse: 'productBlueprint.createNewProductBlueprint',
+                navigateTo: '/edit-product-blueprint'
+              },
+              {
+                verseList: ['search.viewSalesReturnInput'],
+                outputVerse: 'search.viewSalesReturnOutput',
+                navigateTo: '/manage-sales-return'
+              },
+              {
+                verseList: ['search.viewAllSalesRecordInput'],
+                outputVerse: 'search.viewAllSalesRecordOutput',
+                navigateTo: '/manage-sales'
+              },
+
+              {
+                verseList: ['search.viewAllSalesReportInput'],
+                outputVerse: 'search.viewAllSalesReportOutput',
+                navigateTo: '/report-sales'
+              },
+              {
+                verseList: ['search.makeASellFromPosInput'],
+                outputVerse: 'search.makeASellFromPosOutput',
+                callMethod: function () { this.buttonGoToPosTapped() }
+              },
+              {
+                verseList: ['search.viewAllVendorsInput'],
+                outputVerse: 'search.viewAllVendorsOutput',
                 navigateTo: '/manage-vendors'
               },
               {
-                verseList: ['vendor.createVendor'],
-                outputVerse: 'vendor.createVendor',
+                verseList: ['search.addANewVendorInput'],
+                outputVerse: 'search.addANewVendorOutput',
                 navigateTo: '/edit-vendor'
-              },
-              {
-                verseList: ['home.buttonCreateProductAcquisition', 'home.shortcutToAddProduct'],
-                outputVerse: 'home.shortcutToAddProduct',
-                callMethod: function () { this.buttonCreateProductAcquisitionTapped() }
               }
             ]
           }
