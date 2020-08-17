@@ -111,18 +111,22 @@
             value: () => [
               {
                 verseList: ['sidebar.inventoryReport'],
+                outputVerse: 'sidebar.inventoryReport',
                 navigateTo: '/report-inventories'
               },
               {
                 verseList: ['vendor.manageVendorPageTitle'],
+                outputVerse: 'vendor.manageVendorPageTitle',
                 navigateTo: '/manage-vendors'
               },
               {
                 verseList: ['vendor.createVendor'],
+                outputVerse: 'vendor.createVendor',
                 navigateTo: '/edit-vendor'
               },
               {
                 verseList: ['home.buttonCreateProductAcquisition', 'home.shortcutToAddProduct'],
+                outputVerse: 'home.shortcutToAddProduct',
                 callMethod: function () { this.buttonCreateProductAcquisitionTapped() }
               }
             ]
@@ -144,7 +148,15 @@
       }
 
       _queryFn(datasource, query) {
-        console.log({ datasource, query })
+        // console.log({ datasource, query })
+
+        // let ignoredPhraseList = ['how to', 'how'];
+        // for (let ignoredPhrase of ignoredPhraseList) {
+        //   query = query.replace(ignoredPhrase, '');
+        //   query = query.replace(' ' + ignoredPhrase, '');
+        //   query = query.replace(ignoredPhrase + ' ', '');
+        // }
+
         return datasource.filter((item) => {
           if (query.length === 0) return true;
 
@@ -153,7 +165,12 @@
             let [key1, key2] = verse.split('.');
             let text = this.verses[key1][key2];
             if (text.toLowerCase().indexOf(query) != -1 && matchingText === null) {
-              matchingText = text;
+              // matchingText = text;
+
+              let [key1, key2] = item.outputVerse.split('.');
+              let text = this.verses[key1][key2];
+
+              matchingText = text
             }
           });
 
@@ -172,7 +189,7 @@
           this.elem('#app-wide-search-autocomplete').clear();
         });
 
-        console.log({selected})
+        console.log({ selected })
         if ((typeof selected.navigateTo) === 'string') {
           this.page.app.navigateTo(selected.navigateTo);
         } else {
