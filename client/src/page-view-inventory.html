@@ -242,7 +242,7 @@
             return product;
           });
           this.productList = productList;
-          if (this.pagination.offset === 0 && productList.length === 0) {
+          if (this.pagination.offset === 0 && productList.length === 0 && this.searchString.length === 0 && this.inventoryName === "Default") {
             this.app.displayProductFlowContainerDialog(() => { });
           }
           cbfn();
