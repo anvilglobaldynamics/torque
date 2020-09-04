@@ -253,7 +253,7 @@
 
       _processProductBlueprintList(cbfn) {
         this._fetchProductBlueprintList(productBlueprintList => {
-          if (this.pagination.offset === 0 && productBlueprintList.length === 0) {
+          if (this.pagination.offset === 0 && productBlueprintList.length === 0 && this.searchString.length === 0) {
             this.app.displayProductFlowContainerDialog(() => { });
           }
           this.productBlueprintList = productBlueprintList;

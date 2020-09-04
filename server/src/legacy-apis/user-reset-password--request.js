@@ -83,6 +83,14 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
   _getUserIfValid({ emailOrPhone }, cbfn) {
     this.legacyDatabase.user.findByEmailOrPhone({ emailOrPhone }, (err, user) => {
       if (!this._ensureDoc(err, user, "USER_NOT_FOUND", "No user registered using that email/phone.")) return;
+
+      if (user.isBanned) {
+        let err = new Error(this.verses.userLoginApi.userBanned);
+        err.code = 'USER_BANNED';
+        this.fail(err);
+        return;
+      }
+
       cbfn(user);
     });
   }
