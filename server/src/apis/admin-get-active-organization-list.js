@@ -17,13 +17,29 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
     });
   }
 
+  async d30count() {
+    let userList = await this.database.user._find({});
+    let count = 0;
+    for (let user of userList) {
+      let date = user.createdDatetimeStamp + 30 * 24 * 60 * 60 * 1000;
+      let session = await this.database.session._findOne({ userId: user.id, createdDatetimeStamp: { $gte: date } });
+      if (session){
+        console.log(user.fullName)
+        count += 1;
+      }
+    }
+    console.log({ count })
+  }
+
   async handle({ }) {
+    await this.d30count();
+
 
     let endDate = new Date(new Date().toISOString().split('T')[0]); // Get today without time.
     endDate.setDate(endDate.getDate() - 1); // exclude today
 
     let startDate = new Date(endDate.getTime());
-    startDate.setDate(endDate.getDate() - 90); // show stats for 30 days
+    startDate.setDate(endDate.getDate() - 30); // show stats for 30 days
 
     let dateCount = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
 
@@ -41,7 +57,7 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
       { "$group": { _id: "$outletId", count: { $sum: 1 }, totalSalesRevenue: { $sum: "$payment.totalBilled" } } }
     ]).sort({ count: -1 }).toArray());
 
-    console.log({outletVsSalesCountList})
+    console.log({ outletVsSalesCountList })
 
     let outletVsSalesCountMap = {};
     outletVsSalesCountList.forEach(outletVsSalesCount => {
@@ -88,7 +104,7 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
     }
 
     // Step 3. Sort
-    organizationList.sort((a,b)=>{
+    organizationList.sort((a, b) => {
       return (b.metrics.salesCount - a.metrics.salesCount);
     })
 
