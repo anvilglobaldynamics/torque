@@ -30,7 +30,6 @@
         padding-bottom: 10px;
         padding-left: 10px;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -200,14 +199,18 @@
           if (!this._ensureAccess()) return;
           if (this.editMode) {
             this._processGetTransaction(() => {
-              this.elem('elem-party-selector').resetVariables();
-            
-              this.isReady = true;
+              this.delay(300, () => {
+                let el = this.elem('elem-party-selector');
+                if (el) el.resetVariables();
+
+                this.isReady = true;
+              });
             });
           } else {
             this.delay(300, () => {
-              this.elem('elem-party-selector').resetVariables();
-            
+              let el = this.elem('elem-party-selector');
+              if (el) el.resetVariables();
+
               this.isReady = true;
             });
           }
