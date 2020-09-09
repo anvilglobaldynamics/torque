@@ -102,11 +102,37 @@
       }
     }
 
+    .maintenance-banner {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 9999;
+      background: white;
+      padding: 20px;
+      padding-top: 100px;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body unresolved>
   <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
+
+  <div class="maintenance-banner">
+    Lipi for Business is under maintenance. Lipi’s service will be back at 11:00 AM Bangladesh time today. <br><br>Thank you.
+  </div>
+
+  <script type="text/javascript">
+    if (localStorage.getItem('ignore-maintenance')) {
+      document.querySelector('.maintenance-banner').style.display = "none";
+    }
+    if (Date.now() > (1599621701937 + (2 * 60 - 20) * 60 * 1000)) {
+      document.querySelector('.maintenance-banner').style.display = "none";
+
+    }
+  </script>
 
   <torque-app>
     <div class="master-spinner"></div>
@@ -151,7 +177,7 @@
           navigator.serviceWorker.register('service-worker.js', {
             scope: Polymer.rootPath,
           }).then(reg => {
-            if (registrations.length === 0){
+            if (registrations.length === 0) {
               console.debug("Added new registration", reg);
             } else {
               console.debug("Found registration. Requesting check for update", reg);
