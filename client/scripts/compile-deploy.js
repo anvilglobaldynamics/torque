@@ -157,7 +157,8 @@ writePolymerJson(polymerJsonPath, originalPolymerJson);
 
 // Update service worker console log
 {
-  let p = '/home/larson/Documents/Github/torque/client/build/custom-es6-service-worker/service-worker.js';
+  // let p = '/home/larson/Documents/Github/torque/client/build/custom-es6-service-worker/service-worker.js';
+  let p = './build/custom-es6-service-worker/service-worker.js';
   let c = fslib.readFileSync(p, 'utf-8');
   c = c.replace("self.addEventListener('install', function (event) {", `self.addEventListener('install', function (event) { \n console.debug('install ${newBuildNumber}');`);
   c = c.replace("self.addEventListener('activate', function (event) {", `self.addEventListener('activate', function (event) { \n console.debug('activate ${newBuildNumber}');`);
