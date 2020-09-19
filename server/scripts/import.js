@@ -4,7 +4,7 @@ const shell = require('shelljs');
 const readlineSync = require('readline-sync');
 
 const importRemote = (password) => {
-  let command = `mongodump --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
+  let command = `mongodump --db torque --host 35.244.48.152:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
   // let command = `"C:/Program Files/MongoDB/Server/4.0/bin/mongodump" --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
   let res = shell.exec(command);
   if (res.code !== 0) {

@@ -7,7 +7,7 @@ const pathlib = require('path');
 const moment = require('moment');
 
 const importRemote = (password, finalPath) => {
-  let command = `mongodump --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out "${finalPath}"`
+  let command = `mongodump --db torque --host 35.244.48.152:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out "${finalPath}"`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongodump failed`);
