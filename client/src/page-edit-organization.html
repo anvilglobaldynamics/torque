@@ -32,8 +32,8 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editOrganizationForm--name" value="{{editOrganizationForm.name}}" required minlength="3" error-message=[[verses.organization.pleaseEnterAValidName]] label=[[verses.organization.nameOfYourOrganization]]></paper-input>
-            <paper-input class="editOrganizationForm--phone" value="{{editOrganizationForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
             <paper-input class="editOrganizationForm--email" value="{{editOrganizationForm.email}}" required pattern="^.+@.+\..+$" minlength="0" error-message=[[verses.organization.emailInputError]] label=[[verses.organization.emailInput]]></paper-input>
+            <paper-input class="editOrganizationForm--phone" value="{{editOrganizationForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.organization.phoneInputError]] label=[[verses.organization.phoneInput]]></paper-input>
             <paper-textarea class="editOrganizationForm--primaryBusinessAddress" value="{{editOrganizationForm.primaryBusinessAddress}}" required minlength="8" error-message=[[verses.organization.primaryBusinessAddressInputError]] label=[[verses.organization.primaryBusinessAddressInput]] rows="4"></paper-textarea>
 
             <div class="horizontal layout button-row end">

@@ -161,6 +161,8 @@
     "register": "অ্যাকাউন্ট খুলুন",
     "fullnameInput": "আপনার পুরো নাম",
     "fullnameInputError": "এই নামটি গ্রহণযোগ্য নয়।",
+    "emailInput": "আপনার ইমেইল",
+    "emailInputError": "এই ইমেইলটি সঠিক নয়।",
     "phoneInput": "আপনার ফোন নম্বর",
     "phoneInputError": "এই ফোন নম্বরটি সঠিক নয়।",
     "passwordInput": "৬ অক্ষরের পাসওয়ার্ড",

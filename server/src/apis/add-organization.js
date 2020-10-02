@@ -16,7 +16,7 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
     return Joi.object().keys({
       name: Joi.string().min(1).max(64).required(),
       primaryBusinessAddress: Joi.string().min(1).max(128).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow('').required(),
       email: Joi.string().email().min(3).max(30).allow('').required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string().required()

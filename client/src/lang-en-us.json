@@ -161,6 +161,8 @@
     "register": "Register",
     "fullnameInput": "Your full name",
     "fullnameInputError": "Enter a longer name.",
+    "emailInput": "Your email address",
+    "emailInputError": "Enter your valid email address.",
     "phoneInput": "Your phone number",
     "phoneInputError": "Enter your valid phone number.",
     "passwordInput": "6 digit password",

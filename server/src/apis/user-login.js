@@ -23,7 +23,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         Joi.string().email().min(3).max(30), // if email
         Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14) // if phone
       ]).required(),
-      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).allow(null).required(),
       password: Joi.string().min(6).max(30).required()
     });
   }
