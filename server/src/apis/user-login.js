@@ -7,7 +7,7 @@ const { generateRandomString } = require('./../utils/random-string');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
-const PHONE_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
+const EMAIL_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
 
 exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
@@ -41,23 +41,34 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
     }
 
     let warning = [];
-    if (emailOrPhone === user.phone && !user.isPhoneVerified && this.clientApplication === 'torque') {
-      let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
-      throwOnFalsy(phoneVerificationRequest, "PHONE_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.phoneVerificationRequestNotFound);
-      let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
-      if (!isVerificationComplete) {
-        let diff = Date.now() - createdDatetimeStamp;
-        throwOnTruthy(diff > PHONE_VERIFICATION_WINDOW, "USER_REQUIRES_PHONE_VERIFICATION", this.verses.userLoginApi.userRequiresPhoneVerification);
-        diff = Math.round(diff / (1000 * 60))
-        warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
+
+    // NOTE: Legacy phone verification code. Remove once certain
+    // if (emailOrPhone === user.phone && !user.isPhoneVerified && this.clientApplication === 'torque') {
+    //   let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
+    //   throwOnFalsy(phoneVerificationRequest, "PHONE_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.phoneVerificationRequestNotFound);
+    //   let { createdDatetimeStamp, isVerificationComplete } = phoneVerificationRequest;
+    //   if (!isVerificationComplete) {
+    //     let diff = Date.now() - createdDatetimeStamp;
+    //     throwOnTruthy(diff > EMAIL_VERIFICATION_WINDOW, "USER_REQUIRES_PHONE_VERIFICATION", this.verses.userLoginApi.userRequiresPhoneVerification);
+    //     diff = Math.round(diff / (1000 * 60))
+    //     warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
+    //   }
+    // } else 
+
+    if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
+      let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
+
+      // NOTE: If email verification requrest does not exist, skip
+      // throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
+
+      if (emailVerificationRequest) {
+        let { createdDatetimeStamp, isVerificationComplete } = emailVerificationRequest;
+        if (!isVerificationComplete) {
+          let diff = Date.now() - createdDatetimeStamp;
+          throwOnTruthy(diff > EMAIL_VERIFICATION_WINDOW, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification);
+        }
       }
 
-    } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
-      let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
-      // throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)
-      if (emailVerificationRequest) {
-        throwOnFalsy(emailVerificationRequest.isVerificationComplete, "USER_REQUIRES_EMAIL_VERIFICATION", this.verses.userLoginApi.userRequiresEmailVerification)
-      }
     } else {
       'pass'
     }

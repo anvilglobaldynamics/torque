@@ -32,7 +32,7 @@ exports.UserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
     let userId = await this._createUser({ fullName, email, password, agreedToTocDatetimeStamp, accessibleApplicationList: ['torque'] });
 
-    let verificationLink = await this._generateEmailVerificationLink({ email, userId });
+    let verificationLink = await this._createEmailVerificationRequest({ email, userId });
     this._sendEmailVerificationMail({ email, verificationLink });
 
     return { status: "success", userId };

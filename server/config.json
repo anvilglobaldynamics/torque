@@ -31,9 +31,9 @@
     "name": "torque"
   },
   "email": {
-    "enabled": false,
+    "enabled": true,
     "publicKey": "pubkey-000000000000000",
-    "privateKey": "key-000000000000000",
+    "privateKey": "key-31ecc570440500bd6cb9faa9aa8a593b",
     "domain": "mg.anvil.live",
     "from": "Anvil Global Dynamic Ltd. <postmaster@mg.anvil.live>"
   },

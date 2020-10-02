@@ -75,7 +75,7 @@ exports.EmailVerificationRequestCollection = class extends LegacyCollection {
       if (!doc) {
         let err = new Error('Invalid verification token');
         err.code = "INVALID_VERIFICATION_TOKEN";
-        return cbfn(null, err);
+        return cbfn(err, null);
       }
       let mod = {
         $set: {

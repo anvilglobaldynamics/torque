@@ -24,8 +24,8 @@ exports.UserCollection = class extends LegacyCollection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
-      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).allow(null).required(),
       passwordHash: Joi.string().min(64).max(64).required(),
       email: Joi.string().email().min(3).max(30).allow(null).required(),
       nid: Joi.string().min(16).max(16).allow('').required(),
@@ -47,7 +47,7 @@ exports.UserCollection = class extends LegacyCollection {
     this.uniqueKeyDefList = [
       {
         filters: {},
-        keyList: ['countryCode+phone']
+        keyList: ['email']
       }
     ]
   }
@@ -126,6 +126,7 @@ exports.UserCollection = class extends LegacyCollection {
       }
     }
     this._update({ id: userId }, mod, (err, wasUpdated) => {
+      console.log({err, wasUpdated})
       if (err) return cbfn(err);
       if (!wasUpdated) return cbfn(new Error("User Not Found"));
       return cbfn();
