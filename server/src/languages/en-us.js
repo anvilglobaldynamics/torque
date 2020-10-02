@@ -1,7 +1,7 @@
 exports.verses = {
   genericServerError: "Server error occurred. Admin has been notified.",
   userLoginApi: {
-    userNotFound: "No user matched the email/phone and password combination.",
+    userNotFound: "No user matched the email and password combination.",
     userBanned: "Your Lipi account has been temporarily blocked. Please contact 01770947908 or care@anvil.live",
     userRequiresPhoneVerification: "You need to verify your phone number.",
     userRequiresEmailVerification: "You need to verify your email. Try logging in with your phone number and then verify your email.",

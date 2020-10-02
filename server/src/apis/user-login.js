@@ -30,19 +30,15 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
   async __getUser({ countryCode, emailOrPhone, password }) {
     let passwordHash = this._makeHash(password);
-    let user = await this.database.user.findByEmailOrPhoneAndPasswordHash({ countryCode, emailOrPhone, passwordHash });
+    let user = await this.database.user.findByEmailAndPasswordHash({ countryCode, email: emailOrPhone, passwordHash });
     throwOnFalsy(user, "USER_NOT_FOUND", this.verses.userLoginApi.userNotFound);
     throwOnTruthy(user.isBanned, "USER_BANNED", this.verses.userLoginApi.userBanned);
 
     if (user.accessibleApplicationList.indexOf(this.clientApplication) === -1) {
-      if (this.clientApplication === 'torque-lite') {
-        throw new CodedError("APP_ACCESS_DENIED", "You already have access to Lipi for Business. Please use that instead of Lipi Lite.");
-      } else {
-        throw new CodedError("APP_ACCESS_DENIED", "You do not have access to Lipi for Business. Please use Lipi Lite.");
+      if (this.clientApplication === 'torque') {
+        throw new CodedError("APP_ACCESS_DENIED", "You do not have access to Lipi for Business.");
       }
     }
-
-    // NOTE: Not currently validating phone when clientApplication === 'torque-lite'
 
     let warning = [];
     if (emailOrPhone === user.phone && !user.isPhoneVerified && this.clientApplication === 'torque') {
@@ -55,6 +51,7 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
         diff = Math.round(diff / (1000 * 60))
         warning.push(`You have less than 1 hour to verify your phone number "${user.phone}".`);
       }
+
     } else if (emailOrPhone === user.email && !user.isEmailVerified && this.clientApplication === 'torque') {
       let emailVerificationRequest = await this.database.emailVerificationRequest.findByForEmail({ forEmail: user.email });
       // throwOnFalsy(emailVerificationRequest, "EMAIL_VERIFICATION_REQUEST_NOT_FOUND", this.verses.userLoginApi.emailVerificationRequestNotFound)

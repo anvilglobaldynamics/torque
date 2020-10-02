@@ -99,6 +99,13 @@ exports.UserCollection = class extends Collection {
     });
   }
 
+  async findByEmailAndPasswordHash({ email, passwordHash }) {
+    return await this._findOne({
+      email,
+      passwordHash
+    });
+  }
+
   async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
     return await this._update({ id }, {
       $set: {
