@@ -15,8 +15,8 @@ exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
 
   get requestSchema() {
     return Joi.object().keys({
-      email: Joi.string().email().min(3).max(30).allow(null).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      email: Joi.string().email().min(3).max(30).required(),
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
 
       fullName: Joi.string().min(1).max(64).required(),
       nid: Joi.string().allow('').min(16).max(16).required(),
@@ -39,19 +39,21 @@ exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
       }
     }
 
-    if (user.phone !== phone) {
-      let existingUser = (await this.database.user.findByEmailOrPhone({ emailOrPhone: phone }));
-      if (existingUser) {
-        throw new CodedError("PHONE_INVALID", "The phone you provided is already in use");
-      }
-    }
+    // if (user.phone !== phone) {
+    //   let existingUser = (await this.database.user.findByEmailOrPhone({ emailOrPhone: phone }));
+    //   if (existingUser) {
+    //     throw new CodedError("PHONE_INVALID", "The phone you provided is already in use");
+    //   }
+    // }
 
     result = await this.database.user.setProfile({ id: userId }, {
-      userId, email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
+      userId, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup
     });
     this.ensureUpdate('user', result);
 
-    if (user.email === email && user.phone === phone) return false;
+    // if (user.email === email && user.phone === phone) return false;
+
+    if (user.email === email) return false;
 
     if (user.email !== email) {
       result = await this.database.user.setEmailVerificationStatus({ id: userId }, { isEmailVerified: false });
@@ -61,13 +63,13 @@ exports.UserEditProfileApi = class extends Api.mixin(UserMixin) {
       this._sendEmailVerificationMail({ email, verificationLink });
     }
 
-    if (user.phone !== phone) {
-      result = await this.database.user.setPhoneVerificationStatus({ id: userId }, { isPhoneVerified: false });
-      this.ensureUpdate('user', result);
+    // if (user.phone !== phone) {
+    //   result = await this.database.user.setPhoneVerificationStatus({ id: userId }, { isPhoneVerified: false });
+    //   this.ensureUpdate('user', result);
 
-      let verificationLink = await this._createPhoneVerificationRequest({ phone, userId });
-      this._sendPhoneVerificationSms({ phone, verificationLink });
-    }
+    //   let verificationLink = await this._createPhoneVerificationRequest({ phone, userId });
+    //   this._sendPhoneVerificationSms({ phone, verificationLink });
+    // }
 
     return true;
   }

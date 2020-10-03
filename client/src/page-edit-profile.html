@@ -74,7 +74,7 @@
           <div class="card vertical layout">
             <p class="card-form-title">[[verses.editProfile.profileEditForm]]</p>
 
-            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input>
+            <!-- <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input> -->
             <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 
             <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message=[[verses.editProfile.fullNameInputError]] label=[[verses.editProfile.fullNameInput]]></paper-input>
@@ -105,7 +105,7 @@
             type: Object,
             value: _ => {
               return {
-                phone: '',
+                // phone: '',
                 email: '',
                 fullName: '',
                 nid: '',
@@ -187,12 +187,13 @@
         });
       }
 
-      _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+      _processUserEditProfile({  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
         if (email) {
           email = email.toLowerCase();
         }
 
-        let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+        let phone = null;
+        let data = {  phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
 
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
@@ -226,8 +227,8 @@
         this.elemAll('#editProfileForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProfileForm').validate()) return;
 
-        let { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
-        this._processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
+        let {  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
+        this._processUserEditProfile({  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
       }
 
       // region: misc =================================

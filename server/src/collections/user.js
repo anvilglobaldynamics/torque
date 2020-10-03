@@ -106,10 +106,10 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+  async setProfile({ id }, { email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
     return await this._update({ id }, {
       $set: {
-        email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
+        email, fullName, nid, physicalAddress, emergencyContact, bloodGroup
       }
     });
   }
