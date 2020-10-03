@@ -185,7 +185,18 @@
 
         this.app.callUserResetPasswordRequestApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+
+          if (response.hasError) {
+            if (response.error.code === "VALIDATION_ERROR") {
+              let message = this.app.verses.login.emailOrPhoneInputError;
+              this.app.showModalDialog(this.app.verses.general.errorMessageTitle, message, _ => {
+                return;
+              });
+              return;
+            }
+            return this.onApiError(response.error);
+          }
+
           let { type } = response;
           cbfn(type);
         });
