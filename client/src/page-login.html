@@ -150,8 +150,8 @@
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
-            if (response.error.code === "USER_REQUIRES_PHONE_VERIFICATION") {
-              return this.app.navigateTo(`/verify/phone:${emailOrPhone}`);
+            if (response.error.code === "USER_REQUIRES_EMAIL_VERIFICATION") {
+              return this.app.navigateTo(`/verify/email:${emailOrPhone}`);
             }
             if (response.error.code === "VALIDATION_ERROR") {
               let message = this.app.verses.login.emailOrPhoneInputError;

@@ -7,7 +7,8 @@ const { generateRandomString } = require('./../utils/random-string');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
-const EMAIL_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
+// const EMAIL_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
+const EMAIL_VERIFICATION_WINDOW = 1 * 1000;
 
 exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
