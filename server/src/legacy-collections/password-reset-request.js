@@ -23,7 +23,7 @@ exports.PasswordResetRequestCollection = class extends LegacyCollection {
     this.joiSchema = Joi.object().keys({
       forUserId: Joi.number().max(999999999999999).required(),
       forEmail: Joi.string().email().min(3).max(30).allow(null).required(),
-      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      forPhone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       confirmedDatetimeStamp: Joi.number().max(999999999999999).allow(null).required(),
@@ -45,11 +45,11 @@ exports.PasswordResetRequestCollection = class extends LegacyCollection {
         foreignKey: 'id',
         referringKey: 'forUserId'
       },
-      {
-        targetCollection: 'user',
-        foreignKey: 'phone',
-        referringKey: 'forPhone'
-      }
+      // {
+      //   targetCollection: 'user',
+      //   foreignKey: 'phone',
+      //   referringKey: 'forPhone'
+      // }
     ];
   }
 

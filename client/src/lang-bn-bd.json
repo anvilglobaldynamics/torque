@@ -155,8 +155,8 @@
     "confirmationLinkEmail": "আমরা আপনার ইমেইলে একটি নিশ্চিতকরণ লিঙ্ক পাঠিয়েছি, আপনার পাসওয়ার্ড পুনরায় সেট করার জন্য লিঙ্কটি ব্যবহার করুন।"
   },
   "forgotPassword": {
-    "emailOrPhoneInputTitle": "ফোন নম্বর বা ইমেইল লিখুন",
-    "emailOrPhoneInputMessage": "আপনি আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ফোন নম্বর/ইমেইল লিখুন।"
+    "emailOrPhoneInputTitle": "আপনার ইমেইল",
+    "emailOrPhoneInputMessage": "আপনার অ্যাকাউন্ট খুলতে ব্যবহৃত ইমেইলটি দিন।"
   },
   "register": {
     "registerTitle": "লিপি অ্যাকাউন্ট খুলুন",
