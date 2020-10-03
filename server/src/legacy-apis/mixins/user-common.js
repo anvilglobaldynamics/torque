@@ -54,7 +54,7 @@ exports.userCommonMixin = (SuperApiClass) => class extends SuperApiClass {
   _notifyPasswordChange({ userId }) {
     this.legacyDatabase.user.findById({ userId }, (err, user) => {
       if (err) return this.logger.error(err);
-      this._sendPasswordChangeNotificationSms({ user });
+      // this._sendPasswordChangeNotificationSms({ user });
       this._sendPasswordChangeNotificationEmail({ user });
     });
   }

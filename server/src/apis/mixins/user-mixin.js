@@ -121,7 +121,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
   // NOTE: In most cases there is no reason to await this method
   async _notifyPasswordChange({ userId }) {
     let user = await this.database.user.findById({ id: userId });
-    await this._sendPasswordChangeNotificationSms({ user });
+    // await this._sendPasswordChangeNotificationSms({ user });
     await this._sendPasswordChangeNotificationEmail({ user });
   }
 
