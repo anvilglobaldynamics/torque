@@ -155,7 +155,8 @@
     "confirmationLinkEmail": "We have sent you a confirmation link to your Email. Use the link to reset your password."
   },
   "forgotPassword": {
-    "emailOrPhoneInputTitle": "Enter Email.",
+    "emailSentTitle": "Reset link sent",
+    "emailOrPhoneInputTitle": "Enter Email",
     "emailOrPhoneInputMessage": "Enter the email address you used to create your account."
   },
   "register": {
@@ -576,7 +577,8 @@
     "setNewPassword": "SET NEW PASSWORD",
     "dontHaveAccount": "Don't have an account?",
     "passwordInput": "Your new password.",
-    "retypePasswordInput": "Retype Your new password.",
+    "retypePasswordInput": "Retype your new password.",
+    "newPasswordSetTitle": "New password set",
     "newPasswordSet": "You new password has been set. You can log in now.",
     "retypeIncorrectHeader": "Wrong Retype",
     "retypeIncorrect": "You incorrectly typed your new password the second time. Please type it again and press confirm."

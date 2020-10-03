@@ -31,39 +31,39 @@ class EmailService {
       {
         name: 'en-us--password-reset',
         path: './src/templates/email/en-us--password-reset.html',
-        subject: `Your password reset code for ${branding.shortName}`
+        subject: `Your password reset link for ${branding.shortName}`
       },
       {
-        name: 'en-us--generic-message',
-        path: './src/templates/email/en-us--generic-message.html',
-        subject: `Message from ${branding.shortName}`
+        name: 'en-us--password-change',
+        path: './src/templates/email/en-us--password-change.html',
+        subject: `Your password for ${branding.shortName} was reset`
       },
-      {
-        name: 'bn-bd--email-verification',
-        path: './src/templates/email/bn-bd--email-verification.html',
-        subject: `Verify your email for ${branding.shortName}`
-      },
-      {
-        name: 'bn-bd--password-reset',
-        path: './src/templates/email/bn-bd--password-reset.html',
-        subject: `Your password reset code for ${branding.shortName}`
-      },
-      {
-        name: 'bn-bd--generic-message',
-        path: './src/templates/email/bn-bd--generic-message.html',
-        subject: `Message from ${branding.shortName}`
-      },
+      // {
+      //   name: 'bn-bd--email-verification',
+      //   path: './src/templates/email/bn-bd--email-verification.html',
+      //   subject: `Verify your email for ${branding.shortName}`
+      // },
+      // {
+      //   name: 'bn-bd--password-reset',
+      //   path: './src/templates/email/bn-bd--password-reset.html',
+      //   subject: `Your password reset code for ${branding.shortName}`
+      // },
+      // {
+      //   name: 'bn-bd--generic-message',
+      //   path: './src/templates/email/bn-bd--generic-message.html',
+      //   subject: `Message from ${branding.shortName}`
+      // },
       // Receipt
       {
         name: 'en-us--receipt',
         path: './src/templates/email/receipt.html',
         subject: `Receipt - Lipi for Business`
       },
-      {
-        name: 'bn-bd--receipt',
-        path: './src/templates/email/receipt.html',
-        subject: `Receipt - Lipi for Business`
-      }
+      // {
+      //   name: 'bn-bd--receipt',
+      //   path: './src/templates/email/receipt.html',
+      //   subject: `Receipt - Lipi for Business`
+      // }
     ];
 
     this.templates = {};
@@ -97,6 +97,10 @@ class EmailService {
   }
 
   async sendStoredMail(clientLanguage, templateName, model, to) {
+
+    // override clientLanguage
+    clientLanguage = 'en-us'
+
     templateName = clientLanguage + '--' + templateName;
     let html = this.generateHtml(templateName, model);
     let subject = this.templates[templateName].subject;

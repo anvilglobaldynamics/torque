@@ -88,7 +88,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
     if (!email) return;
     let model = { email, textContent: this.verses.userNotificationCommon.yourPasswordHasChanged };
     let clientLanguage = (this.clientLanguage || 'en-us');
-    let [err, isDeveloperError, response, finalBody] = await this.server.emailService.sendStoredMail(clientLanguage, 'generic-message', model, email);
+    let [err, isDeveloperError, response, finalBody] = await this.server.emailService.sendStoredMail(clientLanguage, 'password-change', model, email);
     if ((err) || response.message !== 'Queued. Thank you.') {
       if (err) {
         if (!isDeveloperError) this.logger.error(err);
@@ -97,7 +97,7 @@ exports.UserMixin = (SuperApiClass) => class extends SuperApiClass {
       }
       let message = 'Failed to send password change notification email. Please handle the case manually.'
       this.logger.important(message, {
-        type: 'generic-message',
+        type: 'password-change',
         model
       });
     }

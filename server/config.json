@@ -2,12 +2,12 @@
   "baseName": "torque-server",
   "branding": {
     "shortName": "Lipi",
-    "extendedName": "Lipi by Anvil",
+    "extendedName": "Lipi for Business",
     "serverUrl": "http://localhost:8540",
     "clientUrl": "http://localhost:8545",
     "authorName": "Anvil Global Dynamics",
     "authorWebsite": "https://anvil.live",
-    "supportPhone": "01770947908",
+    "supportPhone": "+8801770947908",
     "supportEmail": "care@anvil.live"
   },
   "server": {
