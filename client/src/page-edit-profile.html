@@ -22,7 +22,6 @@
 <dom-module id="page-edit-profile">
   <template>
     <style include="shared-styles">
-
       .title {
         font-size: 18px;
       }
@@ -44,10 +43,10 @@
 
           <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
           <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
-          <template is="dom-if" if="[[user.email]]">
-            <div class="user-detail-container">[[verses.general.email]]: [[user.email]]</div>
-          </template>
-          <div class="user-detail-container">[[verses.general.phone]]: [[user.phone]]</div>
+          <!-- <template is="dom-if" if="[[user.email]]"> -->
+          <div class="user-detail-container">[[verses.general.email]]: [[user.email]]</div>
+          <!-- </template> -->
+          <!-- <div class="user-detail-container">[[verses.general.phone]]: [[user.phone]]</div> -->
 
         </div>
       </div>
@@ -81,8 +80,8 @@
             <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label=[[verses.editProfile.NidInput]]></paper-input>
             <paper-textarea class="editProfileForm--physicalAddress" value="{{editProfileForm.physicalAddress}}" label=[[verses.editProfile.addressInput]] rows="4"></paper-textarea>
 
-            <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label=[[verses.editProfile.emergencyContactInput]]></paper-input>
-            <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label=[[verses.editProfile.bloodgroupInput]]></paper-input>
+            <!-- <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label=[[verses.editProfile.emergencyContactInput]]></paper-input> -->
+            <!-- <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label=[[verses.editProfile.bloodgroupInput]]></paper-input> -->
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary editProfileForm--submit" on-tap="editProfileTapped">[[verses.editProfile.saveChanges]]</paper-button>
@@ -159,7 +158,7 @@
         this.removeAutoValidation('#changePasswordForm paper-input');
         this.removeAutoValidation('#editProfileForm paper-input');
       }
-      
+
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'authenticated'
@@ -187,13 +186,13 @@
         });
       }
 
-      _processUserEditProfile({  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+      _processUserEditProfile({ email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
         if (email) {
           email = email.toLowerCase();
         }
 
         let phone = null;
-        let data = {  phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
+        let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
 
         this.app.callUserEditProfileApi(data, (err, response) => {
           if (err) return;
@@ -227,8 +226,8 @@
         this.elemAll('#editProfileForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProfileForm').validate()) return;
 
-        let {  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
-        this._processUserEditProfile({  email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
+        let { email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
+        this._processUserEditProfile({ email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
       }
 
       // region: misc =================================

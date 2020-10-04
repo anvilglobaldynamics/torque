@@ -43,7 +43,7 @@
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
             <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
-            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
+            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" minlength="4" minlength="14" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.outlet.contactPhoneOfContactPerson]]></paper-input>
 
             <paper-dropdown-menu class="full-width-paper-dropdown editOutletForm--categoryCode" label=[[verses.outlet.categoryCodeDropdown]] class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{editOutletForm.categoryCode}}" attr-for-selected="code">
