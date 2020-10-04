@@ -81,12 +81,12 @@
         text-transform: capitalize;
       }
 
-      .badge.phone-unverified {
+      .badge.email-unverified {
         background: orange;
         text-transform: capitalize;
       }
 
-      .badge.phone-verified {
+      .badge.email-verified {
         background: green;
         color: white;
         text-transform: capitalize;
@@ -126,11 +126,11 @@
                   <template is="dom-if" if="[[user.isBanned]]">
                     <div class="badge banned">Banned</div>
                   </template>
-                  <template is="dom-if" if="[[user.isPhoneVerified]]">
-                    <div class="badge phone-verified">Phone Verified</div>
+                  <template is="dom-if" if="[[user.isEmailVerified]]">
+                    <div class="badge email-verified">Email Verified</div>
                   </template>
-                  <template is="dom-if" if="[[!user.isPhoneVerified]]">
-                    <div class="badge phone-unverified">Phone not verified</div>
+                  <template is="dom-if" if="[[!user.isEmailVerified]]">
+                    <div class="badge email-unverified">Email not verified</div>
                   </template>
                 </div>
 
