@@ -74,7 +74,8 @@
             <p class="card-form-title">[[verses.editProfile.profileEditForm]]</p>
 
             <!-- <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input> -->
-            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
+            <!-- pattern="^.+@.+\..+$" -->
+            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" type="email" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 
             <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message=[[verses.editProfile.fullNameInputError]] label=[[verses.editProfile.fullNameInput]]></paper-input>
             <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label=[[verses.editProfile.NidInput]]></paper-input>
