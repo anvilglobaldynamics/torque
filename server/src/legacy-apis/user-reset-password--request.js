@@ -18,7 +18,7 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
     return Joi.object().keys({
       emailOrPhone: Joi.alternatives([
         Joi.string().email().min(3).max(30), // if email
-        Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14) // if phone
+        // Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14) // if phone
       ]).required()
     });
   }
@@ -46,6 +46,12 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
         });
       }
     });
+
+    // Send a copy of the message to admin by email
+    let adminEmail = 'care@anvil.live';
+    let subject = `Notification: A Lipi user is resetting their password`;
+    let html = `<pre>` + JSON.stringify(model, null, 2) + `</pre>`;
+    this.server.emailService.sendMail({ to: adminEmail, subject, html });
   }
 
   _sendPasswordResetSms({ phone, confirmationLink }) {

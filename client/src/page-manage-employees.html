@@ -27,6 +27,18 @@
         width: 100%;
         margin: 5px;
       }
+
+      .fired-text {
+        border: 1px solid lightpink;
+        background-color: lightpink;
+        border-radius: 6px;
+        margin-right: 4px;
+        font-size: 13px;
+        padding: 3px;
+        color: darkred;
+        display: inline-block;
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -44,9 +56,18 @@
             <div class="horizontal layout item center">
               <div class="vertical layout flex">
                 <div class="person-name-container">[[employee.userDetails.fullName]]</div>
-                <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div>
+
+                <template is="dom-if" if="[[!employee.isActive]]">
+                  <!-- <div class="fired-text" style="max-width: 100px; text-align: center;">(Ex Employee)</div> -->
+                  <div>
+                    <div class="fired-text">[[verses.employee.firedText]]</div>
+                  </div>
+                </template>
+
+                <!-- <div class="person-phone-container">[[verses.general.phone]]: [[employee.userDetails.phone]]</div> -->
                 <div class="person-detail-container">[[verses.employee.companyProvidedId]]: [[employee.companyProvidedId]]</div>
-                <div class="person-detail-container">[[verses.employee.designation]] : [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
+                <div class="person-detail-container">[[verses.employee.designation]]: [[employee.designation]], [[verses.employee.role]]: [[employee.role]]</div>
+                <div class="person-detail-container">[[verses.general.email]]: [[employee.userDetails.email]]</div>
               </div>
               <paper-button raised class="secondary" on-tap="viewTapped">[[verses.general.view]]</paper-button>
               <!-- <paper-button raised class="primary" on-tap="editTapped">[[verses.general.edit]]</paper-button> -->
@@ -68,10 +89,10 @@
       </div>
 
       <div class="vartical layout wrap hire-button-group">
-        <div class="card action-button-container">
+        <!-- <div class="card action-button-container">
           <div class="mb-4">[[verses.employee.hireUserEmployeeDetail]]</div>
           <paper-button raised class="btn primary" on-tap="hireEmployeeTapped">[[verses.employee.hireUserEmployee]]</paper-button>
-        </div>
+        </div> -->
 
         <div class="card action-button-container">
           <div class="mb-4">[[verses.employee.addUserAsEmployeeDetail]]</div>

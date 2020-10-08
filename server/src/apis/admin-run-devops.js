@@ -26,6 +26,31 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
     let affectedList = [];
 
+    let userList = await this.database.user._find({ email: null });
+    console.log('USERLIST', userList.length)
+
+    for (let user of userList) {
+      console.log("userId", user.id);
+
+      await this.database.user._update({
+        id: user.id
+      }, {
+        $set: {
+          email: `fake.${user.phone}@lipi.shop`
+        }
+      });
+
+      // return;
+    }
+
+    console.log("ALL DONE")
+    return { status: "success", affectedList };
+  }
+
+  async __oldCodeKeptForReference({ body, username }) {
+
+    let affectedList = [];
+
     let userList = await this.database.user._find({ 'originApp': 'torque-lite' });
     // let userList = await this.database.user._find({ 'accessibleApplicationList': ['torque-lite'] });
     console.log('USERLIST', userList.length)
@@ -142,7 +167,7 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
     return { status: "success", affectedList };
   }
 
-  async __oldCodeKeptForReference() {
+  async __oldCodeKeptForReference2() {
 
     let organizationList = await this.database.organization._find({});
 

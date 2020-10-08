@@ -132,18 +132,32 @@
         emailOrPhone = emailOrPhone.trim();
         emailOrPhone = emailOrPhone.toLowerCase();
 
+        if (emailOrPhone.indexOf('@') === -1) {
+          let message = this.app.verses.login.emailRequiredMessage;
+          this.app.showModalDialog(this.app.verses.login.emailRequiredTitle, message, _ => {
+            return;
+          });
+          return;
+        }
+
         this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
 
         // NOTE: Update when Lipi is internationalized
-        let countryCode = '+880';
+        let countryCode = null;
 
         let data = { emailOrPhone, password, countryCode };
 
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
-            if (response.error.code === "USER_REQUIRES_PHONE_VERIFICATION") {
-              return this.app.navigateTo(`/verify/phone:${emailOrPhone}`);
+            if (response.error.code === "USER_REQUIRES_EMAIL_VERIFICATION") {
+              return this.app.navigateTo(`/verify/email:${emailOrPhone}`);
+            }
+            if (response.error.code === "VALIDATION_ERROR") {
+              let message = this.app.verses.login.emailOrPhoneInputError;
+              this.app.showModalDialog(this.app.verses.login.emailOrPhoneInput, message, _ => {
+                return;
+              });
             }
             return this.onApiError(response.error, 'loginForm');
           }
@@ -171,7 +185,18 @@
 
         this.app.callUserResetPasswordRequestApi(data, (err, response) => {
           if (err) return;
-          if (response.hasError) return this.onApiError(response.error);
+
+          if (response.hasError) {
+            if (response.error.code === "VALIDATION_ERROR") {
+              let message = this.app.verses.login.emailOrPhoneInputError;
+              this.app.showModalDialog(this.app.verses.general.errorMessageTitle, message, _ => {
+                return;
+              });
+              return;
+            }
+            return this.onApiError(response.error);
+          }
+
           let { type } = response;
           cbfn(type);
         });

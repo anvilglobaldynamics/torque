@@ -59,10 +59,10 @@
         <iron-form id="registerForm" on-keypress="genericFormSubmitionKeypress" hidden="[[!$equals(selectedTabIndex, 0)]]">
           <form>
             <paper-input class="registerForm--fullName" value="{{registerForm.fullName}}" required minlength="3" error-message="[[verses.register.fullnameInputError]]" label="[[verses.register.fullnameInput]]"></paper-input>
-            <paper-input class="registerForm--phone" value="{{registerForm.phone}}" required minlength="4" minlength="14" error-message="[[verses.register.phoneInputError]]" label="[[verses.register.phoneInput]]"></paper-input>
+            <paper-input class="registerForm--email" value="{{registerForm.email}}" required minlength="3" minlength="30" error-message="[[verses.register.emailInputError]]" label="[[verses.register.emailInput]]" type="email"></paper-input>
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="6" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 0px;">
             </paper-input>
-
+            
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary" on-tap="continueTapped">[[verses.general.continue]]</paper-button>
@@ -141,7 +141,7 @@
             value: _ => {
               return {
                 fullName: '',
-                phone: '',
+                email: '',
                 password: ''
               };
             }
@@ -185,17 +185,17 @@
           this.app.removeSettings();
         } catch (ex) { }
 
-        if ('phone' in this.params) {
-          this.set('registerForm.phone', this.params.phone);
+        // if ('phone' in this.params) {
+        //   this.set('registerForm.phone', this.params.phone);
 
-          this.app.callAnalyticsReportPotentialUserApi({
-            phone: this.params.phone,
-            source: 'torque-live-register-page',
-            shouldBlockUi: false
-          }, (err, response) => {
-            if (err) return;
-          });
-        }
+        //   this.app.callAnalyticsReportPotentialUserApi({
+        //     phone: this.params.phone,
+        //     source: 'torque-live-register-page',
+        //     shouldBlockUi: false
+        //   }, (err, response) => {
+        //     if (err) return;
+        //   });
+        // }
 
         try {
           let db = this.db || this.app.db;
@@ -229,11 +229,10 @@
         });
       }
 
-      _processUserRegister({ fullName, phone, password, hasAgreedToToc }, cbfn) {
+      _processUserRegister({ fullName, email, password, hasAgreedToToc }, cbfn) {
         // NOTE: Update when Lipi is internationalized
-        let countryCode = '+880';
 
-        let data = { fullName, phone, password, hasAgreedToToc, countryCode };
+        let data = { fullName, email, password, hasAgreedToToc };
         this.app.callUserRegisterApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) {
@@ -241,7 +240,7 @@
             return this.onApiError(response.error, 'registerForm');
           }
 
-          this.storeInCache('loginForm--emailOrPhone', phone);
+          this.storeInCache('loginForm--emailOrPhone', email);
 
           cbfn();
         });
@@ -254,10 +253,7 @@
 
         this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
 
-        // NOTE: Update when Lipi is internationalized
-        let countryCode = '+880';
-
-        let data = { emailOrPhone, password, countryCode };
+        let data = { emailOrPhone, countryCode: null, password };
 
         this.app.callUserLoginApi(data, (err, response) => {
           if (err) return;
@@ -406,14 +402,14 @@
           return this.app.showModalDialog(this.verses.register.tocNotAgreedHeader, this.verses.register.tocNotAgreed);
         }
 
-        let { fullName, phone, password } = this.registerForm;
+        let { fullName, email, password } = this.registerForm;
 
-        this._processUserRegister({ fullName, phone, password, hasAgreedToToc: this.agreesToToc }, (cbfn) => {
+        this._processUserRegister({ fullName, email, password, hasAgreedToToc: this.agreesToToc }, (cbfn) => {
 
-          this._processUserLogin({ emailOrPhone: phone, password }, (cbfn) => {
+          this._processUserLogin({ emailOrPhone: email, password }, (cbfn) => {
 
             let { name, primaryBusinessAddress, categoryCode } = this.addOrganizationForm;
-            let email = '';
+            let phone = '';
 
             let industryCategory = 'retail';
             if (serviceIndustryCategoryCodeList.indexOf(categoryCode) > -1) {

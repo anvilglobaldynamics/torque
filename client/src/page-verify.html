@@ -44,10 +44,16 @@
 
             <div class="help-text" style="text-align: center; margin-top: 30px; font-size: 16px">[[verses.verify.callUsReason]]</div>
 
+            <!-- 
             <div class="call-to-verify">
               [[verses.verify.callUsToVerifyPart1]]
               <a class="link primary" href="tel:+8801770947908" style="text-decoration: none;">[[verses.verify.callUsToVerifyPart2]]</a>
               [[verses.verify.callUsToVerifyPart3]]
+            </div> 
+            -->
+
+            <div class="call-to-verify">
+              [[verses.home.callUsToVerify]]
             </div>
 
             <!-- <template is="dom-if" if="[[$equals(what, 'phone')]]">
@@ -111,6 +117,9 @@
           if ('phone' in this.params) {
             this.what = 'phone';
             this.phone = this.params.phone;
+          } else if ('email' in this.params) {
+            this.what = 'email';
+            this.email = this.params.email;
           } else {
             return this.app.navigateTo('/home');
           }

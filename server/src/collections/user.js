@@ -13,10 +13,13 @@ exports.UserCollection = class extends Collection {
       createdDatetimeStamp: Joi.number().max(999999999999999).required(),
       lastModifiedDatetimeStamp: Joi.number().max(999999999999999).required(),
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
-      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).required(),
+
+      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).allow(null).required(),
+      countryCode: Joi.string().regex(/^[a-z0-9\+]*$/i).min(2).max(4).allow(null).required(),
+      email: Joi.string().email().min(3).max(30).required(),
+
       passwordHash: Joi.string().min(64).max(64).required(),
-      email: Joi.string().email().min(3).max(30).allow(null).required(),
+
       nid: Joi.string().min(16).max(16).allow('').required(),
       physicalAddress: Joi.string().min(1).max(128).allow('').required(),
       emergencyContact: Joi.string().min(1).max(128).allow('').required(),
@@ -38,17 +41,18 @@ exports.UserCollection = class extends Collection {
     return [
       {
         filters: {},
-        keyList: ['countryCode+phone']
+        keyList: ['email']
       }
     ];
   }
 
-  async create({ originApp, phone, fullName, passwordHash, agreedToTocDatetimeStamp, countryCode = '+880', accessibleApplicationList }) {
+  async create({ originApp, email, fullName, passwordHash, agreedToTocDatetimeStamp, accessibleApplicationList }) {
     return await this._insert({
       originApp,
       passwordHash,
-      email: null,
-      phone,
+      email,
+      phone: null,
+      countryCode: null,
       fullName,
       nid: '',
       physicalAddress: '',
@@ -59,7 +63,6 @@ exports.UserCollection = class extends Collection {
       isPhoneVerified: false,
       isEmailVerified: false,
       isBanned: false,
-      countryCode,
       accessibleApplicationList,
       agreedToTocDatetimeStamp
     });
@@ -96,10 +99,17 @@ exports.UserCollection = class extends Collection {
     });
   }
 
-  async setProfile({ id }, { email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+  async findByEmailAndPasswordHash({ email, passwordHash }) {
+    return await this._findOne({
+      email,
+      passwordHash
+    });
+  }
+
+  async setProfile({ id }, { email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
     return await this._update({ id }, {
       $set: {
-        email, phone, fullName, nid, physicalAddress, emergencyContact, bloodGroup
+        email, fullName, nid, physicalAddress, emergencyContact, bloodGroup
       }
     });
   }

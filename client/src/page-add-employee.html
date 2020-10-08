@@ -35,8 +35,11 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="addEmployeeForm--fullName" value="{{addEmployeeForm.fullName}}" required minlength="3" error-message=[[verses.employee.nameOfEmployeeInputError]] label=[[verses.employee.nameOfEmployeeInput]]></paper-input>
+            
+            <!-- <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactNumber]]></paper-input> -->
+            <paper-input class="addEmployeeForm--email" value="{{addEmployeeForm.email}}" required minlength="3" minlength="30" error-message=[[verses.employee.emailInputError]] label=[[verses.employee.emailInput]]></paper-input>
+
             <paper-input class="addEmployeeForm--password" value="{{addEmployeeForm.password}}" required minlength="8" error-message=[[verses.employee.passwordInputError]] label=[[verses.employee.passwordInput]] type="password"></paper-input>
-            <paper-input class="addEmployeeForm--phone" value="{{addEmployeeForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.employee.phoneInputError]] label=[[verses.employee.contactNumber]]></paper-input>
 
             <elem-common-employment-details-input name="employeeForm" employee-form="{{addEmployeeForm}}" page="{{self}}"></elem-common-employment-details-input>
 
@@ -63,18 +66,20 @@
             value: _ => {
               if (mode === 'development') {
                 return {
-                  fullName: 'Added Employee Full Name',
-                  phone: '1700000011',
+                  fullName: 'Another Employee',
+                  // phone: '1700000011',
+                  email: 'another.employee@anvil.live',
                   password: 'johndoe1pass',
-                  role: 'pichi role',
-                  designation: 'pichi desig',
+                  role: 'Sales',
+                  designation: 'Sales Soldier',
                   companyProvidedId: '007',
                   privileges: {}
                 };
               } else {
                 return {
                   fullName: '',
-                  phone: '',
+                  // phone: '',
+                  email: '',
                   password: '',
                   role: '',
                   designation: '',
@@ -125,9 +130,9 @@
 
       // region: createEmployee =================================
 
-      _processCreateEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges }) {
+      _processCreateEmployee({ fullName, password, email, role, designation, companyProvidedId, privileges }) {
         let data = {
-          fullName, password, phone, role, designation, companyProvidedId, privileges,
+          fullName, password, email, role, designation, companyProvidedId, privileges,
           organizationId: this.app.organization.id
         };
 
@@ -151,8 +156,8 @@
         this.elemAll('#addEmployeeForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#addEmployeeForm').validate()) return;
 
-        let { fullName, password, phone, role, designation, companyProvidedId, privileges } = this.addEmployeeForm;
-        this._processCreateEmployee({ fullName, password, phone, role, designation, companyProvidedId, privileges });
+        let { fullName, password, email, role, designation, companyProvidedId, privileges } = this.addEmployeeForm;
+        this._processCreateEmployee({ fullName, password, email, role, designation, companyProvidedId, privileges });
       }
 
       // region: misc =================================

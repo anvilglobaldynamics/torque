@@ -22,7 +22,6 @@
 <dom-module id="page-edit-profile">
   <template>
     <style include="shared-styles">
-
       .title {
         font-size: 18px;
       }
@@ -44,10 +43,10 @@
 
           <div class="title">[[verses.general.user]]: [[user.fullName]]</div>
           <div class="">[[verses.general.designation]]: [[organization.employment.designation]] ([[organization.employment.role]])</div>
-          <template is="dom-if" if="[[user.email]]">
-            <div class="user-detail-container">[[verses.general.email]]: [[user.email]]</div>
-          </template>
-          <div class="user-detail-container">[[verses.general.phone]]: [[user.phone]]</div>
+          <!-- <template is="dom-if" if="[[user.email]]"> -->
+          <div class="user-detail-container">[[verses.general.email]]: [[user.email]]</div>
+          <!-- </template> -->
+          <!-- <div class="user-detail-container">[[verses.general.phone]]: [[user.phone]]</div> -->
 
         </div>
       </div>
@@ -58,9 +57,9 @@
           <div class="card vertical layout">
             <p class="card-form-title">[[verses.editProfile.passwordChangeForm]]</p>
 
-            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="6" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
-            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="6" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
-            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="6" maxlength="15" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--oldPassword" value="{{changePasswordForm.oldPassword}}" required minlength="6" maxlength="30" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.currentPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--newPassword" value="{{changePasswordForm.newPassword}}" required minlength="6" maxlength="30" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.newPassword]] type="password"></paper-input>
+            <paper-input class="changePasswordForm--repeatNewPassword" value="{{changePasswordForm.repeatNewPassword}}" required minlength="6" maxlength="30" error-message=[[verses.editProfile.invalidPasswordError]] label=[[verses.editProfile.retypeNewPassword]] type="password"></paper-input>
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary changePasswordForm--submit" on-tap="changePasswordTapped">[[verses.editProfile.changePassword]]</paper-button>
@@ -74,15 +73,16 @@
           <div class="card vertical layout">
             <p class="card-form-title">[[verses.editProfile.profileEditForm]]</p>
 
-            <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input>
-            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" pattern="^.+@.+\..+$" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
+            <!-- <paper-input class="editProfileForm--phone" value="{{editProfileForm.phone}}" required minlength="4" minlength="14" error-message=[[verses.editProfile.phoneNumberInputError]] label=[[verses.editProfile.phoneNumberInput]]></paper-input> -->
+            <!-- pattern="^.+@.+\..+$" -->
+            <paper-input class="editProfileForm--email" value="{{editProfileForm.email}}" type="email" minlength="3" error-message=[[verses.editProfile.emailAddressInputError]] label=[[verses.editProfile.emailAddressInput]]></paper-input>
 
             <paper-input class="editProfileForm--fullName" value="{{editProfileForm.fullName}}" required minlength="3" error-message=[[verses.editProfile.fullNameInputError]] label=[[verses.editProfile.fullNameInput]]></paper-input>
             <paper-input class="editProfileForm--nid" value="{{editProfileForm.nid}}" label=[[verses.editProfile.NidInput]]></paper-input>
             <paper-textarea class="editProfileForm--physicalAddress" value="{{editProfileForm.physicalAddress}}" label=[[verses.editProfile.addressInput]] rows="4"></paper-textarea>
 
-            <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label=[[verses.editProfile.emergencyContactInput]]></paper-input>
-            <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label=[[verses.editProfile.bloodgroupInput]]></paper-input>
+            <!-- <paper-input class="editProfileForm--emergencyContact" value="{{editProfileForm.emergencyContact}}" label=[[verses.editProfile.emergencyContactInput]]></paper-input> -->
+            <!-- <paper-input class="editProfileForm--bloodGroup" value="{{editProfileForm.bloodGroup}}" label=[[verses.editProfile.bloodgroupInput]]></paper-input> -->
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary editProfileForm--submit" on-tap="editProfileTapped">[[verses.editProfile.saveChanges]]</paper-button>
@@ -105,7 +105,7 @@
             type: Object,
             value: _ => {
               return {
-                phone: '',
+                // phone: '',
                 email: '',
                 fullName: '',
                 nid: '',
@@ -159,7 +159,7 @@
         this.removeAutoValidation('#changePasswordForm paper-input');
         this.removeAutoValidation('#editProfileForm paper-input');
       }
-      
+
       _ensureAccess() {
         return this.accessControl({
           authLevel: 'authenticated'
@@ -187,11 +187,12 @@
         });
       }
 
-      _processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
+      _processUserEditProfile({ email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
         if (email) {
           email = email.toLowerCase();
         }
 
+        let phone = null;
         let data = { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup };
 
         this.app.callUserEditProfileApi(data, (err, response) => {
@@ -226,8 +227,8 @@
         this.elemAll('#editProfileForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editProfileForm').validate()) return;
 
-        let { phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
-        this._processUserEditProfile({ phone, email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
+        let { email, fullName, nid, physicalAddress, emergencyContact, bloodGroup } = this.editProfileForm;
+        this._processUserEditProfile({ email, fullName, nid, physicalAddress, emergencyContact, bloodGroup });
       }
 
       // region: misc =================================

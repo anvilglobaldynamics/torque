@@ -16,7 +16,7 @@ exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
   get requestSchema() {
     return Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      phone: Joi.string().regex(/^[a-z0-9\+]*$/i).min(4).max(14).required(),
+      email: Joi.string().email().min(3).max(30).required(),
       password: Joi.string().min(8).max(30).required(),
 
       organizationId: Joi.number().max(999999999999999).required(),
@@ -40,6 +40,7 @@ exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
 
   async _checkOrganizationPackageEmployeeLimit({ organizationId, aPackage }) {
     let employmentList = await this.database.employment.listByOrganizationId({ organizationId });
+    employmentList = employmentList.filter(i => i.isActive);
     if (employmentList.length == aPackage.limits.maximumEmployees) {
       throw new CodedError("ORGANIZATION_PACKAGE_LIMIT_REACHED", this.verses.packageLimitCommon.activePackageLimitReached);
     }
@@ -53,17 +54,16 @@ exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
   async handle({ body, userId: creatorUserId }) {
 
 
-    let { fullName, phone, password, organizationId, role, designation, companyProvidedId, privileges } = body;
+    let { fullName, email, password, organizationId, role, designation, companyProvidedId, privileges } = body;
     let { aPackage } = this.interimData;
 
     let creatorUser = await this.__getUser({ userId: creatorUserId });
     await this._checkOrganizationPackageEmployeeLimit({ organizationId, aPackage });
 
-    let createdUserId = await this._createUser({ fullName, phone, password, agreedToTocDatetimeStamp: null, accessibleApplicationList: ['torque'] });
+    let createdUserId = await this._createUser({ fullName, email, password, agreedToTocDatetimeStamp: null, accessibleApplicationList: ['torque'] });
 
-    let verificationLink = await this._createPhoneVerificationRequest({ phone, userId: createdUserId });
-    this._sendPhoneVerificationSms({ phone, verificationLink });
-
+    let verificationLink = await this._createEmailVerificationRequest({ email, userId: createdUserId });
+    this._sendEmailVerificationMail({ email, verificationLink });
 
     let employmentId = await this._hireUser({ userId: createdUserId, organizationId, role, designation, companyProvidedId, privileges });
 
