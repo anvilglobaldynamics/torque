@@ -98,7 +98,7 @@
               <template is="dom-repeat" items="[[employeeList]]" as="employee">
                 <div class="property-list-item">
                   <div class="inventory-container-view-name" style="font-weight: bold;">⚫ [[employee.userDetails.fullName]]</div>
-                  <div class="inventory-container-view-details">[[employee.userDetails.phone]]</div>
+                  <div class="inventory-container-view-details">[[employee.userDetails.phone]] - [[employee.userDetails.email]] ([[employee.userDetails.isEmailVerified]])</div>
                   <div class="inventory-container-view-details">[[employee.designation]] ([[employee.role]])</div>
                   <div class="inventory-container-view-details">User ID: [[employee.userDetails.id]], Employee ID: [[employee.id]]</div>
                 </div>
@@ -409,6 +409,7 @@
 
       _processOrganization(cbfn) {
         this._fetchOrganization(({ organization, outletList, warehouseList, employeeList }) => {
+          console.log({ organization, outletList, warehouseList, employeeList })
           // this.organization = organization;
           Object.assign(this, { organization, outletList, warehouseList, employeeList });
 
