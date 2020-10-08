@@ -90,6 +90,8 @@ exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
   }
 
   async handle({ body }) {
+    let message = "Lipi for Business is under maintenance. Lipi’s service will be back at 11:00 PM Bangladesh time today. Thank you."
+    throw new CodedError("SERVER_UNDER_MAINTENANCE", message);
     let { countryCode, emailOrPhone, password } = body;
     let { user, warning } = await this.__getUser({ countryCode, emailOrPhone, password });
     await this.__destroyExistingSessions({ userId: user.id });
