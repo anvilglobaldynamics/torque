@@ -26,119 +26,24 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
     let affectedList = [];
 
-    let userList = await this.database.user._find({ 'originApp': 'torque-lite' });
-    // let userList = await this.database.user._find({ 'accessibleApplicationList': ['torque-lite'] });
+    let userList = await this.database.user._find({ email: null });
     console.log('USERLIST', userList.length)
 
-    // === set user.accessibleApplicationList = ['torque']
-    await this.database.user._updateMany({
-      'accessibleApplicationList': ['torque-lite']
-    }, {
-      $set: {
-        'accessibleApplicationList': ['torque']
-      }
-    });
-
-    // === create phone verification request
     for (let user of userList) {
-      console.log("userId", user.id)
-      let phoneVerificationRequest = await this.database.phoneVerificationRequest.findByForPhone({ forPhone: user.phone });
-      if (!phoneVerificationRequest) {
-        let verificationLink = await this._createPhoneVerificationRequest({ phone: user.phone, userId: user.id });
-        this._sendPhoneVerificationSms({ phone: user.phone, verificationLink });
-      }
-    }
+      console.log("userId", user.id);
 
-    let organizationList = await this.database.organization._find({ 'originApp': 'torque-lite' });
-    console.log('ORGANIZATIONLIST', organizationList.length);
-
-    let serviceIndustryCategoryCodeList = [
-      "CAT_SALON",
-      "CAT_PARLOUR",
-      "CAT_GYM",
-      "CAT_YOGA",
-      "CAT_MUSIC_DANCE",
-      "CAT_BEAUTY"
-    ]
-
-    // === organization package and module
-    for (let organization of organizationList) {
-      let organizationId = organization.id;
-      console.log('organizationId', organizationId);
-
-      if (organization.activeModuleCodeList.length === 3) {
-        console.log("SKIP")
-      }
-
-      // get outlet
-      let outlet = await this.database.outlet._findOne({ organizationId });
-      if (!outlet) {
-        console.log("Missing outlet")
-        continue;
-      }
-
-      // deactivate all modules
-      await this.database.moduleActivation._updateMany({ organizationId }, {
+      await this.database.user._update({
+        id: user.id
+      }, {
         $set: {
-          isDeactivated: true,
-          deactivatedDatetimeStamp: Date.now()
+          email: `fake.${user.phone}@lipi.shop`
         }
       });
 
-      let activeModuleCodeList = ['MOD_ACCOUNTING', 'MOD_VENDOR'];
-
-      if (serviceIndustryCategoryCodeList.indexOf(outlet.categoryCode) === -1) {
-        activeModuleCodeList.push('MOD_PRODUCT');
-
-        await this.database.moduleActivation.create({
-          moduleCode: 'MOD_PRODUCT',
-          organizationId,
-          createdByAdminName: 'default',
-          paymentReference: 'Free Upgradation'
-        });
-      } else {
-        activeModuleCodeList.push('MOD_SERVICE');
-
-        await this.database.moduleActivation.create({
-          moduleCode: 'MOD_SERVICE',
-          organizationId,
-          createdByAdminName: 'default',
-          paymentReference: 'Free Upgradation'
-        });
-      }
-
-      await this.database.moduleActivation.create({
-        moduleCode: 'MOD_VENDOR',
-        organizationId,
-        createdByAdminName: 'default',
-        paymentReference: 'Free Upgradation'
-      });
-
-      await this.database.moduleActivation.create({
-        moduleCode: 'MOD_ACCOUNTING',
-        organizationId,
-        createdByAdminName: 'default',
-        paymentReference: 'Free Upgradation'
-      });
-
-      await this.database.organization._update({ id: organizationId }, {
-        $set: {
-          activeModuleCodeList
-        }
-      });
-
-      let packageActivationId = await this.database.packageActivation.create({
-        packageCode: 'RS-F01',
-        organizationId,
-        createdByAdminName: 'default',
-        paymentReference: 'Free Upgradation'
-      });
-      let result = await this.database.organization.setPackageActivationId({ id: organizationId }, { packageActivationId });
-
+      // return;
     }
 
     console.log("ALL DONE")
-
     return { status: "success", affectedList };
   }
 
@@ -262,7 +167,7 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
     return { status: "success", affectedList };
   }
 
-  async __oldCodeKeptForReference() {
+  async __oldCodeKeptForReference2() {
 
     let organizationList = await this.database.organization._find({});
 
