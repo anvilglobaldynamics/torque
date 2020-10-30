@@ -24,27 +24,55 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
   async handle({ body, username }) {
 
-    let affectedList = [];
-
-    let userList = await this.database.user._find({ email: null });
-    console.log('USERLIST', userList.length)
+    let userList = [
+      {
+        email: "fahidsourav2002@gmail.com"
+        , userId: 4260
+      }
+      , {
+        email: "asaduzzamankhan07@gmail.com"
+        , userId: 4864
+      }
+      , {
+        email: "tonmoytelecom121@gmail.com"
+        , userId: 4879
+      }
+      , {
+        email: "attailham3@gmail.com"
+        , userId: 4884
+      }
+      , {
+        email: "startwithmasum@gmail.com"
+        , userId: 4885
+      }
+      , {
+        email: "hkrian53@gmail.com"
+        , userId: 4886
+      }
+      , {
+        email: "mdeirfan488@gmail.com"
+        , userId: 4888
+      }
+      , {
+        email: "guest.organic@gmail.com"
+        , userId: 4889
+      }
+    ]
 
     for (let user of userList) {
-      console.log("userId", user.id);
+      // console.log("userId", user.id);
 
-      await this.database.user._update({
-        id: user.id
-      }, {
-        $set: {
-          email: `fake.${user.phone}@lipi.shop`
-        }
-      });
+      let { email, userId } = user;
+      console.log(email);
+
+      let verificationLink = await this._createEmailVerificationRequest({ email, userId });
+      this._sendEmailVerificationMail({ email, verificationLink });
 
       // return;
     }
 
     console.log("ALL DONE")
-    return { status: "success", affectedList };
+    return { status: "success", userList };
   }
 
   async __oldCodeKeptForReference({ body, username }) {
