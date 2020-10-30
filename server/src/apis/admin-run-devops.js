@@ -24,55 +24,57 @@ exports.AdminRunDevopsApi = class extends Api.mixin(OrganizationMixin, Accountin
 
   async handle({ body, username }) {
 
-    let userList = [
-      {
-        email: "fahidsourav2002@gmail.com"
-        , userId: 4260
-      }
-      , {
-        email: "asaduzzamankhan07@gmail.com"
-        , userId: 4864
-      }
-      , {
-        email: "tonmoytelecom121@gmail.com"
-        , userId: 4879
-      }
-      , {
-        email: "attailham3@gmail.com"
-        , userId: 4884
-      }
-      , {
-        email: "startwithmasum@gmail.com"
-        , userId: 4885
-      }
-      , {
-        email: "hkrian53@gmail.com"
-        , userId: 4886
-      }
-      , {
-        email: "mdeirfan488@gmail.com"
-        , userId: 4888
-      }
-      , {
-        email: "guest.organic@gmail.com"
-        , userId: 4889
-      }
-    ]
+    // let userList = [
+    //   {
+    //     email: "fahidsourav2002@gmail.com"
+    //     , userId: 4260
+    //   }
+    //   , {
+    //     email: "asaduzzamankhan07@gmail.com"
+    //     , userId: 4864
+    //   }
+    //   , {
+    //     email: "tonmoytelecom121@gmail.com"
+    //     , userId: 4879
+    //   }
+    //   , {
+    //     email: "attailham3@gmail.com"
+    //     , userId: 4884
+    //   }
+    //   , {
+    //     email: "startwithmasum@gmail.com"
+    //     , userId: 4885
+    //   }
+    //   , {
+    //     email: "hkrian53@gmail.com"
+    //     , userId: 4886
+    //   }
+    //   , {
+    //     email: "mdeirfan488@gmail.com"
+    //     , userId: 4888
+    //   }
+    //   , {
+    //     email: "guest.organic@gmail.com"
+    //     , userId: 4889
+    //   }
+    // ]
 
-    for (let user of userList) {
-      // console.log("userId", user.id);
+    // for (let user of userList) {
+    //   // console.log("userId", user.id);
 
-      let { email, userId } = user;
-      console.log(email);
+    //   let { email, userId } = user;
+    //   console.log(email);
 
-      let verificationLink = await this._createEmailVerificationRequest({ email, userId });
-      this._sendEmailVerificationMail({ email, verificationLink });
+    //   let verificationLink = await this._createEmailVerificationRequest({ email, userId });
+    //   this._sendEmailVerificationMail({ email, verificationLink });
 
-      // return;
-    }
+    //   // return;
+    // }
 
-    console.log("ALL DONE")
-    return { status: "success", userList };
+    // console.log("ALL DONE")
+    // return { status: "success", userList };
+
+    return { status: 'idle' }
   }
 
   async __oldCodeKeptForReference({ body, username }) {
