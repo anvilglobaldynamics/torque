@@ -66,6 +66,14 @@ exports.AdminGetAggregatedUserListApi = class extends Api {
       user.passwordHash = 'REDACTED';
     }));
 
+    await Promise.all(userList.map(async user => {
+      let session = await this.database.session._findOne({ userId: user.id }, { sort: { id: -1 } });
+      if (session){
+        delete session['apiKey'];
+      }
+      user.session = session;
+    }));
+
     return { userList, totalUserCount };
   }
 

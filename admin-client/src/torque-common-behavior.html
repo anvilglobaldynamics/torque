@@ -162,6 +162,15 @@
         }
       }
 
+      $mkDatetime(date, format = 'MMM d, yyyy hh:mm:ss tt') {
+        try {
+          return (new XDate(date)).toString(format);
+        } catch (ex) {
+          console.error(ex);
+          return 'INVALID DATE';
+        }
+      }
+
     }
   }
 

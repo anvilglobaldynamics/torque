@@ -137,10 +137,16 @@
                 <div class="title">Name: [[user.fullName]]</div>
                 <div class="description">Phone: [[user.phone]]</div>
                 <div class="description">Email: [[user.email]]</div>
-                <div class="description">NID: [[user.nid]]</div>
+                <!-- <div class="description">NID: [[user.nid]]</div> -->
+                <template is="dom-if" if="[[user.session]]">
+                  <div class="description" style="font-size: 12px;">Last Login: [[$mkDatetime(user.session.createdDatetimeStamp)]]</div>
+                </template>
+                <template is="dom-if" if="[[!user.session]]">
+                  <div class="description" style="font-size: 12px;">Last Login: Never</div>
+                </template>
 
                 <div class="horizontal layout center">
-                  <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin Type" class="mr-4">
+                  <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin" class="mr-4" style="width: 100px;">
                     <paper-listbox slot="dropdown-content" selected="{{user.originTypeSelected}}">
                       <template is="dom-repeat" items="[[originTypeList]]" as="originType">
                         <paper-item name="[[package.originType]]">[[originType.label]]</paper-item>
@@ -148,9 +154,7 @@
                     </paper-listbox>
                   </paper-dropdown-menu>
                   <paper-button raised class="ban-unban primary" on-tap="setOriginTypeTapped">Set</paper-button>
-                </div>
-
-                <div class="horizontal layout">
+               
                   <template is="dom-if" if="[[!user.isBanned]]">
                     <paper-button raised class="ban-unban danger" on-tap="banUserTapped">Ban User</paper-button>
                   </template>
