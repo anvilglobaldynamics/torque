@@ -173,7 +173,7 @@
 
       _autoFillKnownFormFields() {
         let user = this.app.user;
-        this.set('editOutletForm.phone', user.phone);
+        this.set('editOutletForm.phone', user.email);
         this.set('editOutletForm.contactPersonName', user.fullName);
 
         let organization = this.app.organization;
