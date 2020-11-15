@@ -617,6 +617,12 @@
             productCategoryList = [];
           }
 
+          if (productCategoryList.length > 1) {
+            productCategoryList = [
+              productCategoryList.find(productCategory => this.newCategoryInput === productCategory.name)
+            ]
+          }
+
           if (productCategoryList.length === 0) {
             this.app.showModalDialog(this.verses.productBlueprint.productCategoryNotFound, this.verses.productBlueprint.productCategoryNotFoundDetails);
 
