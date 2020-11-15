@@ -328,7 +328,8 @@
       }
 
       // NOTE: Copied from "page-edit-outlet" and added cbfn
-      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }, cbfn) {
+      _processCreateOutlet({ name, email, contactPersonName, physicalAddress, location, categoryCode }, cbfn) {
+        let phone = email;
         let organizationId;
         organizationId = this.app.organization.id;
         let data = {
@@ -420,7 +421,7 @@
 
               // let location = { lat: 23.7945153, lng: 90.4139857 }; // FIXME
               let location = null;
-              this._processCreateOutlet({ name, phone, contactPersonName: fullName, physicalAddress: primaryBusinessAddress, location, categoryCode }, (cbfn) => {
+              this._processCreateOutlet({ name, email, contactPersonName: fullName, physicalAddress: primaryBusinessAddress, location, categoryCode }, (cbfn) => {
 
                 let message = this.app.verses.register.nowAUserOfTorque;
                 this.app.showToast(message, _ => {
