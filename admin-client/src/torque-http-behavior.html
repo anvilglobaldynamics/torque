@@ -192,6 +192,11 @@
           this.callCombinedJsonApi('admin-set-user-origin-type', data, cbfn);
         }
 
+        callAdminGetActiveOrganizationListApi(data, cbfn) {
+          if (!this._applyApiKey(data)) return;
+          this.callCombinedJsonApi('admin-get-active-organization-list', data, cbfn);
+        }
+
       }
     }
 
