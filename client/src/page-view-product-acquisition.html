@@ -106,7 +106,7 @@
       <template is="dom-if" if="{{productAcquisition.productList.length}}">
         <div class="card vertical layout">
           <div class="title">
-            <b>[[verses.general.total]]: [[productAcquisition.productList.length]] [[verses.general.products]]</b>
+            <b>[[verses.general.total]]:</b> [[productAcquisition.productList.length]] [[verses.general.products]], [[totalUnits]] [[verses.general.units]]
           </div>
           <div class="list">
             <template is="dom-repeat" items="{{productAcquisition.productList}}" as="product">
@@ -119,7 +119,6 @@
                     @ [[$applyThousandDecimalFormatting(product.product.purchasePrice)]] [[app.organization.settings.monetaryUnit]]
                     </template>
                   </div>
-
 
                 </div>
               </div>
@@ -153,6 +152,10 @@
       static get properties() {
         return {
           vendorId: {
+            type: Number,
+            value: null
+          },
+          totalUnits: {
             type: Number,
             value: null
           }
@@ -221,6 +224,13 @@
       _processProductAcquisition(cbfn) {
         this._fetchProductAcquisition((productAcquisition) => {
           this.productAcquisition = productAcquisition;
+
+          let totalUnits = 0;
+          productAcquisition.productList.forEach(product =>{
+            totalUnits += product.count;
+          });
+          this.totalUnits = totalUnits;
+          
           cbfn();
         });
       }
