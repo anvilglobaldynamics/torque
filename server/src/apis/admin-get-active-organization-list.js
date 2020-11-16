@@ -13,7 +13,10 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
 
   get requestSchema() {
     return Joi.object().keys({
-      apiKey: Joi.string().length(64).required()
+      apiKey: Joi.string().length(64).required(),
+
+      fromDate: Joi.number().max(999999999999999).required(),
+      toDate: Joi.number().max(999999999999999).required(),
     });
   }
 
@@ -23,7 +26,7 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
     for (let user of userList) {
       let date = user.createdDatetimeStamp + 30 * 24 * 60 * 60 * 1000;
       let session = await this.database.session._findOne({ userId: user.id, createdDatetimeStamp: { $gte: date } });
-      if (session){
+      if (session) {
         console.log(user.fullName)
         count += 1;
       }
@@ -31,17 +34,21 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
     console.log({ count })
   }
 
-  async handle({ }) {
-    await this.d30count();
+  async handle({ body }) {
+    // onlt previously used for testing
+    // await this.d30count();
+    let { fromDate, toDate } = body;
+    toDate = this.__getExtendedToDate(toDate);
 
+    let endDate = new Date(new Date(toDate).toISOString().split('T')[0]); // Get today without time.
+    // endDate.setDate(endDate.getDate() - 1); // exclude today
 
-    let endDate = new Date(new Date().toISOString().split('T')[0]); // Get today without time.
-    endDate.setDate(endDate.getDate() - 1); // exclude today
-
-    let startDate = new Date(endDate.getTime());
-    startDate.setDate(endDate.getDate() - 30); // show stats for 30 days
+    // let startDate = new Date(endDate.getTime());
+    // startDate.setDate(endDate.getDate() - 30); // show stats for 30 days
+    let startDate = new Date(fromDate);
 
     let dateCount = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+    console.log({ dateCount })
 
     // Step 1. Find only organizations that were active in the period.
     let outletVsSalesCountList = (await this.database.engine._db.collection('sales').aggregate([

@@ -32,28 +32,67 @@
         }
       }
 
+      table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #ddd;
+      }
+
+      th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: var(--app-primary-color);
+        color: white;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
 
     <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
 
+      <div class="filter-region">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date" style="margin-right: 2px;"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
+            Search
+          </paper-button>
+        </div>
+
+      </div>
+
       <table>
         <thead>
           <tr>
-          <th>Name</th>
-          <th>Sales Count</th>
-          <th>Total Sales Rev.</th>
-          <th>Last Sales</th>
-        </tr>
+            <th>Name</th>
+            <th>Sales Count</th>
+            <th>Total Sales Rev.</th>
+            <th>Last Sales</th>
+          </tr>
         </thead>
         <tbody>
           <template is="dom-repeat" items="[[organizationList]]" as="organization">
             <tr>
               <td style="text-align: center">[[organization.name]]</td>
-              <td  style="text-align: center">[[organization.metrics.salesCount]]</td>
-              <td  style="text-align: center">[[organization.metrics.totalSalesRevenue]]</td>
-              <td  style="text-align: center">[[$mkDate(organization.metrics.lastSalesDate)]]</td>
+              <td style="text-align: center">[[organization.metrics.salesCount]]</td>
+              <td style="text-align: center">[[organization.metrics.totalSalesRevenue]]</td>
+              <td style="text-align: center">[[$mkDate(organization.metrics.lastSalesDate)]]</td>
             </tr>
           </template>
         </tbody>
@@ -72,7 +111,25 @@
 
       static get properties() {
         return {
-
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          }
         };
       }
 
@@ -106,9 +163,18 @@
         return true;
       }
 
-      _fetchActiveOrganizationList(cbfn) {
-        let data = {
+      filterTapped(e = null) {
+        this._processActiveOrganizationList(() => {
+          // this.isReady = true;
+        });
+      }
 
+      _fetchActiveOrganizationList(cbfn) {
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+
+        let data = {
+          fromDate, toDate
         };
         this.app.callAdminGetActiveOrganizationListApi(data, (err, response) => {
           console.log(response)
