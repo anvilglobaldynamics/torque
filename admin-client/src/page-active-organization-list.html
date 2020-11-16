@@ -1,0 +1,215 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/baselib/baselib.html">
+
+<link rel="import" href="../bower_components/polymer-fx/fx-page.html">
+<link rel="import" href="../bower_components/polymer-fx/fx-common-behavior.html">
+
+<link rel="import" href="torque-db-behavior.html">
+<link rel="import" href="torque-common-behavior.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="page-active-organization-list">
+  <template>
+    <style include="shared-styles">
+      @media (min-width: 960px) {
+        :host {
+          display: block;
+          padding: 24px;
+        }
+      }
+
+      table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #ddd;
+      }
+
+      th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: var(--app-primary-color);
+        color: white;
+      }
+
+      .organization-name {
+        color: var(--app-primary-color);
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    </style>
+
+    <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
+
+    <div class$="std-page layout vertical [[$if(isReady, '', 'hidden')]]" id="wrapper">
+
+      <div class="filter-region">
+
+        <div class="card horizontal layout center">
+          <paper-input class="flex" value="{{fromDate}}" type="date" label="From Date" style="margin-right: 2px;"></paper-input>
+          <paper-input class="flex" value="{{toDate}}" type="date" label="To Date"></paper-input>
+          <paper-button raised class="btn primary apply-filter-button" on-tap="filterTapped">
+            Search
+          </paper-button>
+        </div>
+
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sales Count</th>
+            <th>Total Sales Rev.</th>
+            <th>Last Sales</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template is="dom-repeat" items="[[organizationList]]" as="organization">
+            <tr>
+              <td style="text-align: center"><span class="organization-name" on-click="manageOrganizationTapped">[[organization.name]]</span></td>
+              <td style="text-align: center">[[organization.metrics.salesCount]]</td>
+              <td style="text-align: center">[[$round2place(organization.metrics.totalSalesRevenue)]]</td>
+              <td style="text-align: center">[[$mkDate(organization.metrics.lastSalesDate)]]</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+    </div>
+
+  </template>
+
+  <script>
+    class PageActiveOrganizationList extends FxPage.mixin(TorqueCommonBehavior, TorqueDbBehavior) {
+
+      static get is() {
+        return 'page-active-organization-list';
+      }
+
+      static get properties() {
+        return {
+          fromDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date.setMonth(date.getMonth() - 1);
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          },
+          toDate: {
+            type: String,
+            value: _ => {
+              let date = new Date();
+              date = date.getTime();
+              date = (new XDate(date)).toString('yyyy-MM-dd');
+              return date;
+            }
+          }
+        };
+      }
+
+      // region: core =================================
+
+      constructor() {
+        super();
+        this.confirmPageReady();
+      }
+
+      onNavigateIn() {
+        this.app.shouldShowSaveButton = false;
+        this.app.currentPageIsModal = false;
+        this.app.pushPageTitle('Active Organizations');
+        if (!this._ensureAccess()) return;
+        this._processActiveOrganizationList(() => {
+          this.isReady = true;
+        });
+      }
+
+      onNavigateOut() {
+        super.onNavigateOut();
+        this.app.popPageTitle();
+      }
+
+      _ensureAccess() {
+        if (!this.app.user) {
+          this.app.navigateTo('/login');
+          return false;
+        }
+        return true;
+      }
+
+      filterTapped(e = null) {
+        this._processActiveOrganizationList(() => {
+          // this.isReady = true;
+        });
+      }
+
+      _fetchActiveOrganizationList(cbfn) {
+        let fromDate = new Date(this.fromDate).getTime();
+        let toDate = new Date(this.toDate).getTime();
+
+        let data = {
+          fromDate, toDate
+        };
+        this.app.callAdminGetActiveOrganizationListApi(data, (err, response) => {
+          console.log(response)
+          if (err) return;
+          if (response.hasError) return this.onApiError(response.error);
+          return cbfn(response);
+        });
+      }
+
+      _processActiveOrganizationList(cbfn) {
+        this._fetchActiveOrganizationList(({ organizationList }) => {
+          this.organizationList = organizationList;
+          cbfn();
+        });
+      }
+
+      // region: ui  ===========================
+
+      manageOrganizationTapped(e) {
+        let { organization } = e.model;
+        return this.app.navigateTo(`/manage-organization/organization:${organization.id}`);
+      }
+
+      $round2place(num) {
+        return Math.round(num * 100) / 100;
+      }
+
+    }
+
+    window.customElements.define(PageActiveOrganizationList.is, PageActiveOrganizationList);
+  </script>
+</dom-module>
