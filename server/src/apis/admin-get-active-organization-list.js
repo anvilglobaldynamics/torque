@@ -115,6 +115,8 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
       return (b.metrics.salesCount - a.metrics.salesCount);
     })
 
+    organizationList = organizationList.slice(0, 20);
+
     return { organizationList };
   }
 

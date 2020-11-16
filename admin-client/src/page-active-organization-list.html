@@ -59,6 +59,12 @@
         background-color: var(--app-primary-color);
         color: white;
       }
+
+      .organization-name {
+        color: var(--app-primary-color);
+        cursor: pointer;
+        text-decoration: underline;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -89,9 +95,9 @@
         <tbody>
           <template is="dom-repeat" items="[[organizationList]]" as="organization">
             <tr>
-              <td style="text-align: center">[[organization.name]]</td>
+              <td style="text-align: center"><span class="organization-name" on-click="manageOrganizationTapped">[[organization.name]]</span></td>
               <td style="text-align: center">[[organization.metrics.salesCount]]</td>
-              <td style="text-align: center">[[organization.metrics.totalSalesRevenue]]</td>
+              <td style="text-align: center">[[$round2place(organization.metrics.totalSalesRevenue)]]</td>
               <td style="text-align: center">[[$mkDate(organization.metrics.lastSalesDate)]]</td>
             </tr>
           </template>
@@ -196,6 +202,10 @@
       manageOrganizationTapped(e) {
         let { organization } = e.model;
         return this.app.navigateTo(`/manage-organization/organization:${organization.id}`);
+      }
+
+      $round2place(num) {
+        return Math.round(num * 100) / 100;
       }
 
     }
