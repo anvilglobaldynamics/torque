@@ -48,7 +48,7 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
     let startDate = new Date(fromDate);
 
     let dateCount = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
-    console.log({ dateCount })
+    // console.log({ dateCount })
 
     // Step 1. Find only organizations that were active in the period.
     let outletVsSalesCountList = (await this.database.engine._db.collection('sales').aggregate([
@@ -64,7 +64,7 @@ exports.AdminGetActiveOrganizationApi = class extends Api {
       { "$group": { _id: "$outletId", count: { $sum: 1 }, totalSalesRevenue: { $sum: "$payment.totalBilled" } } }
     ]).sort({ count: -1 }).toArray());
 
-    console.log({ outletVsSalesCountList })
+    // console.log({ outletVsSalesCountList })
 
     let outletVsSalesCountMap = {};
     outletVsSalesCountList.forEach(outletVsSalesCount => {
