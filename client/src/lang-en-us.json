@@ -382,6 +382,7 @@
     "showingLocationOnMap": "Showing location on Map below",
     "noLocationOnMap": "Location has not been set on Map yet.",
     "locationRequiredNote": "💡 Knowing your outlet's location helps us provide better support and service. Enter official text address. Then point in the map.",
+    "outletReceiptTextNote": "💡 This line will only be printed on receipts of sales made from this outlet. To add a common text on all sales, go to Settings > For whole Org.",
     "textOnReceipt":"Text to display on receipt"
   },
   "selectGeolocation": {
