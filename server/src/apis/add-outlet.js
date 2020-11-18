@@ -22,7 +22,8 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).allow(null).required(),
-      categoryCode: Joi.string().required()
+      categoryCode: Joi.string().required(),
+      outletReceiptText: Joi.string().min(0).max(64).allow('').required(),
     });
   }
 
@@ -43,14 +44,14 @@ exports.AddOutletApi = class extends Api.mixin(InventoryMixin, OutletMixin) {
   }
 
   async handle({ body }) {
-    let { name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
+    let { name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText } = body;
     let { aPackage } = this.interimData;
     await this._checkOrganizationPackageOutletLimit({ organizationId, aPackage });
 
     let categoryExists = await this.__checkIfCategoryCodeExists({ categoryCode });
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
-    let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode });
+    let outletId = await this._createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText });
 
     if (location) {
       await this._createGeolocationCache({ outletId, location });

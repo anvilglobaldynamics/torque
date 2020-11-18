@@ -22,7 +22,8 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }).allow(null).required(),
-      categoryCode: Joi.string().required()
+      categoryCode: Joi.string().required(),
+      outletReceiptText: Joi.string().min(0).max(64).allow('').required(),
     });
   }
 
@@ -40,8 +41,8 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
     }];
   }
 
-  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
-    let res = await this.database.outlet.setDetails({ id: outletId }, { name, physicalAddress, phone, contactPersonName, location, categoryCode });
+  async _updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText }) {
+    let res = await this.database.outlet.setDetails({ id: outletId }, { name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText });
     this.ensureUpdate('outlet', res);
   }
 
@@ -51,12 +52,12 @@ exports.EditOutletApi = class extends Api.mixin(OutletMixin) {
   }
 
   async handle({ body }) {
-    let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode } = body;
+    let { outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText } = body;
 
     let categoryExists = await this.__checkIfCategoryCodeExists({ categoryCode });
     throwOnFalsy(categoryExists, "CATEGORY_INVALID", "Category code is invalid.");
 
-    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode });
+    await this._updateOutlet({ outletId, name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText });
 
     if (location) {
       let exists = await this.database.cacheOutletGeolocation._findOne({ outletId });

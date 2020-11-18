@@ -24,6 +24,7 @@ exports.OutletCollection = class extends Collection {
       categoryCode: Joi.string().required(),
       isDeleted: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),
+      outletReceiptText: Joi.string().min(0).max(64).allow('').required(),
     });
   }
 
@@ -43,7 +44,7 @@ exports.OutletCollection = class extends Collection {
 
   get deletionIndicatorKey() { return 'isDeleted'; }
 
-  async create({ originApp, name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
+  async create({ originApp, name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText }) {
     return await this._insert({
       originApp,
       name,
@@ -53,14 +54,15 @@ exports.OutletCollection = class extends Collection {
       contactPersonName,
       location,
       categoryCode,
+      outletReceiptText,
       isDeleted: false
     });
   }
 
-  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location, categoryCode }) {
+  async setDetails({ id }, { name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText }) {
     return await this._update({ id }, {
       $set: {
-        name, physicalAddress, phone, contactPersonName, location, categoryCode
+        name, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText
       }
     });
   }

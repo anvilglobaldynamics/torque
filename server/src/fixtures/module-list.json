@@ -34,5 +34,10 @@
   {
     "code": "MOD_ACCOUNTING",
     "name": "Unlocks the ability to manage accounts, transactions and view reports."
+  },
+  {
+    "code": "MOD_OUTLET_SPECIFIC_RECEIPT",
+    "name": "Unlocks the ability to specify text on receipt for individual outlets.",
+    "WARNING": "When deactivating this module, outlet specific receipt texts (outlet.outletReceiptText) are NOT removed/emptied"
   }
 ]

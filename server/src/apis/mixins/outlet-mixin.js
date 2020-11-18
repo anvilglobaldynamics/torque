@@ -4,9 +4,9 @@ const { throwOnFalsy, throwOnTruthy, CodedError } = require('../../utils/coded-e
 /** @param {typeof Api} SuperApiClass */
 exports.OutletMixin = (SuperApiClass) => class extends SuperApiClass {
 
-  async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode }) {
+  async _createOutlet({ name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText }) {
     let outlet = {
-      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode,
+      name, organizationId, physicalAddress, phone, contactPersonName, location, categoryCode, outletReceiptText,
       originApp: this.clientApplication
     }
     return await this.database.outlet.create(outlet);
