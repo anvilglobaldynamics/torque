@@ -153,6 +153,29 @@
         padding: 10px;
       }
 
+      .outlet-metrics-table-container {
+        overflow-x: auto;
+      }
+
+      .outlet-metrics-table {
+        width: 100%;
+      }
+
+      .outlet-metrics-table .cell {
+        padding-left: 4px;
+        padding-right: 4px;
+        border-bottom: 1px solid rgb(225, 225, 225);
+        border-right: 1px solid rgb(225, 225, 225);
+      }
+
+      .outlet-metrics-table .cell-right {
+        border-right: 0px solid rgb(225, 225, 225);
+      }
+
+      .outlet-metrics-table .cell-bottom {
+        border-bottom: 0px solid rgb(225, 225, 225);
+      }
+
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -465,6 +488,56 @@
         </div>
         <!-- metrics - end -->
 
+        <!-- outlet-metrics - start -->
+        <div class="card outlet-metrics-table-container">
+          <table class="outlet-metrics-table">
+
+            <tr>
+              <td></td>
+              <th class="cell" colspan="2">[[verses.general.today]]</th>
+              <th class="cell cell-right" colspan="2">[[verses.general.month]]</th>
+            </tr>
+            <tr>
+              <th class="cell" align="left">
+                <span>[[verses.general.outlet]]</span>
+              </th>
+              <th class="cell" align="right">
+                <span>[[verses.general.invoices]]</span>
+              </th>
+              <th class="cell" align="right">
+                <span>[[verses.general.sales]]</span>
+              </th>
+              <th class="cell" align="right">
+                <span>[[verses.general.invoices]]</span>
+              </th>
+              <th class="cell cell-right" align="right">
+                <span>[[verses.general.sales]]</span>
+              </th>
+            </tr>
+
+            <template is="dom-repeat" items="[[outletMetricList]]" as="outletMetric">
+              <tr>
+                <td class="cell" align="left">
+                  [[outletMetric.outlet.name]]
+                </td>
+                <td class="cell"  align="right">
+                  [[$applyThousandDecimalFormatting(outletMetric.totalNumberOfSalesToday)]]
+                </td>
+                <td class="cell"  align="right">
+                  [[$applyThousandDecimalFormatting(outletMetric.totalAmountSoldToday)]]
+                </td>
+                <td class="cell"  align="right">
+                  [[$applyThousandDecimalFormatting(outletMetric.totalNumberOfSalesThisMonth)]]
+                </td>
+                <td class="cell cell-right"  align="right">
+                  [[$applyThousandDecimalFormatting(outletMetric.totalAmountSoldThisMonth)]]
+                </td>
+              </tr>
+            </template>
+          </table>
+        </div>
+        <!-- outlet-metrics - end -->
+
         <!-- Organization information - start -->
         <div class="vertical layout wrap">
           <div class="card flex info-panel">
@@ -553,6 +626,10 @@
             value: 'care@anvil.live'
           },
           packageActivationList: {
+            type: Array,
+            value: () => []
+          },
+          outletMetricList: {
             type: Array,
             value: () => []
           }
@@ -787,8 +864,9 @@
       }
 
       _processDashboardSummary(cbfn) {
-        this._fetchDashboardSummary(({ metrics, organizationPackageDetails, usageFlags }) => {
+        this._fetchDashboardSummary(({ metrics, outletMetricList, organizationPackageDetails, usageFlags }) => {
           this.metrics = metrics;
+          this.outletMetricList = outletMetricList;
           this.usageFlags = usageFlags;
           let { code, name, limits, duration } = organizationPackageDetails.packageDetail;
           let { createdDatetimeStamp } = organizationPackageDetails.packageActivation;

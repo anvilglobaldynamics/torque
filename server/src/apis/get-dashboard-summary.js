@@ -28,8 +28,8 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     }];
   }
 
-  async _getSalesSummaryForDateRange({ organizationId, fromDate, toDate }) {
-    let salesList = await this._getSalesList({ organizationId, fromDate, toDate, outletId: null, customerId: null, shouldFilterByOutlet: false, shouldFilterByCustomer: false });
+  async _getSalesSummaryForDateRange({ organizationId, fromDate, toDate, outletId }) {
+    let salesList = await this._getSalesList({ organizationId, fromDate, toDate, outletId, customerId: null, shouldFilterByOutlet: (outletId ? true : false), shouldFilterByCustomer: false });
     salesList = salesList.filter(sales => !sales.isDiscarded);
     let totalCount = salesList.length;
     let totalAmount = 0;
@@ -39,7 +39,7 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     return ({ totalAmount, totalCount });
   }
 
-  async _getSalesSummaryForDay(organizationId) {
+  async _getSalesSummaryForDay({ organizationId, outletId }) {
     let fromDate = new Date();
     fromDate.setHours(0);
     fromDate.setMinutes(0);
@@ -50,11 +50,11 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     toDate.setMinutes(59);
     toDate = toDate.getTime();
 
-    let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate });
+    let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate, outletId });
     return ({ totalAmount, totalCount });
   }
 
-  async _getSalesSummaryForMonth(organizationId) {
+  async _getSalesSummaryForMonth({ organizationId, outletId }) {
     let fromDate = new Date();
     fromDate.setDate(1);
     fromDate.setHours(0);
@@ -66,16 +66,16 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
     toDate.setMinutes(59);
     toDate = toDate.getTime();
 
-    let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate });
+    let { totalAmount, totalCount } = await this._getSalesSummaryForDateRange({ organizationId, toDate, fromDate, outletId });
     return ({ totalAmount, totalCount });
   }
 
-  async _getSalesSummary({ organizationId }) {
-    let { totalCount, totalAmount } = await this._getSalesSummaryForDay(organizationId);
+  async _getSalesSummary({ organizationId, outletId }) {
+    let { totalCount, totalAmount } = await this._getSalesSummaryForDay({ organizationId, outletId });
     let totalNumberOfSalesToday = totalCount;
     let totalAmountSoldToday = totalAmount;
 
-    ({ totalCount, totalAmount } = await this._getSalesSummaryForMonth(organizationId));
+    ({ totalCount, totalAmount } = await this._getSalesSummaryForMonth({ organizationId, outletId }));
     let totalNumberOfSalesThisMonth = totalCount;
     let totalAmountSoldThisMonth = totalAmount;
 
@@ -85,6 +85,18 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
       totalNumberOfSalesThisMonth,
       totalAmountSoldThisMonth
     });
+  }
+
+  async _getOutletSalesSummary({ organizationId }) {
+    let outletList = await this.database.outlet._find({ organizationId });
+    if (outletList.length < 2) return [];
+    let outletMetricList = [];
+    for (let outlet of outletList) {
+      let metrics = await this._getSalesSummary({ organizationId, outletId: outlet.id });
+      metrics.outlet = outlet;
+      outletMetricList.push(metrics);
+    }
+    return outletMetricList;
   }
 
   async _getActivatedPackageDetails({ organizationId }) {
@@ -154,10 +166,11 @@ exports.GetDashboardSummaryApi = class extends Api.mixin(SalesMixin) {
 
   async handle({ body }) {
     let { organizationId } = body;
-    let metrics = await this._getSalesSummary({ organizationId });
+    let metrics = await this._getSalesSummary({ organizationId, outletId: null });
+    let outletMetricList = await this._getOutletSalesSummary({ organizationId });
     let organizationPackageDetails = await this._getActivatedPackageDetails({ organizationId });
     let usageFlags = await this._getUsageFlags({ organizationId });
-    return { metrics, organizationPackageDetails, usageFlags };
+    return { metrics, outletMetricList, organizationPackageDetails, usageFlags };
   }
 
 }
