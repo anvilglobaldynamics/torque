@@ -504,6 +504,16 @@
 
       // ====================== utils =============================
 
+      focusAndSelectInput(domIdentifier) {
+        try {
+          let el = this.elem(domIdentifier);
+          el.inputElement.inputElement.focus();
+          el.inputElement.inputElement.select();
+        } catch (ex) {
+          'pass'
+        }
+      }
+
       // Check browser depending on user agent
       isBrowserAndroid() {
         let userAgent = navigator.userAgent || navigator.vendor || window.opera;

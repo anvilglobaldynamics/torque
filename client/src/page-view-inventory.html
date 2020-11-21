@@ -68,7 +68,7 @@
       <!-- search section -->
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.posSelectProduct.searchForProductInputError]] label=[[verses.posSelectProduct.searchForProductInput]] on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex view-inventory-search-input" value="{{searchString}}" required minlength="0" error-message=[[verses.posSelectProduct.searchForProductInputError]] label=[[verses.posSelectProduct.searchForProductInput]] on-keypress="searchFieldKeypressed"></paper-input>
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
@@ -104,7 +104,6 @@
                       [[product.count]] [[product.unit]]
                     </div>
                   </div>
-
                 </div>
 
               </template>
@@ -290,6 +289,7 @@
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
         this._processInventory(() => this.isReady = true);
+        this.focusAndSelectInput('.view-inventory-search-input');
       }
 
       // region: misc =================================
