@@ -175,7 +175,6 @@
       .outlet-metrics-table .cell-bottom {
         border-bottom: 0px solid rgb(225, 225, 225);
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -520,16 +519,16 @@
                 <td class="cell" align="left">
                   [[outletMetric.outlet.name]]
                 </td>
-                <td class="cell"  align="right">
+                <td class="cell" align="right">
                   [[$applyThousandDecimalFormatting(outletMetric.totalNumberOfSalesToday)]]
                 </td>
-                <td class="cell"  align="right">
+                <td class="cell" align="right">
                   [[$applyThousandDecimalFormatting(outletMetric.totalAmountSoldToday)]]
                 </td>
-                <td class="cell"  align="right">
+                <td class="cell" align="right">
                   [[$applyThousandDecimalFormatting(outletMetric.totalNumberOfSalesThisMonth)]]
                 </td>
-                <td class="cell cell-right"  align="right">
+                <td class="cell cell-right" align="right">
                   [[$applyThousandDecimalFormatting(outletMetric.totalAmountSoldThisMonth)]]
                 </td>
               </tr>
@@ -1143,6 +1142,16 @@
 
         this._getOutletList(({ outletList }) => {
           let warehouseList = [];
+
+          // defaultOutlet - start
+          let settings = this._getNormalizedSettings();
+          let { outletId: defaultOutletId, bypassHomepage } = settings.defaultOutletMetaMap[this.app.organization.id];
+
+          if ((defaultOutletId === 0 || defaultOutletId > 0) && bypassHomepage) {
+            this.app.navigateTo(`/pos/outlet:${defaultOutletId}`);
+            return;
+          }
+          // defaultOutlet - end
 
           this.app.displayInventoryContainerDialog({ outletList, warehouseList }, (selected) => {
             if (!selected) return;
