@@ -140,7 +140,11 @@
     "back": "ফেরত যান",
     "details": "বিস্তারিত",
     "paginationSeparator": ", মোট",
-    "okay":"ঠিক আছে"
+    "okay":"ঠিক আছে",
+    "invoices": "ইনভয়েস",
+    "sales": "বিক্রয়",
+    "today":"আজকে",
+    "month": "মাসের"
   },
   "login": {
     "learnMoreAboutLipi": "লিপির বিষয় আরো জানুন",
@@ -317,7 +321,11 @@
     "selfOnboardingProductBlueplrintTitle": "আপনি কোন ধরণের পণ্য বিক্রি করেন?",
     "selfOnboardingAddProductsTitle": "পণ্য তালিকায় পণ্য যোগ করুন",
     "selfOnboardingServiceBlueprintTitle": "আপনি কোন ধরণের সেবা দিয়ে থাকেন?",
-    "selfOnboardingSaleTitle": "বিক্রয়কেন্দ্র থেকে প্রথম বিক্রি করুন"
+    "selfOnboardingSaleTitle": "বিক্রয়কেন্দ্র থেকে প্রথম বিক্রি করুন",    
+    "totalNumberOfSalesTodayLabel": "আজকের ইনভয়েস",
+    "totalAmountSoldTodayLabel": "আজকের বিক্রয়",
+    "totalNumberOfSalesThisMonthLabel": "এই মাসের ইনভয়েস",
+    "totalAmountSoldThisMonthLabel": "এই মাসের বিক্রয়"
   },
   "organization": {
     "addOrganizationTitle": "সংস্থা তৈরি করুন",
