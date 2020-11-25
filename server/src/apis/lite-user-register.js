@@ -78,7 +78,8 @@ exports.LiteUserRegisterApi = class extends Api.mixin(SecurityMixin, UserMixin, 
       phone,
       contactPersonName: fullName,
       location,
-      categoryCode
+      categoryCode,
+      outletReceiptText: ''
     });
 
     await this._createGeolocationCache({ outletId, location });

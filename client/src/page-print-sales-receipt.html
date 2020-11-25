@@ -315,6 +315,12 @@
               </template>
             </div>
 
+            <template is="dom-if" if="[[outlet.outletReceiptText]]">
+              <div class="receipt-text-slim">
+                [[outlet.outletReceiptText]]
+              </div>
+            </template>
+
             <template is="dom-if" if="[[app.organization.settings.receiptText1]]">
               <div class="receipt-text-slim receipt-text-1-slim">
                 [[app.organization.settings.receiptText1]]
@@ -483,6 +489,12 @@
                 <div><b>[[verses.general.number]]:</b> [[customer.phone]]</div>
               </template>
             </div> -->
+
+            <template is="dom-if" if="[[outlet.outletReceiptText]]">
+              <div class="receipt-text-a4">
+                [[outlet.outletReceiptText]]
+              </div>
+            </template>
 
             <template is="dom-if" if="[[app.organization.settings.receiptText1]]">
               <div class="receipt-text-a4 receipt-text-1-a4">

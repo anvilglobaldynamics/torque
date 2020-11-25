@@ -27,11 +27,10 @@
       }
 
       .note {
-        margin-top: 30px;
+        margin-top: 12px;
         font-size: 12px;
         color: #616161;
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -42,8 +41,8 @@
         <form>
           <div class="card vertical layout">
             <paper-input class="editOutletForm--name" value="{{editOutletForm.name}}" required minlength="3" error-message=[[verses.outlet.nameOfOutletInputError]] label=[[verses.outlet.nameOfOutletInput]]></paper-input>
-            <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
-            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="1" minlength="64" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.general.contactInformation]]></paper-input>
+            <paper-input class="editOutletForm--contactPersonName" value="{{editOutletForm.contactPersonName}}" maxlength="64" required minlength="3" error-message=[[verses.outlet.contactPersonNameInputError]] label=[[verses.outlet.contactPersonNameInput]]></paper-input>
+            <paper-input class="editOutletForm--phone" value="{{editOutletForm.phone}}" required minlength="1" maxlength="64" error-message=[[verses.outlet.contactPhoneOfContactPersonError]] label=[[verses.general.contactInformation]]></paper-input>
 
             <paper-dropdown-menu class="full-width-paper-dropdown editOutletForm--categoryCode" label=[[verses.outlet.categoryCodeDropdown]] class="mr-4">
               <paper-listbox slot="dropdown-content" selected="{{editOutletForm.categoryCode}}" attr-for-selected="code">
@@ -54,6 +53,13 @@
             </paper-dropdown-menu>
 
             <paper-textarea class="editOutletForm--physicalAddress" value="{{editOutletForm.physicalAddress}}" required minlength="8" error-message=[[verses.outlet.physicalAddressInputError]] label=[[verses.outlet.physicalAddressInput]] rows="3"></paper-textarea>
+
+            <template is="dom-if" if="[[hasModule('MOD_OUTLET_SPECIFIC_RECEIPT')]]">
+              <div class="note" style="padding-top: 30px;">
+                [[verses.outlet.outletReceiptTextNote]]
+              </div>
+              <paper-input class="editOutletForm--outletReceiptText" value="{{editOutletForm.outletReceiptText}}" maxlength="64" label=[[verses.outlet.textOnReceipt]]></paper-input>
+            </template>
 
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
@@ -94,6 +100,7 @@
                   contactPersonName: '',
                   physicalAddress: '',
                   location: null,
+                  outletReceiptText: '',
                   categoryCode: 'CAT_GENERAL'
                 };
               } else {
@@ -103,6 +110,7 @@
                   contactPersonName: '',
                   physicalAddress: '',
                   location: null,
+                  outletReceiptText: '',
                   categoryCode: 'CAT_GENERAL'
                 };
               }
@@ -203,13 +211,14 @@
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
           this.editingOutlet = response.outlet;
-          let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editingOutlet;
-          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location, categoryCode };
+          let { name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText } = this.editingOutlet;
+          if (!outletReceiptText) outletReceiptText = '';
+          this.editOutletForm = { name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText };
           cbfn();
         });
       }
 
-      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }) {
+      _processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText }) {
         let organizationId;
         if ('fromOrganizationCreatePage' in this.params) {
           organizationId = this.params.fromOrganizationCreatePage;
@@ -217,7 +226,7 @@
           organizationId = this.app.organization.id;
         }
         let data = {
-          name, phone, contactPersonName, physicalAddress, location, categoryCode,
+          name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText,
           organizationId
         };
         this.app.callAddOutletApi(data, (err, response) => {
@@ -234,9 +243,9 @@
         });
       }
 
-      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode }) {
+      _processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText }) {
         let data = {
-          name, phone, contactPersonName, physicalAddress, location, categoryCode,
+          name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText,
           outletId: this.editingOutlet.id
         };
         this.app.callEditOutletApi(data, (err, response) => {
@@ -259,16 +268,16 @@
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
-        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
+        let { name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText } = this.editOutletForm;
+        this._processCreateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText });
       }
 
       updateOutletTapped(e = null) {
         this.elemAll('#editOutletForm paper-input').forEach(el => el.autoValidate = true);
         if (!this.elem('#editOutletForm').validate()) return;
 
-        let { name, phone, contactPersonName, physicalAddress, location, categoryCode } = this.editOutletForm;
-        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode });
+        let { name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText } = this.editOutletForm;
+        this._processUpdateOutlet({ name, phone, contactPersonName, physicalAddress, location, categoryCode, outletReceiptText });
       }
 
       // region: misc =================================

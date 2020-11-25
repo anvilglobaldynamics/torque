@@ -33,6 +33,7 @@ exports.OutletCollection = class extends LegacyCollection {
       }).required(),
       isDeleted: Joi.boolean().required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),
+      outletReceiptText: Joi.string().min(0).max(64).allow('').required(),
     });
 
     this.uniqueKeyDefList = [
@@ -51,7 +52,7 @@ exports.OutletCollection = class extends LegacyCollection {
     ];
   }
 
-  create({ originApp, name, organizationId, physicalAddress, phone, contactPersonName, location }, cbfn) {
+  create({ originApp, name, organizationId, physicalAddress, phone, contactPersonName, location, outletReceiptText }, cbfn) {
     let doc = {
       originApp,
       name,
@@ -60,6 +61,7 @@ exports.OutletCollection = class extends LegacyCollection {
       phone,
       contactPersonName,
       location,
+      outletReceiptText,
       isDeleted: false
     }
     this._insert(doc, (err, id) => {
@@ -67,10 +69,10 @@ exports.OutletCollection = class extends LegacyCollection {
     });
   }
 
-  update({ outletId }, { name, physicalAddress, phone, contactPersonName, location }, cbfn) {
+  update({ outletId }, { name, physicalAddress, phone, contactPersonName, location, outletReceiptText }, cbfn) {
     let modifications = {
       $set: {
-        name, physicalAddress, phone, contactPersonName, location
+        name, physicalAddress, phone, contactPersonName, location, outletReceiptText
       }
     }
     this._update({ id: outletId }, modifications, cbfn);
