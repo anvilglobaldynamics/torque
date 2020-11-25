@@ -979,7 +979,7 @@
     "useWebsockets": "Use Websockets",
     "useWebsocketsDetail": "If checked, the app will try to use websockets.",
     "takeToDefaultOutlet": "Directly open POS",
-    "takeToDefaultOutletDetail": "Directly go to regularly used outlet's POS after login instead of dashboard.",
+    "takeToDefaultOutletDetail": "Directly go to regularly used outlet's POS after login instead of dashboard. Also, clicking the POS button on dashboard will take you directly to this outlet's POS.",
     "useBackgroundSync": "Enable 'Offline Mode'",
     "useBackgroundSyncDetails": "'Offline Mode' lets you keep using regularly used outlet's POS during network outage. Note that data usage will increase if you enable this feature.",
     "defaultOutletSelection": "Select Outlet",
