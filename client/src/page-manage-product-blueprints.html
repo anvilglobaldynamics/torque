@@ -145,7 +145,7 @@
 
       <div class="card vertical layout">
         <div class="p-16 horizontal layout center">
-          <paper-input class="flex" value="{{searchString}}" required minlength="0" error-message=[[verses.productBlueprint.searchForProductBlueprintInputError]] label="[[verses.productBlueprint.searchForProductBlueprintInput]]" on-keypress="searchFieldKeypressed"></paper-input>
+          <paper-input class="flex product-blueprint-search-input" value="{{searchString}}" required minlength="0" error-message=[[verses.productBlueprint.searchForProductBlueprintInputError]] label="[[verses.productBlueprint.searchForProductBlueprintInput]]" on-keypress="searchFieldKeypressed"></paper-input>
           <paper-icon-button icon="clear" on-tap="searchCancelTapped"></paper-icon-button>
           <paper-button raised class="primary" on-tap="searchTapped">
             [[verses.general.search]]
@@ -290,6 +290,7 @@
       searchTapped(e = null) {
         this.set('paginate.offset', 0);
         this._processProductBlueprintList(() => this.isReady = true);
+        this.focusAndSelectInput('.product-blueprint-search-input');
       }
 
       bulkImportTapped(e = null) {
