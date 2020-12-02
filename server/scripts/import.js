@@ -5,7 +5,6 @@ const readlineSync = require('readline-sync');
 
 const importRemote = (password) => {
   let command = `mongodump --db torque --host 35.244.48.152:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
-  // let command = `"C:/Program Files/MongoDB/Server/4.0/bin/mongodump" --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongodump failed`);
@@ -15,7 +14,6 @@ const importRemote = (password) => {
 
 const exportToLocal = () => {
   let command = `mongorestore --db torque-imported --drop ./mongo-temp-import/torque`
-  // let command = `"C:/Program Files/MongoDB/Server/4.0/bin/mongorestore" --db torque-imported --drop ./mongo-temp-import/torque`
   let res = shell.exec(command);
   if (res.code !== 0) {
     shell.echo(`Error: mongorestore failed`);
@@ -30,3 +28,6 @@ let password = readlineSync.question('Please enter your password for "torque-adm
 importRemote(password);
 exportToLocal();
 console.log('Imported as db: "torque-imported"')
+
+// let command = `"C:/Program Files/MongoDB/Server/4.0/bin/mongodump" --db torque --host 35.200.184.65:27017 -u torque-admin -p ${password} --authenticationDatabase torque --out ./mongo-temp-import`
+// let command = `"C:/Program Files/MongoDB/Server/4.0/bin/mongorestore" --db torque-imported --drop ./mongo-temp-import/torque`
