@@ -7,6 +7,9 @@ const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 const { getPrivilegesSchemaFromJson } = require('../utils/privilege-loader');
 
+// RFC 2822 - https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+let emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
 exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
 
   get autoValidates() { return true; }
@@ -16,7 +19,12 @@ exports.AddNewEmployeeApi = class extends Api.mixin(UserMixin, SecurityMixin) {
   get requestSchema() {
     return Joi.object().keys({
       fullName: Joi.string().min(1).max(64).required(),
-      email: Joi.string().email().min(3).max(30).required(),
+      email: Joi.string().email().regex(emailRegex).min(3).max(30).required().error((errors) => {
+        errors.forEach(error => {
+          error.message = "Please enter a valid email";
+        })
+        return errors;
+      }),
       password: Joi.string().min(8).max(30).required(),
 
       organizationId: Joi.number().max(999999999999999).required(),
