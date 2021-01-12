@@ -30,6 +30,11 @@
         font-size: 20px;
       }
 
+      .call-to-verify-part {
+        font-size: 14px;
+        margin-top: 16px;
+        margin-left: 10px;
+      }
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -42,9 +47,17 @@
 
             <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
 
-            <div class="help-text" style="text-align: center; margin-top: 30px; font-size: 16px">[[verses.verify.callUsReason]]</div>
+
+            <div class="call-to-verify-part" style="margin-top: 20px;"> [[verses.verify.callUsToVerifyPart1]]</div>
+            <div class="call-to-verify-part"> [[verses.verify.callUsToVerifyPart2]]</div>
+            <div class="call-to-verify-part"> [[verses.verify.callUsToVerifyPart3]]</div>
+            <div class="call-to-verify-part" style="margin-bottom: 20px;"> [[verses.verify.callUsToVerifyPart4]] <span class="link primary" on-tap="loginTapped">[[verses.verify.dontHaveAccount]]</span></div>
+
 
             <!-- 
+
+            <div class="help-text" style="text-align: center; margin-top: 30px; font-size: 16px">[[verses.verify.callUsReason]]</div>
+
             <div class="call-to-verify">
               [[verses.verify.callUsToVerifyPart1]]
               <a class="link primary" href="tel:+8801770947908" style="text-decoration: none;">[[verses.verify.callUsToVerifyPart2]]</a>
@@ -52,9 +65,9 @@
             </div> 
             -->
 
-            <div class="call-to-verify">
+            <!-- <div class="call-to-verify">
               [[verses.home.callUsToVerify]]
-            </div>
+            </div> -->
 
             <!-- <template is="dom-if" if="[[$equals(what, 'phone')]]">
               <div class="page-small--header">[[verses.verify.verifyPhoneNumberHeader]]</div>
@@ -69,9 +82,9 @@
               <paper-button raised class="primary" style="margin: 4px;" on-tap="verifyTapped">[[verses.verify.verify]]</paper-button>
             </div> -->
 
-            <div class="horizontal layout button-row extended center-center">
-              <div class="link primary" on-tap="registerTapped">[[verses.verify.dontHaveAccount]]</div>
-            </div>
+            <!-- <div class="horizontal layout button-row extended center-center" style="margin-top: 30px">
+              <div class="link primary" on-tap="loginTapped">[[verses.verify.dontHaveAccount]]</div>
+            </div> -->
 
           </div>
         </form>
@@ -157,8 +170,8 @@
 
       // region: ui =================================
 
-      registerTapped() {
-        this.app.navigateTo('/register')
+      loginTapped() {
+        this.app.navigateTo('/login')
       }
 
       resendSmsTapped(e = null) {

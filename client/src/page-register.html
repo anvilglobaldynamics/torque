@@ -422,8 +422,17 @@
 
                 let message = this.app.verses.register.nowAUserOfTorque;
                 this.app.showToast(message, _ => {
+
+                  this.app.callUserLogoutApi({}, (err, response) => {
+                    this.app.removeUser();
+                    this.app.removePreviousOrganization();
+                    window.sessionStorage.clear();
+                    this.app.navigateTo(`/verify/email:${email}`);
+                    // window.location.reload();
+                  });
+
                   // this.app.navigateTo('/home');
-                  this.app.navigateToUrlWithoutHistory('/home/bypassable:yes');
+                  // this.app.navigateToUrlWithoutHistory('/home/bypassable:yes');
                 });
 
               });

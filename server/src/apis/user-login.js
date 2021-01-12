@@ -7,8 +7,11 @@ const { generateRandomString } = require('./../utils/random-string');
 const { SecurityMixin } = require('./mixins/security-mixin');
 const { UserMixin } = require('./mixins/user-mixin');
 
-const EMAIL_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
-// const EMAIL_VERIFICATION_WINDOW = 1 * 1000;
+// old threshold of 7 days
+// const EMAIL_VERIFICATION_WINDOW = 7 * 24 * 60 * 60 * 1000;
+
+// new threshold. immediate. just give enough time to do initial setup
+const EMAIL_VERIFICATION_WINDOW = 10 * 1000;
 
 exports.UserLoginApi = class extends Api.mixin(SecurityMixin, UserMixin) {
 
