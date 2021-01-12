@@ -39,7 +39,6 @@
       .registration-tabs .tab.active {
         color: var(--app-button-label-secondary);
       }
-
     </style>
 
     <elem-not-ready is-ready="[[isReady]]"></elem-not-ready>
@@ -62,7 +61,7 @@
             <paper-input class="registerForm--email" value="{{registerForm.email}}" required minlength="3" minlength="30" error-message="[[verses.register.emailInputError]]" label="[[verses.register.emailInput]]" type="email"></paper-input>
             <paper-input class="registerForm--password" value="{{registerForm.password}}" required minlength="6" error-message="[[verses.register.passwordInputError]]" label="[[verses.register.passwordInput]]" type="password" style="margin-top: 0px;">
             </paper-input>
-            
+
             <div class="horizontal layout button-row end">
               <div class="flex"></div>
               <paper-button raised class="primary" on-tap="continueTapped">[[verses.general.continue]]</paper-button>
@@ -248,9 +247,6 @@
 
       // NOTE: Copied from "page-login" and added cbfn
       _processUserLogin({ emailOrPhone, password }, cbfn) {
-        emailOrPhone = emailOrPhone.trim();
-        emailOrPhone = emailOrPhone.toLowerCase();
-
         this.storeInCache('loginForm--emailOrPhone', emailOrPhone);
 
         let data = { emailOrPhone, countryCode: null, password };
@@ -283,8 +279,6 @@
 
       // NOTE: Copied from "page-add-organization" and added cbfn
       _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, cbfn) {
-        email = email.toLowerCase();
-
         let activeModuleCodeList = [];
         if (industryCategory === 'retail') {
           activeModuleCodeList = ['MOD_PRODUCT'];
@@ -334,7 +328,8 @@
         organizationId = this.app.organization.id;
         let data = {
           name, phone, contactPersonName, physicalAddress, location, categoryCode,
-          organizationId
+          organizationId,
+          outletReceiptText: ''
         };
         this.app.callAddOutletApi(data, (err, response) => {
           if (err) return;
@@ -404,6 +399,7 @@
         }
 
         let { fullName, email, password } = this.registerForm;
+        email = this._sanitizeEmail(email);
 
         this._processUserRegister({ fullName, email, password, hasAgreedToToc: this.agreesToToc }, (cbfn) => {
 

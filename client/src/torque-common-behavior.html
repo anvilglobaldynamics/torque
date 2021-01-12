@@ -143,7 +143,7 @@
           'pass'
         }
         if (!organization) {
-          console.warn(new Error("DEV_ERROR unable to locate organization object"))
+          // console.warn(new Error("DEV_ERROR unable to locate organization object"))
           return true;
           // return false;
         }
@@ -608,6 +608,12 @@
 
       $paginationEndText(offset, limit) {
         return offset + limit;
+      }
+
+      _sanitizeEmail(email){
+        email = email.trim();
+        email = email.toLowerCase();
+        return email;
       }
 
     }

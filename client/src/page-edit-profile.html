@@ -189,7 +189,7 @@
 
       _processUserEditProfile({ email, fullName, nid, physicalAddress, emergencyContact, bloodGroup }) {
         if (email) {
-          email = email.toLowerCase();
+          email = this._sanitizeEmail(email);
         }
 
         let phone = null;

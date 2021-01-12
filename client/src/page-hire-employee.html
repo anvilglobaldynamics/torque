@@ -135,7 +135,7 @@
       // region: proces =================================
 
       _processFindUser({ emailOrPhone }, cbfn) {
-        emailOrPhone = emailOrPhone.toLowerCase();
+        emailOrPhone = this._sanitizeEmail(emailOrPhone);
 
         let data = { emailOrPhone };
 

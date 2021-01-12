@@ -144,6 +144,7 @@
                 <template is="dom-if" if="[[!user.session]]">
                   <div class="description" style="font-size: 12px;">Last Login: Never</div>
                 </template>
+                <div class="description" style="font-size: 12px;">Created: [[$mkDatetime(user.createdDatetimeStamp)]]</div>
 
                 <div class="horizontal layout center">
                   <paper-dropdown-menu class="full-width-paper-dropdown" label="Set Origin" class="mr-4" style="width: 100px;">

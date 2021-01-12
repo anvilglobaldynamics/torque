@@ -144,7 +144,7 @@
       // region: addOrganization =================================
 
       _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }) {
-        email = email.toLowerCase();
+        email = this._sanitizeEmail(email);
 
         let activeModuleCodeList = [];
         if (industryCategory === 'retail') {
