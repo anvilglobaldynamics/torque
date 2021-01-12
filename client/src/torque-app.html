@@ -1562,7 +1562,7 @@
 
       onOfflineDataChange() {
         this.offlineData = this.loadOfflineData();
-        if (this.offlineData.offlineModeInitiatedDatetimeStamp) {
+        if (this.offlineData && this.offlineData.offlineModeInitiatedDatetimeStamp) {
           this.isInOfflineMode = true;
         } else {
           this.isInOfflineMode = false;
