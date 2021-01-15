@@ -86,6 +86,8 @@
               </paper-listbox>
             </paper-dropdown-menu>
 
+            <paper-input class="addOrganizationForm--promoCode" value="{{addOrganizationForm.promoCode}}" minlength="0" error-message=[[verses.organization.promoCodeInvalid]] label="[[verses.organization.promoCode]] [[verses.general.optional]]"></paper-input>
+
             <div class="toc" style="margin-top: 16px;">[[verses.register.tocLinkPart1]]<a class="link primary" on-tap="viewTocTapped">[[verses.register.tocLinkPart2]]</a>[[verses.register.tocLinkPart3]]</div>
 
             <template is="dom-if" if="[[hasClickedTheToc]]">
@@ -131,7 +133,8 @@
               return {
                 name: '',
                 primaryBusinessAddress: '',
-                categoryCode: 'CAT_GENERAL'
+                categoryCode: 'CAT_GENERAL',
+                promoCode: ''
               };
             }
           },
@@ -279,7 +282,7 @@
       }
 
       // NOTE: Copied from "page-add-organization" and added cbfn
-      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, cbfn) {
+      _processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory, promoCode }, cbfn) {
         let activeModuleCodeList = [];
         if (industryCategory === 'retail') {
           activeModuleCodeList = ['MOD_PRODUCT'];
@@ -301,7 +304,7 @@
         // Enabling accounting module for every new Lipi user
         activeModuleCodeList.push('MOD_ACCOUNTING');
 
-        let data = { name, phone, email, primaryBusinessAddress, activeModuleCodeList };
+        let data = { name, phone, email, primaryBusinessAddress, activeModuleCodeList, promoCode };
 
         this.app.callAddOrganizationApi(data, (err, response) => {
           if (err) return;
@@ -381,6 +384,31 @@
         this.selectedTabIndex = 0;
       }
 
+      _validatePromoCode({ promoCode }) {
+        if (!promoCode || promoCode.length === 0) {
+          return true;
+        }
+
+        const allowedPromoCodeList = [
+          'PKSF-BASA',
+          'PKSF-CDIP',
+          'PKSF-ESDO',
+          'PKSF-GJUS',
+          'PKSF-JAKAS',
+          'PKSF-PDK',
+          'PKSF-PIDIM',
+          'PKSF-SDI',
+          'PKSF-SNF',
+          'PKSF-SSS',
+        ];
+
+        if (allowedPromoCodeList.indexOf(promoCode) === -1) {
+          this.app.showModalDialog(this.verses.organization.promoCodeInvalidTitle, this.verses.organization.promoCodeInvalidMessage);
+          return false;
+        }
+        return true;
+      }
+
       registerTapped() {
         let serviceIndustryCategoryCodeList = [
           "CAT_SALON",
@@ -394,6 +422,7 @@
         this.elemAll('#addOrganizationForm paper-input').forEach(el => el.autoValidate = true);
         this.elemAll('#addOrganizationForm paper-textarea').forEach(el => el.autoValidate = true);
         if (!this.elem('#addOrganizationForm').validate()) return;
+        if (!this._validatePromoCode(this.addOrganizationForm)) return;
 
         if (!this.agreesToToc) {
           return this.app.showModalDialog(this.verses.register.tocNotAgreedHeader, this.verses.register.tocNotAgreed);
@@ -406,7 +435,7 @@
 
           this._processUserLogin({ emailOrPhone: email, password }, (cbfn) => {
 
-            let { name, primaryBusinessAddress, categoryCode } = this.addOrganizationForm;
+            let { name, primaryBusinessAddress, categoryCode, promoCode } = this.addOrganizationForm;
             let phone = '';
 
             let industryCategory = 'retail';
@@ -414,7 +443,7 @@
               industryCategory = 'service';
             }
 
-            this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory }, (cbfn) => {
+            this._processUserAddOrganization({ name, phone, email, primaryBusinessAddress, industryCategory, promoCode }, (cbfn) => {
 
               // let location = { lat: 23.7945153, lng: 90.4139857 }; // FIXME
               let location = null;

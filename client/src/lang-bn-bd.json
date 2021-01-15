@@ -344,7 +344,11 @@
     "organizationUpdatedToast": "সংস্থা আপডেট হয়ে গিয়েছে।",
     "phoneInputError": "সঠিক ফোন নম্বর লিখুন।",
     "phoneInput": "আপনার সংস্থার ফোন নম্বর",
-    "manageOrganizationTitle": "সংস্থা"
+    "manageOrganizationTitle": "সংস্থা",
+    "promoCode":"প্রোমো কোড",
+    "promoCodeInvalid":"প্রোমো কোডটি সঠিক নয়। ",
+    "promoCodeInvalidTitle":"প্রোমো কোডটি সঠিক নয়",
+    "promoCodeInvalidMessage":"আপনার প্রোমো কোডটি সঠিক নয়। লিপির সাথে কাজ করছে এরকম সংস্থার কাছে আপনি সঠিক প্রোমো কোড পাবেন। আপনি কোনও প্রোমো কোড ছাড়াও রেজিস্টার করতে পারবেন।"
   },
   "outlet": {
     "editOutletTitle": "দোকান সম্পাদনা",
