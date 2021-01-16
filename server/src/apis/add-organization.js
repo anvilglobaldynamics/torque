@@ -20,17 +20,44 @@ exports.AddOrganizationApi = class extends Api.mixin(OrganizationMixin, Accounti
       email: Joi.string().email().min(3).max(30).allow('').required(),
       activeModuleCodeList: Joi.array().items(
         Joi.string().required()
-      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_ACCOUNTING'])
+      ).optional().default(['MOD_PRODUCT', 'MOD_SERVICE', 'MOD_ACCOUNTING']),
+      promoCode: Joi.string().min(0).max(12).allow('').default('').optional()
     });
   }
 
+  // NOTE: Also change on the client's page-register.html
+  _validatePromoCode({ promoCode }) {
+    if (!promoCode || promoCode.length === 0) {
+      return;
+    }
+
+    const allowedPromoCodeList = [
+      'PKSF-BASA',
+      'PKSF-CDIP',
+      'PKSF-ESDO',
+      'PKSF-GJUS',
+      'PKSF-JAKAS',
+      'PKSF-PMUK',
+      'PKSF-PDIM',
+      'PKSF-SDI',
+      'PKSF-SNF',
+      'PKSF-SSS',
+    ];
+
+    if (allowedPromoCodeList.indexOf(promoCode) === -1) {
+      throw new CodedError("INVALID_PROMO_CODE", "Promo Code is invalid.");
+    }
+  }
+
   async handle({ body, userId }) {
-    let { name, primaryBusinessAddress, phone, email, activeModuleCodeList } = body;
+    let { name, primaryBusinessAddress, phone, email, activeModuleCodeList, promoCode } = body;
     await this._checkIfMaxOrganizationLimitReached({ userId });
+
+    this._validatePromoCode({ promoCode });
 
     await this._validatedactiveModuleCodeList({ activeModuleCodeList });
 
-    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList });
+    let organizationId = await this._createOrganization({ name, primaryBusinessAddress, phone, email, userId, activeModuleCodeList, promoCode });
     this._createOrganizationSettings({ organizationId });
 
     let employmentId = await this._setUserAsOwner({ userId, organizationId });

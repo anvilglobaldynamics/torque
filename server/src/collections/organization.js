@@ -24,6 +24,7 @@ exports.OrganizationCollection = class extends Collection {
         Joi.string()
       ).required(),
       originApp: Joi.string().valid('torque', 'torque-lite').required(),
+      promoCode: Joi.string().min(0).max(12).allow('').default('').optional()
     });
   }
 
@@ -35,7 +36,7 @@ exports.OrganizationCollection = class extends Collection {
     return [];
   }
 
-  async create({ originApp, name, primaryBusinessAddress, phone, email, userId, countryCode = '+880', activeModuleCodeList }) {
+  async create({ originApp, name, primaryBusinessAddress, phone, email, userId, countryCode = '+880', activeModuleCodeList, promoCode }) {
     return await this._insert({
       originApp,
       createdByUserId: userId,
@@ -45,6 +46,7 @@ exports.OrganizationCollection = class extends Collection {
       email,
       packageActivationId: null,
       countryCode,
+      promoCode,
       isDeleted: false,
       activeModuleCodeList
     });

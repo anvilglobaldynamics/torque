@@ -342,7 +342,11 @@
     "organizationUpdatedToast": "Organization has been updated.",
     "phoneInputError": "Enter a valid phone number.",
     "phoneInput": "Phone number of your Organization",
-    "manageOrganizationTitle": "Organizations"
+    "manageOrganizationTitle": "Organizations",
+    "promoCode":"Promo code",
+    "promoCodeInvalid":"The promo code is invalid.",
+    "promoCodeInvalidTitle":"Invalid promo code",
+    "promoCodeInvalidMessage":"The promo code entered is invalid. Check case and spelling. You can contact a Lipi partner organisation for correct promo code. Also note that you can register without a promo code."
   },
   "outlet": {
     "editOutletTitle": "Edit Outlet",
