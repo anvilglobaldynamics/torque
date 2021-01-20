@@ -47,11 +47,11 @@ exports.UserResetPasswordRequestApi = class extends collectionCommonMixin(Legacy
       }
     });
 
-    // Send a copy of the message to admin by email
-    let adminEmail = 'care@anvil.live';
-    let subject = `Notification: A Lipi user is resetting their password`;
-    let html = `<pre>` + JSON.stringify(model, null, 2) + `</pre>`;
-    this.server.emailService.sendMail({ to: adminEmail, subject, html });
+    // // Send a copy of the message to admin by email
+    // let adminEmail = 'care@anvil.live';
+    // let subject = `Notification: A Lipi user is resetting their password`;
+    // let html = `<pre>` + JSON.stringify(model, null, 2) + `</pre>`;
+    // this.server.emailService.sendMail({ to: adminEmail, subject, html });
   }
 
   _sendPasswordResetSms({ phone, confirmationLink }) {
