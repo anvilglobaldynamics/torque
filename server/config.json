@@ -33,7 +33,7 @@
   "email": {
     "enabled": false,
     "publicKey": "pubkey-000000000000000",
-    "privateKey": "key-31ecc570440500bd6cb9faa9aa8a593b",
+    "privateKey": "key-00000000000000000000000000000000",
     "domain": "mg.anvil.live",
     "from": "Anvil Global Dynamic Ltd. <postmaster@mg.anvil.live>"
   },
