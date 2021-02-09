@@ -7,5 +7,6 @@ A lightweight and robust 360 degree business management solution for retail and 
 
 [Other notes and guides for developers](meta/dev-notes/)
 
+# License
 
-
+[GNU GPL V3](https://opensource.org/licenses/GPL-3.0)
