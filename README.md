@@ -1,12 +1,18 @@
-# torque
-A lightweight and robust 360 degree business management solution for retail and service based businesses that is always live and accessible from everywhere.
+# What is Torque and what is Lipi?
 
-# Instructions for developers
+Torque is the codename for Lipi for Business’s codebase. Lipi is an easy-to-adopt and easy-to-use mobile-first ERP solution for medium size retailers. It is coded from scratch by the 2 authors and aims to be the first business management app for small-medium retail owners operating in growing economies.
 
-[Environment and Project setup for development](meta/dev-notes/dev-setup.md)
+# Why is Lipi / Torque open source?
 
-[Other notes and guides for developers](meta/dev-notes/)
+Initially started by 2 authors, the project now requires more contribution to grow and sustain. Moreover, an open source codebase brings transparency and credibility to an application which handles sensitive business data. 
 
-# License
+# Who are the authors? 
+Sayem Shafayet, - Leading Technological Innovations, Architecture and DevOps.<br>
+[Github](https://github.com/iShafayet), [LinkedIn](https://www.linkedin.com/in/sayemshafayet/)
+<br><br>
+Mujtaba Nowshad - Leading Product Development, Strategy and QA.<br>
+[Github](https://github.com/iLGunners), [LinkedIn](https://www.linkedin.com/in/mujtabanowshad/)
 
-[GNU GPL V3](https://opensource.org/licenses/GPL-3.0)
+# What is the license? 
+GNU GPL V3 (https://opensource.org/licenses/GPL-3.0)
+
