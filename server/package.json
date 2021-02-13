@@ -31,6 +31,7 @@
   "scripts": {
     "start": "node start.js",
     "dev": "nodemon start.js",
+    "dev-imported": "nodemon start.js --db torque-imported",
     "test": "mocha -- --timeout 20000",
     "test-bail": "mocha -- --timeout 10000 --bail",
   },
