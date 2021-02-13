@@ -4,11 +4,11 @@
 
 # Primary Installation
 
-### Step 0. Log in to Google Compute Engine Instance
+### Step 1. Log in to Google Compute Engine Instance
 
 If unsure, read https://cloud.google.com/sdk/docs/
 
-### Step 1. Installing nodejs, certbot, pm2
+### Step 2. Installing nodejs, certbot, pm2
 Run commands one by one
 ```sh
 sudo -i
@@ -28,7 +28,7 @@ npm install pm2 -g
 pm2 completion install
 ```
 
-### Step 2. Getting HTTPS/SSL certificate
+### Step 3. Getting HTTPS/SSL certificate
 Run commands one by one
 ```sh
 certbot certonly
@@ -41,7 +41,7 @@ This will produce configuration files as detailed -
 /etc/letsencrypt/live/single-server.lipi.live/fullchain.pem
 ```
 
-### Step 3. Configuring public dir and cloning repository
+### Step 4. Configuring public dir and cloning repository
 Run commands one by one
 ```sh
 mkdir /var/www-serve
@@ -51,14 +51,13 @@ cd /var/www-serve
 git clone https://github.com/anvilglobaldynamics/torque --branch master
 
 ```
-### Step 4. Set up torque-config.json
+### Step 5. Set up torque-config.json
 ```sh
 nano /root/torque-config.json
 ```
-============================
-Copy content from `config.json` and paste in above file. Update path to SSL related files generated on Step 2.
+Copy content from `server/config.json` and paste in above file. This file contains configuration for ssl, server, port, websocket, mongodb connection string and default passwords. Edit the file and update to your needs. Also update path to SSL related files generated on Step 3.
 
-### Step 5. Run the server
+### Step 6. Run the server
 
 ```
 cd /var/www-serve/torque/server
