@@ -1,7 +1,6 @@
 # Prerequisites
 
 1. Create a compute instance with Ubuntu 20.x LTS
-2. Collect `config-production.json` by contacting dev admin.
 
 # Primary Installation
 
@@ -16,8 +15,8 @@ sudo -i
 apt update
 
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install gcc g++ make
-sudo apt-get install nodejs
+apt-get install gcc g++ make
+apt-get install nodejs
 
 apt-get install software-properties-common
 add-apt-repository universe
@@ -29,7 +28,7 @@ npm install pm2 -g
 pm2 completion install
 ```
 
-### Step 2. Getting certificate
+### Step 2. Getting HTTPS/SSL certificate
 Run commands one by one
 ```sh
 certbot certonly
@@ -48,16 +47,16 @@ Run commands one by one
 mkdir /var/www-serve
 chmod 777 /var/www-serve
 
-git config --global credential.helper "cache --timeout=9999999999999999"
 cd /var/www-serve
-git clone https://github.com/iShafayet/torque.git --branch master
+git clone https://github.com/anvilglobaldynamics/torque --branch master
 
 ```
 ### Step 4. Set up torque-config.json
 ```sh
 nano /root/torque-config.json
 ```
-Copy content from `config-production.json` and paste in above file. Update path to SSL related files generated on Step 2.
+============================
+Copy content from `config.json` and paste in above file. Update path to SSL related files generated on Step 2.
 
 ### Step 5. Run the server
 
@@ -71,7 +70,4 @@ pm2 save
 # Notes
 
 1. use `pm2 logs` to view raw logs.
-
-
-
 

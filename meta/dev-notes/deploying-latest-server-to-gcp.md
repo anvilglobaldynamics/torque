@@ -13,9 +13,9 @@ If unsure, read https://cloud.google.com/sdk/docs/
 As we are using git to transfer files, all changes that need to be deployed
 has to be merged to master.
 
-### Step 3. 
+### Step 3. update the server
 
-Run commands one by one
+Run following commands one by one
 ```sh
 sudo -i
 cd /var/www-serve/torque/server
