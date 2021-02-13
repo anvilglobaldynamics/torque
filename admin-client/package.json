@@ -1,6 +1,6 @@
 {
   "name": "torque-admin",
-  "license": "MIT LICENSE",
+  "license": "GNU GPLv3",
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
     "eslint": "^3.19.0",

@@ -1,6 +1,6 @@
 {
   "name": "torque-server",
-  "license": "CUSTOM",
+  "license": "GNU GPLv3",
   "version": "0.0.0",
   "description": "torque server",
   "main": "start.js",
@@ -33,7 +33,7 @@
     "dev": "nodemon start.js",
     "dev-imported": "nodemon start.js --db torque-imported",
     "test": "mocha -- --timeout 20000",
-    "test-bail": "mocha -- --timeout 10000 --bail",
+    "test-bail": "mocha -- --timeout 10000 --bail"
   },
   "private": true
 }
