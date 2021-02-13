@@ -1,8 +1,7 @@
 # Prerequisites
 
-1. Create a compute instance with Ubuntu 18.x LTS
-2. Collect credentials for github account `to-bot` by contacting dev admin.
-3. Collect `config-production.json` by contacting dev admin.
+1. Create a compute instance with Ubuntu 20.x LTS
+2. Collect `config-production.json` by contacting dev admin.
 
 # Primary Installation
 
@@ -65,7 +64,7 @@ Copy content from `config-production.json` and paste in above file. Update path 
 ```
 cd /var/www-serve/torque/server
 pm2 start start.js --name "torque-server"
-pm2 startup systemd
+pm2 startup
 pm2 save
 ```
 
