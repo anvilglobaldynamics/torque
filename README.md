@@ -16,3 +16,5 @@ Mujtaba Nowshad - Leading Product Development, Strategy and QA.<br>
 # What is the license? 
 GNU GPL V3 (https://opensource.org/licenses/GPL-3.0)
 
+# Where are the dev notes?
+See [meta/dev-notes](meta/dev-notes/README.md) directory.
