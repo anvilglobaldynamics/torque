@@ -124,6 +124,20 @@
     }
   },
   {
+    "code": "R-SGL-03",
+    "name": "Spark Gear Ltd. Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 12
+    }
+  },
+  {
     "code": "R-SNN-01",
     "name": "SNN Imports Retail Package",
     "price": 0,
