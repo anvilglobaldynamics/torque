@@ -10,7 +10,7 @@
     "commander": "^2.16.0",
     "express": "^4.15.3",
     "fs-extra": "^5.0.0",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "html-entities": "^1.2.1",
     "inline-css": "^2.4.0",
     "joi": "^10.6.0",
