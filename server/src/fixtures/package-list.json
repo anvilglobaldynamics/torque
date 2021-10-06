@@ -1,5 +1,33 @@
 [
   {
+    "code": "R-SGL-04",
+    "name": "Spark Gear Ltd. Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 12
+    }
+  },
+  {
+    "code": "R-SGL-03",
+    "name": "Spark Gear Ltd. Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 1,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 3,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 12
+    }
+  },
+  {
     "code": "RS-T01",
     "name": "Enterprise Trial Package",
     "price": 0,
@@ -124,20 +152,6 @@
     }
   },
   {
-    "code": "R-SGL-03",
-    "name": "Spark Gear Ltd. Retail Package",
-    "price": 0,
-    "duration": {
-      "months": 1,
-      "days": 0
-    },
-    "limits": {
-      "maximumOutlets": 3,
-      "maximumWarehouses": 0,
-      "maximumEmployees": 12
-    }
-  },
-  {
     "code": "R-SNN-01",
     "name": "SNN Imports Retail Package",
     "price": 0,
@@ -157,6 +171,20 @@
     "price": 0,
     "duration": {
       "months": 3,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 2,
+      "maximumWarehouses": 1,
+      "maximumEmployees": 5
+    }
+  },
+  {
+    "code": "R-SNN-03",
+    "name": "SNN Imports Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 12,
       "days": 0
     },
     "limits": {
