@@ -1,6 +1,6 @@
 # What is Torque and what is Lipi?
 
-Torque is the codename for Lipi for Business’s codebase. Lipi is an easy-to-adopt and easy-to-use mobile-first ERP solution for medium size retailers. It is coded from scratch by the 2 authors and aims to be the first business management app for small-medium retail owners operating in growing economies.
+Torque is the codename for Lipi for Business’s codebase. Lipi is an easy-to-adopt and easy-to-use mobile-first business management solution for medium size retailers. It is coded from scratch by the 2 authors and aims to be the first business management app for small-medium retail owners operating in growing economies.
 
 # Why is Lipi / Torque open source?
 
