@@ -1,5 +1,19 @@
 [
   {
+    "code": "R-SGL-08",
+    "name": "Spark Gear Ltd. Retail Package",
+    "price": 0,
+    "duration": {
+      "months": 6,
+      "days": 0
+    },
+    "limits": {
+      "maximumOutlets": 7,
+      "maximumWarehouses": 0,
+      "maximumEmployees": 18
+    }
+  },
+  {
     "code": "R-SGL-07",
     "name": "Spark Gear Ltd. Retail Package",
     "price": 0,
