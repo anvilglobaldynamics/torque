@@ -1,0 +1,16 @@
+FROM node:16 as clientbuild
+WORKDIR /app
+
+RUN npm install -g polymer-cli
+RUN npm install -g bower
+
+COPY package*.json ./
+RUN npm install
+
+COPY bower.json ./
+RUN bower install
+
+COPY . .
+
+EXPOSE 8545
+CMD [ "npm", "start" ]

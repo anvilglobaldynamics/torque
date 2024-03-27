@@ -1,0 +1,31 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile-Dev
+    restart: unless-stopped
+    ports:
+      - 8545:8545
+  backend:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile-Dev
+    restart: unless-stopped
+    ports:
+      - 8540:8540
+    depends_on:
+      - mongodbserver
+    stdin_open: true
+    tty: true
+  mongodbserver:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - db:/data/db
+    ports:
+      - 27017:27017
+volumes:
+  db:
+
+

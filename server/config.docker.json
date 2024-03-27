@@ -1,0 +1,76 @@
+{
+  "baseName": "torque-server",
+  "branding": {
+    "shortName": "Lipi",
+    "extendedName": "Lipi for Business",
+    "serverUrl": "http://localhost:8540",
+    "clientUrl": "http://localhost:8545",
+    "authorName": "Anvil Global Dynamics Ltd.",
+    "authorWebsite": "https://anvil.live",
+    "supportPhone": "+8801770947908",
+    "supportEmail": "care@anvil.live"
+  },
+  "server": {
+    "port": 8540,
+    "websocketPort": 8541,
+    "hostname": "localhost",
+    "ssl": {
+      "enabled": false,
+      "key": null,
+      "cert": null,
+      "caBundle": null
+    }
+  },
+  "log": {
+    "mirrorToFile": true,
+    "dir": "./logs",
+    "format": "json"
+  },
+  "db": {
+    "path": "mongodb://mongodbserver:27017",
+    "name": "torque"
+  },
+  "email": {
+    "enabled": false,
+    "publicKey": "pubkey-000000000000000",
+    "privateKey": "key-00000000000000000000000000000000",
+    "domain": "mg.anvil.live",
+    "from": "Anvil Global Dynamic Ltd. <postmaster@mg.anvil.live>"
+  },
+  "sms": {
+    "enabled": false,
+    "from": "Anvil"
+  },
+  "admin": {
+    "list": [
+      {
+        "username": "system",
+        "passwordHash": "59e234948786e33955c5d86e8a4e9951172b1abbab437e8193e7ee1ad3f42b41",
+        "rights": {
+          "sendOutgoingSms": true,
+          "sendOutgoingEmail": true,
+          "viewUsersAndOrganizations": true,
+          "banUsers": true
+        }
+      },
+      {
+        "username": "default",
+        "passwordHash": "59e234948786e33955c5d86e8a4e9951172b1abbab437e8193e7ee1ad3f42b41",
+        "rights": {
+          "sendOutgoingSms": true,
+          "sendOutgoingEmail": true,
+          "viewUsersAndOrganizations": true,
+          "banUsers": true
+        }
+      }
+    ]
+  },
+  "socketProxy": {
+    "enabled": true,
+    "url": "ws://localhost:8410",
+    "pssk": "ARANDOMSECURITYKEYTHATWILLBEUSEDASAMESSAGE"
+  },
+  "notes": [
+    "default admin password is johndoe1pass"
+  ]
+}
