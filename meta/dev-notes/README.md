@@ -1,6 +1,7 @@
 ## Local/development environment
 
 1. [Local depelopemnt environment setup guide](local-development-environment-setup.md)
+2. [Local development with docker](local-development-with-docker.md)
 
 ## Remote/cloud deployment 
 

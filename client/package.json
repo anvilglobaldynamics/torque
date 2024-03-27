@@ -20,7 +20,7 @@
     "//compile-android": "node ./scripts/compile-deploy.js --android",
     "//deploy-fallback": "node ./scripts/compile-deploy.js --deploy --fallback",
     "deploy": "node ./scripts/compile-deploy.js --deploy",
-    "start": "polymer serve --port 8545"
+    "start": "polymer serve --port 8545 --hostname \"0.0.0.0\""
   },
   "private": true
 }

@@ -1,4 +1,4 @@
-runtime: nodejs10
+runtime: nodejs18
 service: lipi-client-pwa-new
 default_expiration: "1m"
 

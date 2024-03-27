@@ -482,7 +482,8 @@
       }
 
       _fetchOutletList(cbfn) {
-        let data = { organizationId: this.app.organization.id, paginate: this.paginate };
+        let paginate =  { limit: 50, offset: 0 };
+        let data = { organizationId: this.app.organization.id, paginate };
         this.app.callGetOutletListApi(data, (err, response) => {
           if (err) return;
           if (response.hasError) return this.onApiError(response.error);
